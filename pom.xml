@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dirt</groupId>
+    <artifactId>dirt-parent</artifactId>
+    <version>0.0.1.BETA</version>
+
+
+    <name>dirt-parent</name>
+    <url>http://www.dirt.vip</url>
+    <description>dirt 系统</description>
+
+
+    <modules>
+        <module>dirt</module>
+        <module>dirt-common</module>
+        <module>dirt-example</module>
+        <module>dirt-experiment</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <properties>
+        <dirt.version>0.0.1.BETA</dirt.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
+        <!--<spring-cloud.version>2021.0.3</spring-cloud.version>-->
+        <!--<spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>-->
+        <!--<alibaba.nacos.version>2.0.4</alibaba.nacos.version>-->
+        <!--<alibaba.seata.version>1.5.1</alibaba.seata.version>-->
+        <!--<spring-boot-admin.version>2.7.3</spring-boot-admin.version>-->
+        <!--<spring-boot.mybatis>2.2.2</spring-boot.mybatis>-->
+        <!--<pagehelper.boot.version>1.4.3</pagehelper.boot.version>-->
+        <springfox-swagger2>3.0.2</springfox-swagger2>
+        <swagger.core.version>1.6.2</swagger.core.version>
+        <!--<tobato.version>1.27.2</tobato.version>-->
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <druid.version>1.2.11</druid.version>
+        <dynamic-ds.version>3.5.1</dynamic-ds.version>
+        <commons.io.version>2.11.0</commons.io.version>
+        <commons.fileupload.version>1.4</commons.fileupload.version>
+        <velocity.version>2.3</velocity.version>
+        <fastjson.version>2.0.12</fastjson.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <minio.version>8.2.2</minio.version>
+        <poi.version>4.1.2</poi.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <transmittable-thread-local.version>2.13.2</transmittable-thread-local.version>
+        <io.github.zhaord.version>1.0.1.RELEASE</io.github.zhaord.version>
+        <org.projectlombok.version>1.18.16</org.projectlombok.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+
+        <mockito-junit-jupiter.version>2.23.0</mockito-junit-jupiter.version>
+    </properties>
+
+    <!-- 依赖声明 -->
+    <dependencyManagement>
+
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dirt</groupId>
+                <artifactId>dirt-common-core</artifactId>
+                <version>${dirt.version}</version>
+
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.plugin</groupId>
+                <artifactId>spring-plugin-core</artifactId>
+                <version>2.0.0.RELEASE</version>
+            </dependency>
+            <!-- google guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>31.1-jre</version>
+            </dependency>
+            <!-- Swagger knife4j -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${springfox-swagger2}</version>
+            </dependency>
+
+            <!-- SpringCloud 微服务 -->
+            <!--<dependency>-->
+                <!--<groupId>org.springframework.cloud</groupId>-->
+                <!--<artifactId>spring-cloud-dependencies</artifactId>-->
+                <!--<version>${spring-cloud.version}</version>-->
+                <!--<type>pom</type>-->
+                <!--<scope>import</scope>-->
+            <!--</dependency>-->
+
+            <!-- SpringCloud Alibaba 微服务 -->
+            <!--<dependency>-->
+                <!--<groupId>com.alibaba.cloud</groupId>-->
+                <!--<artifactId>spring-cloud-alibaba-dependencies</artifactId>-->
+                <!--<version>${spring-cloud-alibaba.version}</version>-->
+                <!--<type>pom</type>-->
+                <!--<scope>import</scope>-->
+            <!--</dependency>-->
+
+
+
+            <!-- SpringBoot 依赖配置 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+            <!--&lt;!&ndash; Swagger 依赖配置 &ndash;&gt;-->
+            <!--<dependency>-->
+                <!--<groupId>io.swagger</groupId>-->
+                <!--<artifactId>swagger-models</artifactId>-->
+                <!--<version>${swagger.core.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>io.swagger</groupId>-->
+                <!--<artifactId>swagger-annotations</artifactId>-->
+                <!--<version>${swagger.core.version}</version>-->
+            <!--</dependency>-->
+
+            <!-- 验证码 -->
+            <!--<dependency>-->
+                <!--<groupId>com.github.penggle</groupId>-->
+                <!--<artifactId>kaptcha</artifactId>-->
+                <!--<version>${kaptcha.version}</version>-->
+            <!--</dependency>-->
+
+
+
+            <!-- io常用工具类 -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+
+            <!-- excel工具 -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <!-- 文件上传工具类 -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons.fileupload.version}</version>
+            </dependency>
+
+            <!-- Collection 增强Java集合框架 -->
+            <dependency> 
+                <groupId>commons-collections</groupId> 
+                <artifactId>commons-collections</artifactId> 
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <!-- JSON 解析器和生成器 -->
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <!-- JWT -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- 线程传递值 -->
+            <!--<dependency>-->
+                <!--<groupId>com.alibaba</groupId>-->
+                <!--<artifactId>transmittable-thread-local</artifactId>-->
+                <!--<version>${transmittable-thread-local.version}</version>-->
+            <!--</dependency>-->
+
+            <!--测试库-->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito-junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--连接池-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+    <dependencies>
+        <!-- bootstrap 启动器 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.zhaord</groupId>
+            <artifactId>mapstruct-spring-plus-boot-starter</artifactId>
+            <version>${io.github.zhaord.version}</version>
+        </dependency>
+
+        <!--使配置文件里里有定义文件的提示-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${org.projectlombok.version}</version>
+                        </path>
+                        <!-- This is needed when using Lombok 1.18.16 and above -->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                        <!-- Mapstruct should follow the lombok path(s) -->
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<id>public</id>-->
+            <!--<name>aliyun nexus</name>-->
+            <!--<url>https://maven.aliyun.com/repository/public</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
+
+</project>
