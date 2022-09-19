@@ -114,11 +114,6 @@
             <artifactId>hibernate-core</artifactId>
         </dependency>
 
-        <!--JSR 303 hibernate 实现-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
 
         <!-- JWT -->
         <dependency>

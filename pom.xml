@@ -217,10 +217,10 @@
 
     <dependencies>
         <!-- bootstrap 启动器 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-bootstrap</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -253,29 +253,31 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${org.projectlombok.version}</version>
-                        </path>
-                        <!-- This is needed when using Lombok 1.18.16 and above -->
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct-binding.version}</version>
-                        </path>
-                        <!-- Mapstruct should follow the lombok path(s) -->
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
+                    <!--<annotationProcessorPaths>-->
+                        <!--<path>-->
+                            <!--<groupId>org.projectlombok</groupId>-->
+                            <!--<artifactId>lombok</artifactId>-->
+                            <!--<version>${org.projectlombok.version}</version>-->
+                        <!--</path>-->
+                        <!--&lt;!&ndash; This is needed when using Lombok 1.18.16 and above &ndash;&gt;-->
+                        <!--<path>-->
+                            <!--<groupId>org.projectlombok</groupId>-->
+                            <!--<artifactId>lombok-mapstruct-binding</artifactId>-->
+                            <!--<version>${lombok-mapstruct-binding.version}</version>-->
+                        <!--</path>-->
+                        <!--&lt;!&ndash; Mapstruct should follow the lombok path(s) &ndash;&gt;-->
+                        <!--<path>-->
+                            <!--<groupId>org.mapstruct</groupId>-->
+                            <!--<artifactId>mapstruct-processor</artifactId>-->
+                            <!--<version>${org.mapstruct.version}</version>-->
+                        <!--</path>-->
+                    <!--</annotationProcessorPaths>-->
                 </configuration>
             </plugin>
         </plugins>
