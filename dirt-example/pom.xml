@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <modules>
-        <module>dirt-example-membersystem</module>
+        <module>dirt-example-member</module>
         <module>dirt-example-experiment</module>
     </modules>
 

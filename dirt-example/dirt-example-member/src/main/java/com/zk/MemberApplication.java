@@ -15,9 +15,9 @@ import static com.zk.utils.StartUtils.logApplicationStartup;
 @SpringBootApplication
 @Slf4j
 @EnableAsync
-public class DirtExampleApplication {
+public class MemberApplication {
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(DirtExampleApplication.class);
+        SpringApplication app = new SpringApplication(MemberApplication.class);
         ConfigurableApplicationContext run = app.run(args);
         SpringUtil.setApplicationContext(run);
         Environment env = run.getEnvironment();

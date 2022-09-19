@@ -9,7 +9,7 @@
         <artifactId>dirt-example</artifactId>
         <version>0.0.1.BETA</version>
     </parent>
-    <artifactId>dirt-example-membersystem</artifactId>
+    <artifactId>dirt-example-member</artifactId>
 
 
     <dependencies>
