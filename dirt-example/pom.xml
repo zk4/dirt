@@ -12,6 +12,7 @@
     <modules>
         <module>dirt-example-member</module>
         <module>dirt-example-experiment</module>
+        <module>dirt-example-template00</module>
     </modules>
 
     <artifactId>dirt-example</artifactId>
