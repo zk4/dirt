@@ -18,7 +18,6 @@
         <module>dirt</module>
         <module>dirt-common</module>
         <module>dirt-example</module>
-        <module>dirt-experiment</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -68,13 +67,17 @@
                 <artifactId>spring-boot-starter-security</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.dirt</groupId>
+                <artifactId>dirt</artifactId>
+                <version>${dirt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.dirt</groupId>
                 <artifactId>dirt-common-core</artifactId>
                 <version>${dirt.version}</version>
-
             </dependency>
+
             <dependency>
                 <groupId>org.springframework.plugin</groupId>
                 <artifactId>spring-plugin-core</artifactId>

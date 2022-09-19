@@ -1,8 +1,7 @@
 package com.zk;
 
 
-import com.zk.dirt.util.SpringUtil;
-import lombok.extern.slf4j.Slf4j;
+ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,11 +15,13 @@ import java.util.Optional;
 
 
 @SpringBootApplication
+//@EnableCaching
 @Slf4j
+//@EnableLogReqResAspect
 @EnableAsync
-public class DirtExampleApplication {
+public class ExperimentApplication {
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(DirtExampleApplication.class);
+        SpringApplication app = new SpringApplication(ExperimentApplication.class);
         ConfigurableApplicationContext run = app.run(args);
         SpringUtil.setApplicationContext(run);
         Environment env = run.getEnvironment();
