@@ -2,7 +2,7 @@ package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
@@ -26,7 +26,7 @@ import java.util.List;
 @DynamicInsert
 // 让 jackson 忽略序列化 hibernateLazyInitializer handler 属性
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class ReserveFinance extends BaseIdEntity2 {
+public class ReserveFinance extends DirtBaseIdEntity {
 
     @DirtField(title = "预约名称", index = -99, dirtSubmit = @DirtSubmit(index = -99))
     String name;

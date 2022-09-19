@@ -1,7 +1,7 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eFilterOperator;
@@ -34,7 +34,7 @@ import javax.validation.constraints.Size;
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @ToString
-public class Member extends BaseIdEntity2 {
+public class Member extends DirtBaseIdEntity {
     @DirtField(title = "会员昵称", dirtSearch = @DirtSearch(operator = eFilterOperator.LIKE))
     @NotEmpty
     @Size(min = 2, max = 30)

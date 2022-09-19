@@ -1,7 +1,7 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
@@ -23,8 +23,9 @@ import javax.validation.constraints.Size;
 @DynamicInsert
 
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+
 @ToString
-public class ManyToManySide2 extends BaseIdEntity2 {
+public class ManyToManySide2 extends DirtBaseIdEntity {
 
     @DirtField
     @NotEmpty

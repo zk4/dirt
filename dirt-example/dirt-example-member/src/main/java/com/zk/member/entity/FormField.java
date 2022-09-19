@@ -1,7 +1,7 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
@@ -20,7 +20,7 @@ import javax.persistence.Entity;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class FormField extends BaseIdEntity2 {
+public class FormField extends DirtBaseIdEntity {
 
     @DirtField
     String name;

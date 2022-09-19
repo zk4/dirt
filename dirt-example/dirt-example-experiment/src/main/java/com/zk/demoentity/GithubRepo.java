@@ -5,7 +5,7 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.member.provider.StatusProvider;
 import lombok.Getter;
@@ -27,7 +27,7 @@ import java.util.List;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
-public class GithubRepo extends BaseIdEntity2 {
+public class GithubRepo extends DirtBaseIdEntity {
 
 
     @DirtField(title = "仓库名")

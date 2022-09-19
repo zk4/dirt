@@ -1,7 +1,7 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
@@ -29,7 +29,7 @@ import java.util.List;
 @DynamicInsert
 // 让 jackson 忽略序列化 hibernateLazyInitializer handler 属性
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class SmartForm extends BaseIdEntity2 {
+public class SmartForm extends DirtBaseIdEntity {
 
     @DirtField(title = "name",  dirtSubmit = @DirtSubmit)
     @NotNull

@@ -1,14 +1,11 @@
 package com.zk.member.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.BaseIdEntity2;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
-import com.zk.dirt.core.eUIType;
-import com.zk.dirt.experiment.eSubmitWidth;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,8 +14,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -34,29 +33,28 @@ import java.util.List;
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @ToString
-public class CategoryEntity extends BaseIdEntity2 {
+public class CategoryEntity extends DirtBaseIdEntity {
 	/**
 	 * 分类名称
 	 */
 	@DirtField(title = "分类名称",  dirtSubmit = @DirtSubmit )
-	@NotEmpty
 	@Size(min = 2, max = 30)
 	private String name;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parentId", insertable = false, updatable = false)
-	@JsonIgnore
-	CategoryEntity parent;
-
-	@DirtField(title = "parent id",
-			idOfEntity = CategoryEntity.class,
-
-			filters = true,
-			onFilter = true,
-			dirtSubmit = @DirtSubmit
-	)
-	@Column(name = "parentId")
-	Long parentId;
+	//
+	//@DirtField(idOfEntity = CategoryEntity.class)
+	//
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//CategoryEntity parent;
+	//
+	//@DirtField(title = "parent id",
+	//		idOfEntity = CategoryEntity.class,
+	//
+	//		filters = true,
+	//		onFilter = true,
+	//		dirtSubmit = @DirtSubmit
+	//)
+	//@Column(name = "parentId")
+	//Long parentId;
 	/*
 	 * 层级
 	 */
@@ -81,13 +79,8 @@ public class CategoryEntity extends BaseIdEntity2 {
 	private Integer productCount;
 
 
-	@DirtField(
-			title = "子菜单",
-			width = eSubmitWidth.LG,
-			uiType = eUIType.formList,
-			dirtSubmit = @DirtSubmit(width = eSubmitWidth.LG)
-	)
-	@OneToMany(mappedBy = "parent",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@DirtField(title = "子菜单",idOfEntity = CategoryEntity.class)
+	@OneToMany(cascade = CascadeType.MERGE)
 	private List<CategoryEntity> subMenus;
 
 	@DirtAction(text = "详情", key = "detail")

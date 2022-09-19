@@ -2,7 +2,7 @@ package com.zk.demoentity;
 
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.member.provider.StatusProvider;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Container extends BaseIdEntity2 {
+public class Container extends DirtBaseIdEntity {
 
     @DirtField(title = "应用名称",copyable = true)
     String name;

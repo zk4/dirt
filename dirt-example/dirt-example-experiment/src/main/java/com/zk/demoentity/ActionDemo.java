@@ -5,7 +5,7 @@ import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.util.SpringUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class ActionDemo extends BaseIdEntity2 {
+public class ActionDemo extends DirtBaseIdEntity {
 
 
 

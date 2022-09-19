@@ -1,17 +1,20 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.BaseIdEntity2;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -24,7 +27,7 @@ import java.util.List;
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @ToString
-public class ManyToManySide1 extends BaseIdEntity2 {
+public class ManyToManySide1 extends DirtBaseIdEntity {
 
     @DirtField
     @NotEmpty
@@ -44,7 +47,7 @@ public class ManyToManySide1 extends BaseIdEntity2 {
     //  1. idOfEntity 可省略，可从 Field 的 type 推导
     @DirtField(idOfEntity = ManyToManySide2.class)
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    List<ManyToManySide2> sides2;
+     List<ManyToManySide2> sides2;
 
 
     @DirtAction(text = "详情", key = "detail")

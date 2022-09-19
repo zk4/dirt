@@ -5,7 +5,7 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.member.entity.types.eWeekDay;
 import com.zk.member.provider.StatusProvider;
 import lombok.Getter;
@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class EnumDemo extends BaseIdEntity2 {
+public class EnumDemo extends DirtBaseIdEntity {
 
 
     @DirtField(

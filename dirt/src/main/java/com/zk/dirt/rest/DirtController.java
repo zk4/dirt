@@ -8,7 +8,7 @@ import com.zk.dirt.core.DirtActionType;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.DirtEntityType;
 import com.zk.dirt.core.DirtFieldType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.util.ArgsUtil;
 import io.swagger.annotations.ApiModel;
@@ -89,10 +89,10 @@ public class DirtController {
     @ApiOperation(value = "更新")
     @Transactional
     public Result update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Class<? extends BaseIdEntity2> entityClass = (Class<? extends BaseIdEntity2>) Class.forName( entityName);
+        Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName( entityName);
         SimpleJpaRepository jpaRepository = dirtContext.getRepo(entityName);
 
-        BaseIdEntity2 o2 = objectMapper.convertValue(body, entityClass);
+        DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
         if (o2.getId() == null) throw new RuntimeException("没有 id，无法更新");
 
         Object one = persistProxy.getOne(entityClass,o2.getId());

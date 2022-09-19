@@ -6,7 +6,7 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iListable;
 import lombok.Data;
 import lombok.Getter;
@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class ReserveOrder extends BaseIdEntity2 {
+public class ReserveOrder extends DirtBaseIdEntity {
     //
     @DirtField(title = "预约商品 id", idOfEntity = ReserveProduct.class)
     @ManyToOne(fetch = FetchType.LAZY)

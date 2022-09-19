@@ -319,3 +319,5 @@ https://linxfeng.github.io/flow-eda/#/introduce/overview
 5. iBase4J
 6. jeeSpringCloud
 
+hiberate 5.4 reference 
+https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#caching

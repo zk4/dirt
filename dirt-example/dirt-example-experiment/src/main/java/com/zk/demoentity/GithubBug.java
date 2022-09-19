@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.member.provider.SQLProvider;
 import com.zk.member.provider.StatusProvider;
@@ -27,7 +27,7 @@ import java.util.List;
 @DynamicInsert
 // 让 jackson 忽略序列化 hibernateLazyInitializer handler 属性
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class GithubBug extends BaseIdEntity2 {
+public class GithubBug extends DirtBaseIdEntity {
 
     @DirtField(title = "bug",  dirtSubmit = @DirtSubmit(
 

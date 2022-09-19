@@ -2,7 +2,7 @@ package com.zk.dirt.annotation;
 
 import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iListable;
@@ -77,5 +77,5 @@ public @interface DirtField {
     String tooltip() default  "";//	string	会在 title 旁边展示一个 icon，鼠标浮动之后展示
 
 
-    Class<? extends BaseIdEntity2>[] idOfEntity() default {};
+    Class<? extends DirtBaseIdEntity>[] idOfEntity() default {};
 }

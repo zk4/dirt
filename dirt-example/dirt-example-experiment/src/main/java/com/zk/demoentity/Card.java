@@ -5,7 +5,7 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.member.entity.types.eCardType;
 import com.zk.member.entity.types.eStatus;
@@ -25,7 +25,7 @@ import javax.persistence.Enumerated;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
-public class Card extends BaseIdEntity2 {
+public class Card extends DirtBaseIdEntity {
 
 
     @DirtField(title = "卡名")

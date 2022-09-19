@@ -5,7 +5,7 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -24,7 +24,7 @@ import java.time.LocalTime;
 @DynamicInsert
 // 让 jackson 忽略序列化 hibernateLazyInitializer handler 属性
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class TimeDemo extends BaseIdEntity2 {
+public class TimeDemo extends DirtBaseIdEntity {
 
     @DirtField(title = "localDate",
 

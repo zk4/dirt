@@ -1,7 +1,7 @@
 package com.zk.dirt.core;
 
 import com.zk.dirt.annotation.*;
-import com.zk.dirt.entity.BaseIdEntity2;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iListable;
@@ -100,10 +100,10 @@ public class DirtEntityType {
                     tableHeader.setHideInTable(dirtField.hideInTable());
                     tableHeader.setSorter(dirtField.sorter());
                     eUIType uiType = dirtField.uiType();
-                    Class<? extends BaseIdEntity2>[] classes = dirtField.idOfEntity();
+                    Class<? extends DirtBaseIdEntity>[] classes = dirtField.idOfEntity();
                     Class<?> fieldRetType = field.getType();
                     if (classes.length > 0) {
-                        Class<? extends BaseIdEntity2> entityClass = classes[0];
+                        Class<? extends DirtBaseIdEntity> entityClass = classes[0];
                         String simpleName = entityClass.getName();
                         tableHeader.setIdOfEntity(simpleName);
                     }else {
@@ -297,26 +297,27 @@ public class DirtEntityType {
 
                         }
                         if (dirtEntity != null) {
-                            List<DirtFieldType> heads = dirtEntity.getHeads();
-                            ArrayList<Object> objects = new ArrayList<>();
+                            //List<DirtFieldType> heads = dirtEntity.getHeads();
+                            //ArrayList<Object> objects = new ArrayList<>();
 
-                            HashMap<Object, Object> columns = new HashMap<>();
-                            columns.put("uiType", "group");
-                            columns.put("columns", heads.stream()
-                                    .filter(dirtFieldType -> dirtFieldType.getSubmitType() != null)
-                                    .map(DirtFieldType::getSubmitType).collect(Collectors.toList()));
-                            objects.add(columns);
+                            //HashMap<Object, Object> columns = new HashMap<>();
+                            //columns.put("uiType", "group");
+                            //columns.put("columns", heads.stream()
+                            //        .filter(dirtFieldType -> dirtFieldType.getSubmitType() != null)
+                            //        .map(DirtFieldType::getSubmitType).collect(Collectors.toList()));
+                            //objects.add(columns);
 
-                            dirtSubmitType.setColumns(objects);
-                            if (oneToMany != null)
-                                tableHeader.setRelation(eDirtEntityRelation.OneToMany);
-                            else if (oneToOne != null)
-                                tableHeader.setRelation(eDirtEntityRelation.OneToOne);
-                            else if (manyToOne != null)
-                                tableHeader.setRelation(eDirtEntityRelation.ManyToOne);
-                            else if (manyToMany != null)
-                                tableHeader.setRelation(eDirtEntityRelation.ManyToMany);
+                            //dirtSubmitType.setColumns(objects);
+
                         }
+                        if (oneToMany != null)
+                            tableHeader.setRelation(eDirtEntityRelation.OneToMany);
+                        else if (oneToOne != null)
+                            tableHeader.setRelation(eDirtEntityRelation.OneToOne);
+                        else if (manyToOne != null)
+                            tableHeader.setRelation(eDirtEntityRelation.ManyToOne);
+                        else if (manyToMany != null)
+                            tableHeader.setRelation(eDirtEntityRelation.ManyToMany);
 
                     }
                     return tableHeader;
@@ -402,9 +403,9 @@ public class DirtEntityType {
 
     private void initIdOfEntityMap() {
         this.dirtFieldMap.forEach((s, dirtField) -> {
-            Class<? extends BaseIdEntity2>[] classes = dirtField.idOfEntity();
+            Class<? extends DirtBaseIdEntity>[] classes = dirtField.idOfEntity();
             if (classes.length > 0) {
-                Class<? extends BaseIdEntity2> aClass = classes[0];
+                Class<? extends DirtBaseIdEntity> aClass = classes[0];
                 this.idOfEntityMap.put(s, aClass);
             }
         });

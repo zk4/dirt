@@ -20,9 +20,12 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @MappedSuperclass
 
-public  class BaseIdEntity2   implements Serializable {
+public  class DirtBaseIdEntity implements Serializable {
 
     private static final long serialVersionUID = 2359852974346431431L;
+    
+    // 有点屌，以当前 value 做为整个 entity 序列化的值，在这也就是 id
+    // @JsonValue
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
@@ -109,11 +112,11 @@ public  class BaseIdEntity2   implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof BaseIdEntity2)) {
+        if (!(o instanceof DirtBaseIdEntity)) {
             return false;
         }
 
-        BaseIdEntity2 that = (BaseIdEntity2) o;
+        DirtBaseIdEntity that = (DirtBaseIdEntity) o;
 
         return getId() != null && getId().equals(that.getId());
     }

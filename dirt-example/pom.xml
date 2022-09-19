@@ -10,9 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <modules>
+        <module>dirt-example-template00</module>
         <module>dirt-example-member</module>
         <module>dirt-example-experiment</module>
-        <module>dirt-example-template00</module>
+        <module>dirt-example-eiam</module>
     </modules>
 
     <artifactId>dirt-example</artifactId>
