@@ -10,7 +10,7 @@ import java.util.HashMap;
 class JwtTokenUtilTest {
 
 
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtils jwtTokenUtil;
 
     @BeforeEach
     void setUp() {
