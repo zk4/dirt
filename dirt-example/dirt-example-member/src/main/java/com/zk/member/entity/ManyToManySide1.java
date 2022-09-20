@@ -45,7 +45,7 @@ public class ManyToManySide1 extends DirtBaseIdEntity {
 
     // TODO:
     //  1. idOfEntity 可省略，可从 Field 的 type 推导
-    @DirtField(idOfEntity = ManyToManySide2.class)
+    @DirtField
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
      List<ManyToManySide2> sides2;
 

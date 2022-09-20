@@ -6,7 +6,6 @@ import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iListable;
 import com.zk.dirt.util.ExceptionUtils;
-import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 
 import javax.persistence.*;
@@ -34,7 +33,7 @@ public class DirtEntityType {
     private final Map<String, DirtActionType> actionMap = new HashMap<>();
 
     private List<DirtFieldType> heads = new ArrayList<>();
-    @Getter
+
     private final Map<String, Class> idOfEntityMap = new HashMap<>();
 
     ApplicationContext applicationContext;
@@ -90,6 +89,12 @@ public class DirtEntityType {
                     }else {
                         tableHeader.setTitle(dirtField.title());
                     }
+                    OneToMany oneToMany = field.getAnnotation(OneToMany.class);
+                    ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
+                    OneToOne oneToOne = field.getAnnotation(OneToOne.class);
+                    ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
+
+
                     tableHeader.setIndex(dirtField.index());
                     //tableHeader.setWidth(dirtField.width());
                     tableHeader.setFixed(dirtField.fixed());
@@ -108,9 +113,28 @@ public class DirtEntityType {
                         String simpleName = entityClass.getName();
                         tableHeader.setIdOfEntity(simpleName);
                     }else {
-                        //TODO: deduce Entity Type from Return Type if there is relations
-                        // 1 is from BaseEntity2
-                        // 2 is element container, like list<>  set<>,  maby map<?,?>
+                        //deduce Entity Type from Return Type if there is relations
+
+
+                        if(manyToOne!=null ||  oneToOne!=null){
+                            // 1 is from BaseEntity2
+                            tableHeader.setIdOfEntity(field.getType().getName());
+                        }else if (manyToMany !=null || oneToMany!=null){
+                            // 2 is element container, like list<>  set<>,  maby map<?,?>
+                            // TODO: parse Map
+                            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                            if (actualTypeArguments.length == 1) {
+                                Type actualTypeArgument = actualTypeArguments[0];
+                                try {
+                                    Class aClass = Class.forName(actualTypeArgument.getTypeName());
+                                    tableHeader.setIdOfEntity(aClass.getName());
+                                } catch (ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }
 
 
 
@@ -134,6 +158,7 @@ public class DirtEntityType {
                         }
                     }
                     tableHeader.setValueType(uiTypeStr);
+
 
                     // 设置 valueEnum, initialValue
                     Class<? extends iEnumProvider>[] providerClasses = dirtField
@@ -269,10 +294,7 @@ public class DirtEntityType {
                             dirtSubmitType.setInitialValue(initialValue);
 
 
-                        OneToMany oneToMany = field.getAnnotation(OneToMany.class);
-                        ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
-                        OneToOne oneToOne = field.getAnnotation(OneToOne.class);
-                        ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
+
                         DirtEntityType dirtEntity = null;
                         if (oneToMany != null || manyToMany != null) {
                             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
@@ -292,9 +314,9 @@ public class DirtEntityType {
                             }
                         } else if (manyToOne != null || oneToOne != null) {
 
-                            Class<?> ret = fieldRetType;
-                            DirtContext context = applicationContext.getBean(DirtContext.class);
-                            dirtEntity = context.getDirtEntity(ret.getName());
+                            //Class<?> ret = fieldRetType;
+                            //DirtContext context = applicationContext.getBean(DirtContext.class);
+                            //dirtEntity = context.getDirtEntity(ret.getName());
 
                         }
                         //if (dirtEntity != null) {
@@ -402,6 +424,10 @@ public class DirtEntityType {
 
     public DirtField getDirtField(String filedName) {
         return this.dirtFieldMap.get(filedName);
+    }
+
+    public Map<String, Class> getIdOfEntityMap() {
+        return idOfEntityMap;
     }
 
     private void initIdOfEntityMap() {
