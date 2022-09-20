@@ -5,6 +5,7 @@ import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iListable;
+import com.zk.dirt.util.ExceptionUtils;
 import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 
@@ -296,20 +297,20 @@ public class DirtEntityType {
                             dirtEntity = context.getDirtEntity(ret.getName());
 
                         }
-                        if (dirtEntity != null) {
-                            //List<DirtFieldType> heads = dirtEntity.getHeads();
-                            //ArrayList<Object> objects = new ArrayList<>();
-
-                            //HashMap<Object, Object> columns = new HashMap<>();
-                            //columns.put("uiType", "group");
-                            //columns.put("columns", heads.stream()
-                            //        .filter(dirtFieldType -> dirtFieldType.getSubmitType() != null)
-                            //        .map(DirtFieldType::getSubmitType).collect(Collectors.toList()));
-                            //objects.add(columns);
-
-                            //dirtSubmitType.setColumns(objects);
-
-                        }
+                        //if (dirtEntity != null) {
+                        //    List<DirtFieldType> heads = dirtEntity.getHeads();
+                        //    ArrayList<Object> objects = new ArrayList<>();
+                        //
+                        //    HashMap<Object, Object> columns = new HashMap<>();
+                        //    columns.put("uiType", "group");
+                        //    columns.put("columns", heads.stream()
+                        //            .filter(dirtFieldType -> dirtFieldType.getSubmitType() != null)
+                        //            .map(DirtFieldType::getSubmitType).collect(Collectors.toList()));
+                        //    objects.add(columns);
+                        //
+                        //    dirtSubmitType.setColumns(objects);
+                        //
+                        //}
                         if (oneToMany != null)
                             tableHeader.setRelation(eDirtEntityRelation.OneToMany);
                         else if (oneToOne != null)
@@ -362,14 +363,16 @@ public class DirtEntityType {
                 dirtActionType.setKey(actionAnnotation.key());
 
                 Parameter[] parameters = declaredMethod.getParameters();
+
+                ExceptionUtils.conditionThrow(parameters.length<=1,"现在只支持一个参数，或没参数");
+
                 if (parameters.length > 0) {
                     for (int i = 0; i < parameters.length; i++) {
                         Parameter parameter = parameters[i];
                         List<DirtFieldType> dirtFieldTypes = this.fromParameter(parameter);
-                        dirtActionType.getArgColumnsMap().put(parameter.getName(), dirtFieldTypes);
+                        // FIXED: java 8 会保留 parameter 名字， java 11 会变成 arg0， arg 1
+                        dirtActionType.getArgColumnsMap().put("args", dirtFieldTypes);
                     }
-
-
                 }
                 this.actionMap.put(actionAnnotation.key(), dirtActionType);
             }

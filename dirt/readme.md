@@ -116,7 +116,7 @@ ManyToMany 多对多，关系任意，可重复
 
 
 ## BUG
-
+1. [ ] 在 runtime 别依赖 paramter.getName()，比如  public void call(String name){...} "name" 这个名字很可能被编译器改成 arg0 或其他。 
 1. [ ] 逻辑删除有问题， deleteInBatch 不走逻辑删除，先用 deleteAll，性能可优化
 1. [ ] 前端颜色选择有问题
 1. [ ] 因为将构建 header 的逻辑放到了 DirtEntity初始化时, 一些动态的 enum 在添加后是看不到的。需要给接口
