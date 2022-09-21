@@ -13,16 +13,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -115,43 +108,22 @@ public class LazyTest {
     @Test
     @Transactional
     @DisplayName("saveRelation#4()")
-    void saveRelationForDirt() throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, IntrospectionException {
+    void saveRelationForDirt() throws  IllegalAccessException,  InvocationTargetException, IntrospectionException {
         Member one = persistProxy.getOne(Member.class, 1L);
 
         // construct id args
-        ArrayList<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L));
 
-        assignRelationIds(one, ids);
+        HashMap<String, List<Long>> args = new HashMap<>();
+        args.put("items", new ArrayList<>(Arrays.asList(1L, 2L, 3L)));
+        args.put("moreitems", new ArrayList<>(Arrays.asList(1L, 2L, 4L)));
+
+        ArgsUtil.assignRelationIds(Member.class,one, args,entityManager);
 
 
         Member save = persistProxy.save(Member.class, one);
         System.out.println(save.getItems());
     }
 
-    /**
-     *
-     * @param one
-     * @param ids
-     * @throws IntrospectionException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     */
-    private void assignRelationIds(Member one, ArrayList<Long> ids) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
-        // convert ids to entity reference, then set it back to managed entity
-        for (Field declaredField : Member.class.getDeclaredFields()) {
-            if (declaredField.isAnnotationPresent(OneToMany.class) || declaredField.isAnnotationPresent(ManyToMany.class)) {
-                Class[] classes = ArgsUtil.getCollectionItemType(declaredField);
-                Class innerType = classes[1];
-                Set<Object> collect = ids.stream()
-                        .map(id -> entityManager.getReference(innerType, id))
-                        .collect(Collectors.toSet());
-
-                // set entity reference back to oneToMany annotated field
-                Method mehtod = new PropertyDescriptor(declaredField.getName(), Member.class).getWriteMethod();
-                mehtod.invoke(one, collect);
-            }
-        }
-    }
 
     @Test
     void genereateGetterName() {

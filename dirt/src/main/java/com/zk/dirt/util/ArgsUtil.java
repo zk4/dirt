@@ -1,6 +1,7 @@
 package com.zk.dirt.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
@@ -8,10 +9,7 @@ import javax.persistence.OneToMany;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArgsUtil {
@@ -61,26 +59,33 @@ public class ArgsUtil {
     }
 
     /**
-     * 给 entity enhancedInstance 的 relation 通过 id 赋值做关联关系
-     * 不支持 eintity 嵌套，基本无此业务形态
-     * @param enhancedInstance
-     * @param args
+     *  给 entity enhancedInstance 的 relation 通过 id 赋值做关联关系
+     *  注意此方法，不校验 id 是否存在，即使不存在，也会拿到 id reference
+     * @param rawType  未被 proxy 的 entity 类型
+     * @param enhancedInstance 已被 proxy 的 entity 类型实例
+     * @param args  entity hashmap 形式，OneToMany 与 ManyToOne 均以 id List 或 Set 形式存在
      * @param entityManager
-     * @param <T>
+     * @param <T> 已被 proxy 的 entity 类型
      * @throws IntrospectionException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T> void assignRelationIds(Class rawType, T enhancedInstance, HashMap<String, ArrayList<Long>> args, EntityManager entityManager) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
+    public static <T> void assignRelationIds(Class<?> rawType, T enhancedInstance, HashMap<String, List<Long>> args, EntityManager entityManager) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
         // convert ids to entity reference, then set it back to managed entity
-        for (Field declaredField : rawType.getClass().getDeclaredFields()) {
+        for (Field declaredField : rawType.getDeclaredFields()) {
             if (declaredField.isAnnotationPresent(OneToMany.class) || declaredField.isAnnotationPresent(ManyToMany.class)) {
                 Class[] classes = ArgsUtil.getCollectionItemType(declaredField);
+
+                // 容器类型，有用再说
                 // Class contianer = classes[0];
+
+                // 容器内部类型
                 Class innerType = classes[1];
+
                 String fieldName = declaredField.getName();
-                ArrayList<Long> ids = args.get(fieldName);
+                List<Long> ids = args.get(fieldName);
                 if (ids != null) {
+                    // 根据 id 获取 entity reference
                     Set<Object> collect = ids.stream()
                             .map(id -> entityManager.getReference(innerType, id))
                             .collect(Collectors.toSet());
@@ -93,4 +98,57 @@ public class ArgsUtil {
             }
         }
     }
+
+
+
+    // https://gist.github.com/bmchild/2343316
+    @SuppressWarnings("rawtypes")
+    public static Class<?> getEntity(JpaRepository repo) {
+        Type clazzes = getGenericType(repo.getClass())[0];
+        Type[] jpaClass = getGenericType(getClass(clazzes));
+        return getClass( ((ParameterizedType)jpaClass[0]).getActualTypeArguments()[0]);
+    }
+
+    public static Type[] getGenericType(Class<?> target) {
+        if (target == null)
+            return new Type[0];
+        Type[] types = target.getGenericInterfaces();
+        if (types.length > 0) {
+            return types;
+        }
+        Type type = target.getGenericSuperclass();
+        if (type != null) {
+            if (type instanceof ParameterizedType) {
+                return new Type[] { type };
+            }
+        }
+        return new Type[0];
+    }
+
+    /*
+     * Get the underlying class for a type, or null if the type is a variable
+     * type.
+     *
+     * @param type
+     * @return the underlying class
+     */
+    @SuppressWarnings("rawtypes")
+    private static Class<?> getClass(Type type) {
+        if (type instanceof Class) {
+            return (Class) type;
+        } else if (type instanceof ParameterizedType) {
+            return getClass(((ParameterizedType) type).getRawType());
+        } else if (type instanceof GenericArrayType) {
+            Type componentType = ((GenericArrayType) type).getGenericComponentType();
+            Class<?> componentClass = getClass(componentType);
+            if (componentClass != null) {
+                return Array.newInstance(componentClass, 0).getClass();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
 }
