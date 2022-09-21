@@ -28,6 +28,10 @@ public  class DirtBaseIdEntity implements Serializable {
     // @JsonValue
 
     @Id
+
+    // https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela/32223785#32223785
+    @Access(AccessType.PROPERTY)
+
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
     @Column(name = "id")
     @DirtField(title = "id",index = -999999, uiType = eUIType.digit,fixed = "left",dirtSubmit = {})
