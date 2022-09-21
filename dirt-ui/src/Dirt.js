@@ -19,15 +19,15 @@ export default function Dirt(props) {
 
   // 给 header 加点料，如加上新的 render，以支持在不同的场景下，渲染不同的组件，典型如：日期在创建时，是选择具体的值，但在搜索时，经常性是个范围。
   const redefineHeader = (headers, c) => {
-    const {title,idOfEntity: cls, dataIndex, relation} = c
+    const {title, idOfEntity: cls, dataIndex, relation} = c
 
     if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {
-      c['render'] = (text, record, index) => { return customRender.table(title,cls,record[dataIndex]?.id); }
+      c['render'] = (text, record, index) => {return customRender.table(title, cls, record[dataIndex]?.id);}
       return c;
     }
     else if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
       c['render'] = (text, record, index) => {
-        return record[dataIndex]?.map(d => { return customRender.table(title,cls,d.id) })
+        return record[dataIndex]?.map(d => {return customRender.table(title, cls, d.id)})
       }
       return c;
     }
@@ -36,8 +36,14 @@ export default function Dirt(props) {
     if (cls) {
       let key = c["key"]
       c['render'] = (text, record, index) => {
-        const rid = record[dataIndex]?.id;
-        return rid ? <ReadForm key={rid} title={title} id={rid} cls={cls} /> : '';
+        const target = record[dataIndex]
+        if (target && Array.isArray(target)) {
+          return <> { target.map(r => <ReadForm key={r.id} title={title} id={r.id} cls={cls} />) } </>
+
+        } else {
+          const rid = target?.id;
+          return rid ? <ReadForm key={rid} title={title} id={rid} cls={cls} /> : '';
+        }
       }
     }
     // 处理 actions
@@ -145,13 +151,14 @@ export default function Dirt(props) {
       // 只读模式
       // https://github.com/ant-design/pro-components/issues/3323
 
-      return <WriteForm key={key} name={text} readOnly={isDetailed} columns={formData} 
-      onFinish={(postdata) => 
-        // network.createAsync(entityName, values, () => {actionRef.current.reload()})
-         network.updateAsync(entityName, postdata, () => {
-            actionRef.current.reload(); }
-        )
-      } triggerCompoent={<a href="#!"> {text} </a>} />
+      return <WriteForm key={key} name={text} readOnly={isDetailed} columns={formData}
+        onFinish={(postdata) =>
+          // network.createAsync(entityName, values, () => {actionRef.current.reload()})
+          network.updateAsync(entityName, postdata, () => {
+            actionRef.current.reload();
+          }
+          )
+        } triggerCompoent={<a href="#!"> {text} </a>} />
     }
     else if (key === 'delete') {
 

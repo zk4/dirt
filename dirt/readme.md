@@ -56,7 +56,8 @@ ManyToMany 多对多，关系任意，可重复
 ### 编程范式
 
 1. 服务端 entity 对象测试
-2. 基于事件驱动，可以非常快的与异步模型整合，且非常方便微服务拆分。
+2. 基于事件驱动，可以非常快的与异步模型整合，且非常方便微服务拆分。 
+
 
 
 
@@ -82,6 +83,7 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] 支持 Map 映射
 1. [ ] schema 标准化
 1. [ ] 业务事件驱动
+1. [ ] thrift ？ 
 1. [ ] 虚拟 entity 支持
 1. [ ] embeded 支持
 1. [ ] 输出表单联动 schema
@@ -91,8 +93,8 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] 完善 search 字段的前端映射
 1. [ ] 关系支持查询
 1. [ ] 在获取数据时，只获取需要显示的数据， 尤其是关联关系，只返回 id，或者 id list/set
-
-## 前端 T
+1. [ ] 自动生成 以 id 为主导的关联代码，参考 lombok
+## 前端
 1. [x] 性能优化，如果 UI 未显示详情，不应该加载
 1. [x] 表格批量操作
 1. [x] 创建/修改表单自动处理多对一
@@ -310,6 +312,7 @@ https://gitee.com/JeeHuangBingGui/JsonSql
 ### 事件驱动 flow-eda
 
 https://linxfeng.github.io/flow-eda/#/introduce/overview
+
 
 ### 服务端脚手架
 

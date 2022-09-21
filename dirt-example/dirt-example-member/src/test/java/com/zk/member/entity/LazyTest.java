@@ -3,6 +3,7 @@ package com.zk.member.entity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.google.common.collect.ImmutableMap;
+import com.zk.MemberApplication;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.util.ArgsUtil;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes ={MemberApplication.class})
 @DisplayName("lazy 测试")
 @Rollback(value = false)
 public class LazyTest {

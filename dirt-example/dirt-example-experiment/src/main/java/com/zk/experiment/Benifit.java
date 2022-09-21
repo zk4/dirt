@@ -1,19 +1,22 @@
 package com.zk.experiment;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,7 +25,8 @@ import javax.validation.constraints.Size;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@ToString
+//@ToString
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Benifit extends DirtBaseIdEntity {
 
 
@@ -31,8 +35,9 @@ public class Benifit extends DirtBaseIdEntity {
     @Size(min = 2, max = 30)
     String name;
 
-
-
+    @DirtField(dirtSubmit = {})
+    @ManyToMany(mappedBy = "benifits")
+    Set<Card> cards;
 
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}

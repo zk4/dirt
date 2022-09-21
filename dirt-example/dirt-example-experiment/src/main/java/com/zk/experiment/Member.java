@@ -14,7 +14,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -41,16 +40,13 @@ public class Member extends DirtBaseIdEntity {
     String name;
 
     @DirtField
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     Set<Card> cards;
 
     @DirtField
-    @ManyToMany(fetch = FetchType.LAZY)
-    Set<Benifit> benifits;
-
-    @DirtField
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     Set<Coupon> coupons;
+
 
 
     @DirtAction(text = "详情", key = "detail")

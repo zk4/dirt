@@ -1,11 +1,14 @@
 package com.zk.experiment;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,11 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.PostLoad;
-import javax.persistence.Transient;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -32,22 +31,36 @@ public class Card extends DirtBaseIdEntity {
     @DirtField(title = "卡名")
     String name;
 
+    @DirtField
+    @ManyToMany
+    @JsonIdentityReference(alwaysAsId = true)
+    Set<Benifit> benifits;
+
+    @Data
+    @AllArgsConstructor
+    static class Id  {
+        Long id;
+    }
+    //@DirtField(idOfEntity = Benifit.class,dirtSubmit = {})
+    //@ManyToMany
+    //@Transient
+    //Set<Id>  benifitIds;
+    //
 
     @DirtField
     @ManyToMany(mappedBy = "cards")
     @JsonIgnore
     Set<Member> members;
-
-
-    @DirtField
-    @Transient
-    Set<Long>  memberidsds;
-
-    @PostLoad
-    public void  afterMemberIds(){
-        Stream<Long> longStream = members.stream().map(member -> member.getId());
-        this.memberidsds= longStream.collect(Collectors.toSet());
-    }
+    //
+    //@DirtField(dirtSubmit = {})
+    //@Transient
+    //Set<Id>  memberds;
+    //
+    //@PostLoad
+    //public void  postLoad(){
+    //    this.benifitIds= benifits.stream().map(b ->new Id(b.getId())).collect(Collectors.toSet());
+    //    this.memberds= members.stream().map(m ->new Id(m.getId())).collect(Collectors.toSet());
+    //}
 
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}
