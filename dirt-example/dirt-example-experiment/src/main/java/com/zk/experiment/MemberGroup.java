@@ -1,16 +1,19 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,15 +21,25 @@ import javax.persistence.Entity;
 @DirtEntity
 @DynamicUpdate
 @DynamicInsert
-// 让 jackson 忽略序列化 hibernateLazyInitializer handler 属性
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Car extends DirtBaseIdEntity {
+@ToString
+public class MemberGroup extends DirtBaseIdEntity {
 
-    @DirtField(title = "车名",  dirtSubmit = @DirtSubmit(
 
-    ))
-    String carName;
 
+    @DirtField
+    @ManyToMany
+    Set<Member> members;
+
+
+    @DirtAction(text = "详情", key = "detail")
+    public void detail() {}
+
+    @DirtAction(text = "删除", key = "delete")
+    public void delete() {}
+
+    @DirtAction(text = "编辑", key = "edit")
+    public void edit() {}
 
 
 

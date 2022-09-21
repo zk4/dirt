@@ -42,10 +42,6 @@ public class Member extends DirtBaseIdEntity {
     Set<Item> items;
 
 
-    @DirtField
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
-    Set<Item> moreitems;
-
     @DirtField(title = "会员昵称", dirtSearch = @DirtSearch(operator = eFilterOperator.LIKE))
     @NotEmpty
     @Size(min = 2, max = 30)
