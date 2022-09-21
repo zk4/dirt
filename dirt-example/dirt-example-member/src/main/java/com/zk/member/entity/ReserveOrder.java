@@ -29,16 +29,16 @@ import java.math.BigDecimal;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class ReserveOrder extends DirtBaseIdEntity {
 
-    @DirtField(title = "预约商品 id", idOfEntity = ReserveProduct.class)
+    @DirtField(title = "预约商品 id")
     @ManyToOne(fetch = FetchType.LAZY)
     ReserveProduct reserveProduct;
 
 
-    @DirtField(title = "预约商品2", idOfEntity = ReserveProduct.class)
+    @DirtField(title = "预约商品2")
     @ManyToOne(fetch = FetchType.LAZY)
     ReserveProduct reserveProduct2;
 
-    @DirtField(title = "abc", idOfEntity = ReserveProduct.class)
+    @DirtField
     @ManyToOne(fetch = FetchType.LAZY)
     ReserveProduct hello;
 
