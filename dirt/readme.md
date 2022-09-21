@@ -80,7 +80,7 @@ ManyToMany 多对多，关系任意，可重复
 1. [x] 更新与创建关系时，只应该处理 id，不需要传递整个 entity
 1. [ ] schema 标准化
 1. [ ] 业务事件驱动
-1. [ ] 支持 JAVA 里其他映射类型，如 Map，Set，List
+1. [x] 支持 JAVA 里其他映射类型，如 Map，Set，List
 1. [ ] 虚拟 entity 支持
 1. [ ] embeded 支持
 1. [ ] 输出表单联动 schema
