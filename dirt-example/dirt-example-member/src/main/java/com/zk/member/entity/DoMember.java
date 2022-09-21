@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.annotation.DirtSearch;
-import com.zk.dirt.core.eFilterOperator;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +15,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -32,8 +31,11 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @ToString
 public class DoMember extends DirtBaseIdEntity {
-    @DirtField(title = "会员名", dirtSearch = @DirtSearch(operator = eFilterOperator.LIKE))
+    @DirtField(title = "会员名")
+    @Size(max = 3)
+    @NotEmpty
     String name;
+
 
     @DirtField(title = "是否实名")
     Boolean certificated;
@@ -43,14 +45,7 @@ public class DoMember extends DirtBaseIdEntity {
     @JsonIgnore
     List<DoMemberGroupRelation> doMemberGroupRelations;
 
-    @DirtField
-    @Transient
-    public List<Long> groupIds;
 
-    @PostLoad
-    private void postLoad() {
-        groupIds = doMemberGroupRelations.stream().map(DoMemberGroupRelation::getId).collect(Collectors.toList());
-    }
 
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}

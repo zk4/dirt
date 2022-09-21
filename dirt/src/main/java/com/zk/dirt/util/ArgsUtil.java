@@ -108,7 +108,7 @@ public class ArgsUtil {
 
             } else if (declaredField.isAnnotationPresent(ManyToOne.class) || declaredField.isAnnotationPresent(OneToOne.class)) {
                 Class<?> type = declaredField.getType();
-                                arg = entityManager.getReference(type, ((DirtBaseIdEntity)arg).getId());
+                arg = entityManager.getReference(type, ((DirtBaseIdEntity)arg).getId());
             } else {
                 // primitive field
 

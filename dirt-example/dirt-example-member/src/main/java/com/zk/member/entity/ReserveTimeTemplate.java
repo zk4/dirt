@@ -1,11 +1,12 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.DirtBaseIdEntity;
+import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.eUIType;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.member.entity.types.eWeekDay;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +51,15 @@ public class ReserveTimeTemplate extends DirtBaseIdEntity {
     @ElementCollection
     List<eWeekDay>  days;
 
+
+    @DirtAction(text = "详情", key = "detail")
+    public void detail() {}
+
+    @DirtAction(text = "删除", key = "delete")
+    public void delete() {}
+
+    @DirtAction(text = "编辑", key = "edit")
+    public void edit() {}
 
 
 }
