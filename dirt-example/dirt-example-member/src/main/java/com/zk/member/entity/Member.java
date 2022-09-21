@@ -1,11 +1,11 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eFilterOperator;
 import com.zk.dirt.core.eUIType;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.member.entity.types.eGender;
 import com.zk.member.entity.types.eIdType;
 import lombok.Data;
@@ -13,15 +13,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,6 +36,16 @@ import javax.validation.constraints.Size;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @ToString
 public class Member extends DirtBaseIdEntity {
+
+    @DirtField
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    Set<Item> items;
+
+
+    @DirtField
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    Set<Item> moreitems;
+
     @DirtField(title = "会员昵称", dirtSearch = @DirtSearch(operator = eFilterOperator.LIKE))
     @NotEmpty
     @Size(min = 2, max = 30)
@@ -82,6 +93,9 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtField(title = "绑定")
     Boolean binding;
+
+
+
 
 
     //@ManyToOne(fetch = FetchType.LAZY)

@@ -12,11 +12,21 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import static com.zk.utils.StartUtils.logApplicationStartup;
 
+//@SpringBootApplication
+//@EnableAsync
+//public class MemberApplication {
+//    public static void main(String[] args) {
+//        SpringApplication app = new SpringApplication(MemberApplication.class);
+//        ConfigurableApplicationContext run = app.run(args);
+//        SpringUtil.setApplicationContext(run);
+//        Environment env = run.getEnvironment();
+//        logApplicationStartup(env);
+//    }
+//
+//}
 
 @SpringBootApplication
-//@EnableCaching
 @Slf4j
-//@EnableLogReqResAspect
 @EnableAsync
 public class ExperimentApplication {
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
 package com.zk.events;
 
-import com.zk.demoentity.ActionDemo;
+import com.zk.experiment.ActionDemo;
 import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

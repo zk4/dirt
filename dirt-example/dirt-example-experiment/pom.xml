@@ -13,7 +13,6 @@
 
 
     <dependencies>
-
         <dependency>
             <groupId>com.dirt</groupId>
             <artifactId>dirt</artifactId>
@@ -22,7 +21,11 @@
             <groupId>com.dirt</groupId>
             <artifactId>dirt-common-core</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
         <!--knife4j swagger -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
@@ -87,11 +90,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,4 +1,4 @@
-package com.zk.demoentity;
+package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.DirtAction;
