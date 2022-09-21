@@ -3,7 +3,7 @@ package com.zk.dirt.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.BeanUtil;
-import com.zk.member.entity.Member;
+import com.zk.experiment.Member;
 import lombok.Data;
 import lombok.ToString;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.OneToMany;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -96,6 +98,34 @@ class ArgsUtilTest {
 
         Assertions.assertEquals(ret, "zk");
 
+    }
+
+
+    class OuterBean {
+
+        @OneToMany
+        Set<InnerBean>  beans;
+    }
+    class InnerBean {
+
+    }
+
+    @Test
+    void mapToArray() {
+    }
+
+    @Test
+    void getContainerItemType() {
+        Field[] declaredFields = OuterBean.class.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            boolean annotationPresent = declaredField.isAnnotationPresent(OneToMany.class);
+            if(annotationPresent){
+                Class[] collectionItemTypes = ArgsUtil.getCollectionItemType(declaredField);
+                for (Class collectionItemType : collectionItemTypes) {
+                    System.out.println(collectionItemType);
+                }
+            }
+        }
     }
 
     @Data

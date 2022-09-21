@@ -34,7 +34,7 @@ public class JPAPersistProxyImp implements iPersistProxy {
 	}
 
 	@Override
-	public <T, ID> T getOne(Class clazz, ID id){
+	public <T, ID> T getOne(Class<T> clazz, ID id){
 		SimpleJpaRepository jpaRepository = dirtContext.getRepoByType(clazz);
 		return (T) jpaRepository.getOne(id);
 	}
