@@ -1,5 +1,6 @@
 package com.zk.member.entity;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.google.common.collect.ImmutableMap;
 import com.zk.dirt.core.DirtContext;
@@ -125,15 +126,16 @@ public class LazyTest {
 
         args.put("name", "zk");
 
-        args.put("idtype", eIdType.IDCARD);
+        args.put("idtype", eIdType.IDCARD.toString());
 
         args.put("moreitems", new ArrayList<>(Arrays.asList(
                 ImmutableMap.of("id", 3L),
                 ImmutableMap.of("id", 4L)
         )));
 
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        ArgsUtil.updateEntity(Member.class,one, args,entityManager);
+        ArgsUtil.updateEntity(Member.class,one, args,entityManager,objectMapper);
 
         Member save = persistProxy.save(Member.class, one);
         System.out.println(save.getItems());

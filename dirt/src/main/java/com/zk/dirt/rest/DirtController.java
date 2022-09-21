@@ -101,7 +101,7 @@ public class DirtController {
 
         Object one = persistProxy.getOne(entityClass,o2.getId());
 
-        ArgsUtil.updateEntity(entityClass,one,body,entityManager);
+        persistProxy.update(entityClass,one,body);
         //// 不需要传入，直接忽略
         //String[] ignoreList = {"createdTime", "updatedTime", "deleted"};
         //BeanUtils.copyProperties(o2, one, ignoreList);

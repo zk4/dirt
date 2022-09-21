@@ -1,5 +1,6 @@
 package com.zk.dirt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.util.ArgsUtil;
@@ -30,6 +31,9 @@ public class JPAPersistProxyImp implements iPersistProxy {
 
 	@Autowired
 	EntityManager entityManager;
+
+	@Autowired
+	ObjectMapper objectMapper;
 
 	@Override
 	public <ID> Optional findById(Class clazz, ID id) {
@@ -75,6 +79,6 @@ public class JPAPersistProxyImp implements iPersistProxy {
 
 	@Override
 	public <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
-		ArgsUtil.updateEntity(rawType, enhancedInstance, args, entityManager);
+		ArgsUtil.updateEntity(rawType, enhancedInstance, args, entityManager,objectMapper);
 	}
 }

@@ -1,14 +1,17 @@
 package com.zk.dirt.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.*;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.*;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.lang.reflect.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ArgsUtil {
@@ -70,29 +73,38 @@ public class ArgsUtil {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T> void updateEntity(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
-        // convert ids to entity reference, then set it back to managed entity
+    public static <T> void updateEntity(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager,ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
+        // types is converted, save me sometime
+        Object typedArgs = objectMapper.convertValue(args, rawType);
 
         for (Field declaredField : rawType.getDeclaredFields()) {
             String fieldName = declaredField.getName();
-            Object arg = args.get(fieldName);
+
+            Method getter = new PropertyDescriptor(fieldName,rawType).getReadMethod();
+
+            Object arg = getter.invoke(typedArgs);
             if (arg == null) continue;
-            ;
+
             if (declaredField.isAnnotationPresent(OneToMany.class) || declaredField.isAnnotationPresent(ManyToMany.class)) {
                 Class[] classes = ArgsUtil.getCollectionItemType(declaredField);
 
-                // 容器类型，有用再说
-                // Class contianer = classes[0];
-
+                Class containerType = classes[0];
+                Boolean isSet = containerType.isAssignableFrom(Set.class);
                 // 容器内部类型
                 Class innerType = classes[1];
 
-                List<Map> idObjs = (List<Map>) arg;
+                Collection idObjs = (Collection) arg;
 
                 // 根据 id 获取 entity reference
                 arg = idObjs.stream()
-                        .map(idObj -> entityManager.getReference(innerType, (Long)idObj.get("id")))
-                        .collect(Collectors.toSet());
+                        .map(idObj -> {
+                            return entityManager.getReference(innerType, ((DirtBaseIdEntity)idObj).getId());
+                        })
+                        .collect(
+                                isSet?
+                                Collectors.toSet():
+                                        Collectors.toList()
+                        );
 
             } else if (declaredField.isAnnotationPresent(ManyToOne.class) || declaredField.isAnnotationPresent(OneToOne.class)) {
                 Class<?> type = declaredField.getType();
@@ -103,15 +115,10 @@ public class ArgsUtil {
 
             }
 
-            // set entity reference back to oneToMany annotated field
-            Method mehtod = new PropertyDescriptor(declaredField.getName(),
-                    enhancedInstance.getClass()).getWriteMethod();
-            //if(declaredField.isEnumConstant()){
-            //    System.out.println("yes");
-            //    Class<? extends Enum> type = (Class<? extends Enum>) declaredField.getType();
-            //
-            //}
-            mehtod.invoke(enhancedInstance, arg);
+            // set entity reference back to annotated field
+            Method setter = new PropertyDescriptor(fieldName,enhancedInstance.getClass()).getWriteMethod();
+            System.out.println(fieldName);
+            setter.invoke(enhancedInstance, arg);
         }
     }
 
