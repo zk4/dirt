@@ -15,7 +15,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +22,8 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -41,6 +42,9 @@ public class DirtController {
 
     @Autowired
     iPersistProxy persistProxy;
+
+    @Autowired
+    EntityManager entityManager;
 
     @PostMapping("/dirt/action")
     @ApiOperation(value = "动作")
@@ -88,7 +92,7 @@ public class DirtController {
     @PostMapping("/dirt/update")
     @ApiOperation(value = "更新")
     @Transactional
-    public Result update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public Result update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName( entityName);
         SimpleJpaRepository jpaRepository = dirtContext.getRepo(entityName);
 
@@ -96,9 +100,11 @@ public class DirtController {
         if (o2.getId() == null) throw new RuntimeException("没有 id，无法更新");
 
         Object one = persistProxy.getOne(entityClass,o2.getId());
-        // 不需要传入，直接忽略
-        String[] ignoreList = {"createdTime", "updatedTime", "deleted"};
-        BeanUtils.copyProperties(o2, one, ignoreList);
+
+        ArgsUtil.updateEntity(entityClass,one,body,entityManager);
+        //// 不需要传入，直接忽略
+        //String[] ignoreList = {"createdTime", "updatedTime", "deleted"};
+        //BeanUtils.copyProperties(o2, one, ignoreList);
 
         //  检测manytoone id 是否存在
         //DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityClass.getName());

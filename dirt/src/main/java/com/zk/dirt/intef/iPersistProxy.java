@@ -5,7 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface iPersistProxy  {
@@ -23,4 +26,5 @@ public interface iPersistProxy  {
 	<S extends T,T> S save(Class clazz,S entity);
 
 
+    <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException;
 }

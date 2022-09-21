@@ -2,6 +2,7 @@ package com.zk.dirt;
 
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.intef.iPersistProxy;
+import com.zk.dirt.util.ArgsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,10 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,5 +71,10 @@ public class JPAPersistProxyImp implements iPersistProxy {
 	public <S extends T, T> S save(Class clazz, S entity) {
 		SimpleJpaRepository jpaRepository = dirtContext.getRepoByType(clazz);
 		return (S) jpaRepository.save(entity);
+	}
+
+	@Override
+	public <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
+		ArgsUtil.updateEntity(rawType, enhancedInstance, args, entityManager);
 	}
 }

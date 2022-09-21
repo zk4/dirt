@@ -1,9 +1,11 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.google.common.collect.ImmutableMap;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.util.ArgsUtil;
+import com.zk.member.entity.types.eIdType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -112,13 +117,23 @@ public class LazyTest {
         Member one = persistProxy.getOne(Member.class, 1L);
 
         // construct id args
+        HashMap<String, Object> args = new HashMap<>();
+        args.put("items", new ArrayList<>(Arrays.asList(
+                ImmutableMap.of("id", 1L),
+                ImmutableMap.of("id", 2L)
+                )));
 
-        HashMap<String, List<Long>> args = new HashMap<>();
-        args.put("items", new ArrayList<>(Arrays.asList(1L, 2L, 3L)));
-        args.put("moreitems", new ArrayList<>(Arrays.asList(1L, 2L, 4L)));
+        args.put("name", "zk");
 
-        ArgsUtil.assignRelationIds(Member.class,one, args,entityManager);
+        args.put("idtype", eIdType.IDCARD);
 
+        args.put("moreitems", new ArrayList<>(Arrays.asList(
+                ImmutableMap.of("id", 3L),
+                ImmutableMap.of("id", 4L)
+        )));
+
+
+        ArgsUtil.updateEntity(Member.class,one, args,entityManager);
 
         Member save = persistProxy.save(Member.class, one);
         System.out.println(save.getItems());
