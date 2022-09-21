@@ -1,12 +1,11 @@
 package com.zk.member.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.eUIType;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.member.entity.types.eReseveProductType;
 import com.zk.member.provider.StatusProvider;
@@ -50,22 +49,10 @@ public class ReserveFinance extends DirtBaseIdEntity {
 
     // https://kostenko.org/blog/2020/10/jpa-manytoone-get-id-one-query.html
     //---------------------------many to one 演示  ------------------------
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reserveTimeTemplate", insertable = false, updatable = false)
-    @JsonIgnore
+    @DirtField(title = "预留时间")
     ReserveTimeTemplate reserveTimeTemplate;
-
-
-    @DirtField(title = "时间模板 id",
-            idOfEntity = ReserveTimeTemplate.class,
-
-            filters = true,
-            onFilter = true,
-            dirtSubmit = @DirtSubmit
-    )
-    @Column(name = "reserveTimeTemplate")
-    Long reserveTimeTemplateId;
-
 
 
     @DirtField(
