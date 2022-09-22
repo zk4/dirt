@@ -40,6 +40,10 @@ public class Card extends DirtBaseIdEntity {
 
     @DirtField
     @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="card_benifit_rel",
+            joinColumns={@JoinColumn(name="cardId")},
+            inverseJoinColumns={@JoinColumn(name="benifitId")})
     @JsonIdentityReference(alwaysAsId = true)
     Set<Benifit> benifits;
 
@@ -56,6 +60,7 @@ public class Card extends DirtBaseIdEntity {
 
     @DirtField
     @ManyToMany
+    // 允许双向更新
     @JoinTable(name="member_card_rel",
             joinColumns={@JoinColumn(name="cardId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})

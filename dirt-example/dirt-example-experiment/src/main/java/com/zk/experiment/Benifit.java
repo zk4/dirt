@@ -13,6 +13,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -36,7 +38,11 @@ public class Benifit extends DirtBaseIdEntity {
     String name;
 
     @DirtField(dirtSubmit = {})
-    @ManyToMany(mappedBy = "benifits")
+    @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="card_benifit_rel",
+            joinColumns={@JoinColumn(name="benifitId")},
+            inverseJoinColumns={@JoinColumn(name="cardId")})
     Set<Card> cards;
 
     @DirtAction(text = "详情", key = "detail")

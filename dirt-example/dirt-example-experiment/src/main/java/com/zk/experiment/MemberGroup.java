@@ -12,6 +12,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
@@ -29,6 +31,10 @@ public class MemberGroup extends DirtBaseIdEntity {
 
     @DirtField
     @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="membergroup_member_rel",
+            joinColumns={@JoinColumn(name="memberGroupId")},
+            inverseJoinColumns={@JoinColumn(name="memberId")})
     Set<Member> members;
 
 

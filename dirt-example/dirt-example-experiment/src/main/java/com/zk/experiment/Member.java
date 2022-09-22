@@ -39,6 +39,7 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtField
     @ManyToMany
+    // 允许双向更新
     @JoinTable(name="member_card_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="cardId")})
@@ -46,7 +47,19 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtField
     @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="member_coupon_rel",
+            joinColumns={@JoinColumn(name="memberId")},
+            inverseJoinColumns={@JoinColumn(name="couponId")})
     Set<Coupon> coupons;
+
+    @DirtField
+    @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="member_coupon_rel",
+            joinColumns={@JoinColumn(name="couponId")},
+            inverseJoinColumns={@JoinColumn(name="memberId")})
+    Set<MemberGroup> memberGroups;
 
     @DirtField(title = "会员类型",
             uiType = eUIType.select,
