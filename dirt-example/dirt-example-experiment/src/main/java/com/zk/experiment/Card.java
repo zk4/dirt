@@ -1,7 +1,6 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eUIType;
@@ -12,6 +11,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
@@ -54,8 +55,12 @@ public class Card extends DirtBaseIdEntity {
     //
 
     @DirtField
-    @ManyToMany(mappedBy = "cards")
-    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name="member_card_rel",
+            joinColumns={@JoinColumn(name="cardId")},
+            inverseJoinColumns={@JoinColumn(name="memberId")})
+    // json 仅序列化为 id，避免循环
+    @JsonIdentityReference(alwaysAsId = true)
     Set<Member> members;
     //
     //@DirtField(dirtSubmit = {})

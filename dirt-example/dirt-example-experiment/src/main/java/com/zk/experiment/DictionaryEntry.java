@@ -49,10 +49,10 @@ public class DictionaryEntry extends DirtBaseIdEntity implements iDirtDictionary
 
     @DirtField(title = "字典索引")
 
-    // 允许双向
     @ManyToOne
+    // 允许只生成两张表的情况下，双向更新
     @JoinColumn(name = "dictionaryIndex")
-
+    // json 仅序列化为 id，避免循环
     @JsonIdentityReference(alwaysAsId = true)
     DictionaryIndex dictionaryIndex;
 

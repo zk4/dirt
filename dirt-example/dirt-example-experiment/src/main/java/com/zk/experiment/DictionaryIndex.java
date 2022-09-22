@@ -66,7 +66,7 @@ public class DictionaryIndex extends DirtBaseIdEntity {
 
     @DirtField
     @OneToMany
-    // 允许双向
+    // 允许只生成两张表的情况下，双向更新
     @JoinColumn(name = "dictionaryIndex")
     List<DictionaryEntry> entries;
 

@@ -1,20 +1,19 @@
 package com.zk.experiment;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -29,7 +28,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@ToString
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Member extends DirtBaseIdEntity {
 
 
@@ -40,6 +39,9 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtField
     @ManyToMany
+    @JoinTable(name="member_card_rel",
+            joinColumns={@JoinColumn(name="memberId")},
+            inverseJoinColumns={@JoinColumn(name="cardId")})
     Set<Card> cards;
 
     @DirtField
