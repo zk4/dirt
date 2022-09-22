@@ -20,7 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity
+@DirtEntity("会员组")
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
@@ -29,7 +29,7 @@ public class MemberGroup extends DirtBaseIdEntity {
 
 
 
-    @DirtField
+    @DirtField(title = "会员集合")
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="membergroup_member_rel",

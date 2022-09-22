@@ -200,7 +200,13 @@ public class DirtController {
 
 
     @GetMapping("/dirt/getTablesNames")
-    public Set<String> tables() {
+    public Set<String> getTablesNames() {
         return dirtContext.getAllEntityNames();
+    }
+
+
+    @GetMapping("/dirt/getTableMaps")
+    public Map<String,String> getTableMaps() {
+        return dirtContext.getNameEntityMap();
     }
 }

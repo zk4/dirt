@@ -21,7 +21,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity
+@DirtEntity("会员")
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "member")
@@ -37,7 +37,7 @@ public class Member extends DirtBaseIdEntity {
     @Size(min = 2, max = 30)
     String name;
 
-    @DirtField
+    @DirtField(title = "卡包")
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="member_card_rel",
@@ -45,7 +45,7 @@ public class Member extends DirtBaseIdEntity {
             inverseJoinColumns={@JoinColumn(name="cardId")})
     Set<Card> cards;
 
-    @DirtField
+    @DirtField(title = "券包")
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="member_coupon_rel",
@@ -53,7 +53,7 @@ public class Member extends DirtBaseIdEntity {
             inverseJoinColumns={@JoinColumn(name="couponId")})
     Set<Coupon> coupons;
 
-    @DirtField
+    @DirtField(title = "会员组")
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="member_coupon_rel",

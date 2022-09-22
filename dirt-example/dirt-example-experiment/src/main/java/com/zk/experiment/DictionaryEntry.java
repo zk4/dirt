@@ -21,7 +21,7 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 @Entity
-@DirtEntity
+@DirtEntity("字典键值")
 @DynamicUpdate
 @DynamicInsert
 @Table(name = " dictionary_entry")

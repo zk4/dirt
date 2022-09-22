@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
-@DirtEntity
+@DirtEntity("优惠券")
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})

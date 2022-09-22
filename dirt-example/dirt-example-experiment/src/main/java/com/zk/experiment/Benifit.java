@@ -23,7 +23,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity
+@DirtEntity("权益")
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
@@ -37,7 +37,7 @@ public class Benifit extends DirtBaseIdEntity {
     @Size(min = 2, max = 30)
     String name;
 
-    @DirtField(dirtSubmit = {})
+    @DirtField(title = "卡包",dirtSubmit = {})
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="card_benifit_rel",

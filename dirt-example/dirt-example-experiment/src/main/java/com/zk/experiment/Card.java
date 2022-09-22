@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity
+@DirtEntity("卡")
 @DynamicUpdate
 
 @DynamicInsert
@@ -38,7 +38,7 @@ public class Card extends DirtBaseIdEntity {
 
     String  cardType;
 
-    @DirtField
+    @DirtField(title = "权益集合")
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="card_benifit_rel",
@@ -58,7 +58,7 @@ public class Card extends DirtBaseIdEntity {
     //Set<Id>  benifitIds;
     //
 
-    @DirtField
+    @DirtField(title = "会员集合")
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="member_card_rel",

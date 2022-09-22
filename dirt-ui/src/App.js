@@ -5,11 +5,11 @@ import Dirt from './Dirt'
 
 function App() {
   let [path] =useState(window.location.pathname.substr(1) || 'com.zk.member.entity.ReserveProduct')
-  let [tables, setTables] = useState([])
+  let [tables, setTables] = useState({})
 
   useEffect(() => {
     (async () => {
-      let res = await axios.get(`http://127.0.0.1:8081/dirt/getTablesNames`)
+      let res = await axios.get(`http://127.0.0.1:8081/dirt/getTableMaps`)
       if (res.data.code === 0) {
         let tables = res.data.data;
         setTables(tables);
@@ -19,8 +19,8 @@ function App() {
   return (
     <div >
       {
-        tables.length > 0 && tables.map(t => {
-          return <a key={t} href={'/' + t}>{t.split(".").pop()} |</a>
+        Object.keys(tables).length > 0 && Object.entries(tables).map(([t,v]) => {
+          return <a key={t} href={'/' + t}>{v} |</a>
         })
       }
       <Dirt entityName={path} />

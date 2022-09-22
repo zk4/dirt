@@ -23,7 +23,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@DirtEntity
+@DirtEntity("字典索引")
 @DynamicUpdate
 @DynamicInsert
 @Table(name = " dictionary_index")
@@ -59,12 +59,12 @@ public class DictionaryIndex extends DirtBaseIdEntity {
         }
     }
 
-    @DirtField
+    @DirtField(title = "值类型")
     @Enumerated(value = EnumType.STRING)
     @NotNull
     eValueType valueType;
 
-    @DirtField
+    @DirtField(title = "字典 KV")
     @OneToMany
     // 允许只生成两张表的情况下，双向更新
     @JoinColumn(name = "dictionaryIndex")

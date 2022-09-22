@@ -13,7 +13,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface DirtEntity {
-	String name() default "";
+
+	String value() default "";
 	enum eType  {
 		// 二维结构
 		Table,

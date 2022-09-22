@@ -27,7 +27,7 @@ spring:
     port: 6379
     database: 0
   profiles:
-    active: mysql
+    active: mysqlfk
 
 
 zk:

@@ -29,6 +29,7 @@ public class DirtContext {
     private final static Map<String,Class> nameClassMap = new HashMap<String,Class>();
     private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String,SimpleJpaRepository>();
     private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class,SimpleJpaRepository>();
+    private final static Map<String, String> nameEntityMap = new HashMap<String,String>();
 
 
     public DirtContext() {
@@ -52,6 +53,8 @@ public class DirtContext {
                 SimpleJpaRepository jpaRepository = new SimpleJpaRepository(classAnnotationClass, entityManager);
                 nameReposMap.put(simpleName, jpaRepository);
                 classReposMap.put(classAnnotationClass,jpaRepository);
+                 DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
+                nameEntityMap.put(simpleName,declaredAnnotation.value());
             }
         }
         System.out.println(nameDirtEntityMap);
@@ -90,5 +93,7 @@ public class DirtContext {
         return nameReposMap.keySet();
     }
 
-
+    public   Map<String, String> getNameEntityMap() {
+        return nameEntityMap;
+    }
 }
