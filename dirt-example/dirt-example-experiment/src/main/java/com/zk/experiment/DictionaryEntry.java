@@ -48,9 +48,11 @@ public class DictionaryEntry extends DirtBaseIdEntity implements iDirtDictionary
 
 
     @DirtField(title = "字典索引")
+
     // 允许双向
-    @ManyToOne(targetEntity = DictionaryIndex.class)
+    @ManyToOne
     @JoinColumn(name = "dictionaryIndex")
+
     @JsonIdentityReference(alwaysAsId = true)
     DictionaryIndex dictionaryIndex;
 

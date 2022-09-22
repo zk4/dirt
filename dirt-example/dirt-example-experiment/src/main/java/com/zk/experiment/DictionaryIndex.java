@@ -65,9 +65,9 @@ public class DictionaryIndex extends DirtBaseIdEntity {
     eValueType valueType;
 
     @DirtField
-    @OneToMany(targetEntity= DictionaryEntry.class,cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "dictionaryIndex", referencedColumnName = "id")
+    @OneToMany
+    // 允许双向
+    @JoinColumn(name = "dictionaryIndex")
     List<DictionaryEntry> entries;
 
 
