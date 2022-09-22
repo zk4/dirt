@@ -1,6 +1,7 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.*;
@@ -49,6 +50,7 @@ public class Member extends DirtBaseIdEntity {
     @JoinTable(name="member_card_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="cardId")})
+    @JsonIdentityReference(alwaysAsId = true)
     Set<Card> cards;
 
     @DirtField(title = "券包")
@@ -57,6 +59,7 @@ public class Member extends DirtBaseIdEntity {
     @JoinTable(name="member_coupon_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="couponId")})
+    @JsonIdentityReference(alwaysAsId = true)
     Set<Coupon> coupons;
 
     @DirtField(title = "会员组")
@@ -65,6 +68,8 @@ public class Member extends DirtBaseIdEntity {
     @JoinTable(name="member_coupon_rel",
             joinColumns={@JoinColumn(name="couponId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})
+    @JsonIdentityReference(alwaysAsId = true)
+
     Set<MemberGroup> memberGroups;
 
     @DirtField(title = "会员类型",
@@ -74,7 +79,16 @@ public class Member extends DirtBaseIdEntity {
     )
 
     String  memberType;
-    //
+
+
+    @DirtField(title = "标签集合",uiType = eUIType.checkbox)
+    @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="member_tag_rel",
+            joinColumns={@JoinColumn(name="memberId")},
+            inverseJoinColumns={@JoinColumn(name="tagId")})
+    @JsonIdentityReference(alwaysAsId = true)
+    Set<Tag> tags;
 
 
 
