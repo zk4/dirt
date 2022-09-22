@@ -1,6 +1,7 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
@@ -11,11 +12,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Getter
@@ -24,18 +24,23 @@ import java.util.Set;
 @DirtEntity("会员组")
 @DynamicUpdate
 @DynamicInsert
+@Table(name = "my_group")
+@SQLDelete(sql = "UPDATE my_group SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class MemberGroup extends DirtBaseIdEntity {
+@JsonIdentityInfo(scope = MyGroup.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class MyGroup extends DirtBaseIdEntity {
 
 
 
     @DirtField(title = "会员集合")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="membergroup_member_rel",
-            joinColumns={@JoinColumn(name="memberGroupId")},
+    @JoinTable(name="my_group_member_rel",
+            joinColumns={@JoinColumn(name="myGroupId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})
+    @JsonIdentityReference(alwaysAsId = true)
+
     Set<Member> members;
 
 

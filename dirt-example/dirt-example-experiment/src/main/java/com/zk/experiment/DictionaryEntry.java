@@ -9,7 +9,6 @@ import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;

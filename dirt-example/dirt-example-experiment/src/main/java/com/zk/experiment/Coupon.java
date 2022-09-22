@@ -1,6 +1,7 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.*;
@@ -12,9 +13,13 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +28,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Coupon.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
 public class Coupon extends DirtBaseIdEntity {
 
@@ -36,6 +41,17 @@ public class Coupon extends DirtBaseIdEntity {
     @DirtField(title = "券描述",uiType = eUIType.textarea)
     @Size(min = 1, max = 3000)
     String remark;
+
+
+    @DirtField(title = "拥有者")
+    @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="member_coupon_rel",
+            joinColumns={@JoinColumn(name="couponId")},
+            inverseJoinColumns={@JoinColumn(name="memberId")})
+    @JsonIdentityReference(alwaysAsId = true)
+    Set<Member> members;
+
 
     @DirtField(title = "券类型",
             uiType = eUIType.select,

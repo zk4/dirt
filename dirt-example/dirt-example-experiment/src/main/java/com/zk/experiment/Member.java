@@ -30,7 +30,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Member.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Member extends DirtBaseIdEntity {
 
 
@@ -66,11 +66,11 @@ public class Member extends DirtBaseIdEntity {
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="member_coupon_rel",
-            joinColumns={@JoinColumn(name="couponId")},
-            inverseJoinColumns={@JoinColumn(name="memberId")})
+            joinColumns={@JoinColumn(name="memberId")},
+            inverseJoinColumns={@JoinColumn(name="myGroupId")})
     @JsonIdentityReference(alwaysAsId = true)
 
-    Set<MemberGroup> memberGroups;
+    Set<MyGroup> myGroups;
 
     @DirtField(title = "会员类型",
             uiType = eUIType.select,
@@ -81,13 +81,14 @@ public class Member extends DirtBaseIdEntity {
     String  memberType;
 
 
-    @DirtField(title = "标签集合",uiType = eUIType.checkbox)
+    @DirtField(title = "标签集合")
     @ManyToMany
     // 允许双向更新
     @JoinTable(name="member_tag_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="tagId")})
     @JsonIdentityReference(alwaysAsId = true)
+
     Set<Tag> tags;
 
 
