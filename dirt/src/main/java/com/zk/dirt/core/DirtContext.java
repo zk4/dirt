@@ -53,8 +53,11 @@ public class DirtContext {
                 SimpleJpaRepository jpaRepository = new SimpleJpaRepository(classAnnotationClass, entityManager);
                 nameReposMap.put(simpleName, jpaRepository);
                 classReposMap.put(classAnnotationClass,jpaRepository);
+
                  DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
-                nameEntityMap.put(simpleName,declaredAnnotation.value());
+
+                 if(declaredAnnotation.visiable())
+                    nameEntityMap.put(simpleName,declaredAnnotation.value());
             }
         }
         System.out.println(nameDirtEntityMap);

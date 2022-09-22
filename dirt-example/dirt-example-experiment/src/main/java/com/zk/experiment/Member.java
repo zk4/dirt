@@ -8,6 +8,7 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
@@ -36,6 +37,11 @@ public class Member extends DirtBaseIdEntity {
     @NotEmpty
     @Size(min = 2, max = 30)
     String name;
+
+    @DirtField(title = "会员昵称"    )
+    @NotEmpty
+    @Size(min = 2, max = 30)
+    String nickname;
 
     @DirtField(title = "卡包")
     @ManyToMany
@@ -81,5 +87,18 @@ public class Member extends DirtBaseIdEntity {
     @DirtAction(text = "编辑", key = "edit")
     public void edit() {}
 
+    @DirtAction(text = "随机名称", key = "reduce", confirm = true)
+    public void reduce() {
+        this.nickname = RandomStringUtils.randomAlphabetic(13);
+    }
+
+
+    @DirtField(title = "联合字段（名字-昵称)",dirtSubmit = {})
+    @Transient
+    String fullName;
+
+    public String getFullName(){
+        return name +"-" +nickname;
+    }
 
 }

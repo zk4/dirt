@@ -22,4 +22,7 @@ public @interface DirtEntity {
 		Tree,
 	}
 	eType type() default  eType.Table;
+
+	// 是否能从目录接口里拿到
+	boolean visiable() default  true;
 }

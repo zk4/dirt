@@ -21,7 +21,7 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 @Entity
-@DirtEntity("字典键值")
+@DirtEntity(value = "字典键值",visiable = false)
 @DynamicUpdate
 @DynamicInsert
 @Table(name = " dictionary_entry")
@@ -56,6 +56,7 @@ public class DictionaryEntry extends DirtBaseIdEntity implements iDirtDictionary
     @JsonIdentityReference(alwaysAsId = true)
     DictionaryIndex dictionaryIndex;
 
+
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}
 
@@ -64,6 +65,8 @@ public class DictionaryEntry extends DirtBaseIdEntity implements iDirtDictionary
 
     @DirtAction(text = "编辑", key = "edit")
     public void edit() {}
+
+
 
 
 

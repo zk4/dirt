@@ -7,6 +7,7 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -47,16 +48,7 @@ public class Card extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     Set<Benifit> benifits;
 
-    //@Data
-    //@AllArgsConstructor
-    //static class Id  {
-    //    Long id;
-    //}
-    //@DirtField(idOfEntity = Benifit.class,dirtSubmit = {})
-    //@ManyToMany
-    //@Transient
-    //Set<Id>  benifitIds;
-    //
+
 
     @DirtField(title = "会员集合")
     @ManyToMany
@@ -67,16 +59,7 @@ public class Card extends DirtBaseIdEntity {
     // json 仅序列化为 id，避免循环
     @JsonIdentityReference(alwaysAsId = true)
     Set<Member> members;
-    //
-    //@DirtField(dirtSubmit = {})
-    //@Transient
-    //Set<Id>  memberds;
-    //
-    //@PostLoad
-    //public void  postLoad(){
-    //    this.benifitIds= benifits.stream().map(b ->new Id(b.getId())).collect(Collectors.toSet());
-    //    this.memberds= members.stream().map(m ->new Id(m.getId())).collect(Collectors.toSet());
-    //}
+
 
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}
@@ -87,6 +70,26 @@ public class Card extends DirtBaseIdEntity {
     @DirtAction(text = "编辑", key = "edit")
     public void edit() {}
 
+    @DirtField(title = "状态")
+    Boolean status ;
 
+    @DirtField(title = "实名")
+    Boolean binding= true;
+
+    @DirtAction(text = "状态改变", key = "changeStatus")
+    public void changeStatus() {
+
+        if (this.status==null)
+            this.status = false;
+        this.status = !this.status;
+    }
+
+
+    @DirtAction(text = "切换绑定", key = "bind")
+    public void bind() {
+        if (this.binding==null)
+            this.binding = false;
+        this.binding = !this.binding;
+    }
 
 }
