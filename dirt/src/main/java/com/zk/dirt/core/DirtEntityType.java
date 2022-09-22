@@ -3,6 +3,7 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.ColProps;
+import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iListable;
 import com.zk.dirt.util.ExceptionUtils;
@@ -62,13 +63,13 @@ public class DirtEntityType {
 
     public List<DirtFieldType> getHeads() {
         // TODO: 可静态的应该尽量静态化
-        if (!inited) {
+        //if (!inited) {
             initDirtFieldMap();
             initIdOfEntityMap();
             initActionMap();
             initHeads();
             inited = true;
-        }
+        //}
         return heads;
     }
 
@@ -155,6 +156,7 @@ public class DirtEntityType {
                             else if (type.isAssignableFrom(Double.class)) uiTypeStr = "digit";
                             else if (type.isAssignableFrom(BigDecimal.class)) uiTypeStr = "money";
                             else if (type.isAssignableFrom(Boolean.class)) uiTypeStr = "switch";
+
                         }
                     }
                     tableHeader.setValueType(uiTypeStr);
@@ -179,6 +181,8 @@ public class DirtEntityType {
                         if (enumConstant) {
                             Class enumType = fieldRetType;
                             listableClass = enumType.asSubclass(iListable.class);
+                            // TODO： 位置调整一下，放上面一点
+                            tableHeader.setValueType("select");
                         }
                         Class<? extends iListable>[] classes1 = dirtField.enumListableType();
                         if (classes1.length > 0) {
@@ -208,12 +212,21 @@ public class DirtEntityType {
                             List options = query.getResultList();
                             source = new LinkedHashMap();
                             for (Object option : options) {
-                                Map option1 = (Map) option;
-                                // TODO: 不可这样写，需要与实现无关
-                                source.put(option1.get("status"),
-                                        new DirtEnumValue(option1.get("text"),
-                                                option1.get("status"),
-                                                ""));
+                                if(option instanceof  iDirtDictionaryEntryType){
+                                    iDirtDictionaryEntryType option1 = (iDirtDictionaryEntryType) option;
+                                    source.put(option1.getDictKey(),
+                                            new DirtEnumValue(option1.getDictValue(),
+                                                    option1.getDictKey(),
+                                                    option1.getDictSort()
+                                            ));
+                                }else {
+                                    Map option1 = (Map) option;
+                                    // TODO: 不可这样写，需要与实现无关
+                                    source.put(option1.get("dictKey"),
+                                            new DirtEnumValue(option1.get("dictValue"),
+                                                    option1.get("dictKey")
+                                            ));
+                                }
                             }
                         }
                     }
@@ -264,7 +277,7 @@ public class DirtEntityType {
                         dirtSubmitType.setPlaceholder(submitable.placeholder());
                         dirtSubmitType.setWidth(submitable.width().getValue());
                         dirtSubmitType.setIndex(submitable.index());
-                        dirtSubmitType.setValueType(uiTypeStr);
+                        dirtSubmitType.setValueType(tableHeader.getValueType());
                         HashMap formItemProps = new HashMap();
 
                         // 兼容 JSR

@@ -3,9 +3,8 @@ package com.zk.experiment;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.annotation.DirtAction;
-import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.*;
+import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +20,7 @@ import java.util.Set;
 @Entity
 @DirtEntity
 @DynamicUpdate
+
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 public class Card extends DirtBaseIdEntity {
@@ -28,6 +28,14 @@ public class Card extends DirtBaseIdEntity {
 
     @DirtField(title = "卡名")
     String name;
+
+    @DirtField(title = "卡类型",
+            uiType = eUIType.select,
+            sourceProvider = @DirtHQLSource(hql = "select d.entries from DictionaryIndex as d where d.name='卡类型\'"),
+            dirtSubmit = @DirtSubmit
+    )
+
+    String  cardType;
 
     @DirtField
     @ManyToMany

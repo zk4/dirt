@@ -1,9 +1,8 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.annotation.DirtAction;
-import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.*;
+import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +45,15 @@ public class Member extends DirtBaseIdEntity {
     @DirtField
     @ManyToMany
     Set<Coupon> coupons;
+
+    @DirtField(title = "会员类型",
+            uiType = eUIType.select,
+            sourceProvider = @DirtHQLSource(hql = "select d.entries from DictionaryIndex as d where d.name='会员类型'"),
+            dirtSubmit = @DirtSubmit
+    )
+
+    String  memberType;
+    //
 
 
 
