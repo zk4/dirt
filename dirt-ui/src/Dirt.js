@@ -22,12 +22,12 @@ export default function Dirt(props) {
     const {title, idOfEntity: cls, dataIndex, relation} = c
 
     if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {
-      c['render'] = (text, record, index) => {return customRender.table(title, cls, record[dataIndex]?.id);}
+      c['render'] = (text, record, index) => {return customRender.table(title, cls, record[dataIndex]);}
       return c;
     }
     else if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
       c['render'] = (text, record, index) => {
-        return record[dataIndex]?.map(d => {return customRender.table(title, cls, d.id)})
+        return record[dataIndex]?.map(d => {return customRender.table(title, cls, d)})
       }
       return c;
     }
@@ -38,9 +38,11 @@ export default function Dirt(props) {
       c['render'] = (text, record, index) => {
         const target = record[dataIndex]
         if (target && Array.isArray(target)) {
+          debugger
           return <> { target.map(r => <ReadForm key={r.id} title={title} id={r.id} cls={cls} />) } </>
 
         } else {
+          debugger
           const rid = target?.id;
           return rid ? <ReadForm key={rid} title={title} id={rid} cls={cls} /> : '';
         }

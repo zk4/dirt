@@ -6,6 +6,7 @@ import {BetaSchemaForm, } from '@ant-design/pro-components';
 import network from '../../network'
 import Consts from "../../consts"
 import customRender from '../../customRender'
+import { isObj } from '../../util';
 
 export default function ({title, cls, id}) {
   let [formData, setFormData] = useState([])
@@ -39,6 +40,7 @@ export default function ({title, cls, id}) {
             debugger
           }
 
+          if(isObj(d.initialValue)) d.initialValue=0
 
           return d;
         }).sort((a, b) => a.index - b.index);

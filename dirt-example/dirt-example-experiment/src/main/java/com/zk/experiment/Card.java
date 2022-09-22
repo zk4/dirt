@@ -7,8 +7,6 @@ import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -36,11 +34,11 @@ public class Card extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     Set<Benifit> benifits;
 
-    @Data
-    @AllArgsConstructor
-    static class Id  {
-        Long id;
-    }
+    //@Data
+    //@AllArgsConstructor
+    //static class Id  {
+    //    Long id;
+    //}
     //@DirtField(idOfEntity = Benifit.class,dirtSubmit = {})
     //@ManyToMany
     //@Transient
