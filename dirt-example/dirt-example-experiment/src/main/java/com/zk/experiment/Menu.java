@@ -23,32 +23,29 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity("会员标签")
+@DirtEntity("目录")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "tag")
-@SQLDelete(sql = "UPDATE tag SET deleted = true WHERE id=?")
+@Table(name = "t_menu")
+@SQLDelete(sql = "UPDATE t_menu SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Tag.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Tag extends DirtBaseIdEntity {
+@JsonIdentityInfo(scope = Menu.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Menu extends DirtBaseIdEntity {
 
-
-    @DirtField(title = "标称名称" )
+    @DirtField(title = "目录名" )
     @NotEmpty
-    @Size(min = 2, max = 30)
+    @Size(max = 30)
     String name;
 
+    @ManyToOne
+    Menu parent;
 
-
-    @DirtField(title = "会员集合")
-    @ManyToMany
-    // 允许双向更新
-    @JoinTable(name="member_tag_rel",
-            joinColumns={@JoinColumn(name="tagId")},
-            inverseJoinColumns={@JoinColumn(name="memberId")})
+    @DirtField(title = "子目录")
+    @OneToMany
+    @JoinColumn(name = "parent")
     @JsonIdentityReference(alwaysAsId = true)
-    Set<Member> members;
+    Set<Menu> menus;
 
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}

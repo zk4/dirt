@@ -74,6 +74,7 @@ public class DirtContext {
     public DirtEntityType getDirtEntity(String name){
         DirtEntityType dirtEntity = nameDirtEntityMap.get(name);
         if(dirtEntity==null) {
+            System.out.println(nameDirtEntityMap);
             throw new RuntimeException("不存在 " + name);
         }
         return dirtEntity;

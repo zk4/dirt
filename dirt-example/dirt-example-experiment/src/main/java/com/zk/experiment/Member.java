@@ -65,7 +65,7 @@ public class Member extends DirtBaseIdEntity {
     @DirtField(title = "会员组")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="member_coupon_rel",
+    @JoinTable(name="my_group_member_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="myGroupId")})
     @JsonIdentityReference(alwaysAsId = true)

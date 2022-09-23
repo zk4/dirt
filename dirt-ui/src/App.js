@@ -4,7 +4,7 @@ import axios from 'axios'
 import Dirt from './Dirt'
 
 function App() {
-  let [path] =useState(window.location.pathname.substr(1) || 'com.zk.member.entity.ReserveProduct')
+  let [path] =useState(window.location.pathname.substr(1) || 'com.zk.experiment.Member')
   let [tables, setTables] = useState({})
 
   useEffect(() => {
