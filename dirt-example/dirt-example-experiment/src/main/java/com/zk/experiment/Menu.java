@@ -1,7 +1,7 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
@@ -19,6 +19,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 @Setter
@@ -39,13 +40,26 @@ public class Menu extends DirtBaseIdEntity {
     String name;
 
     @ManyToOne
+    @JsonIgnore
     Menu parent;
 
     @DirtField(title = "子目录")
     @OneToMany
     @JoinColumn(name = "parent")
-    @JsonIdentityReference(alwaysAsId = true)
-    Set<Menu> menus;
+    //@JsonIdentityReference(alwaysAsId = true)
+    Set<Menu> children;
+
+    public Set<Menu> getChildren() {
+        if(children.size()==0)return null;
+        return children;
+    }
+
+    @Transient
+    Long key;
+    static AtomicLong integer=new AtomicLong(1);
+    public Long getKey() {
+        return integer.incrementAndGet();
+    }
 
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}
