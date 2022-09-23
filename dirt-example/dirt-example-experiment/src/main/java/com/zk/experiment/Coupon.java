@@ -29,7 +29,6 @@ import java.util.Set;
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Coupon.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-
 public class Coupon extends DirtBaseIdEntity {
 
 

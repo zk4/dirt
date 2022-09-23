@@ -3,6 +3,10 @@ import ReadForm from './interface/Form/ReadForm'
 import {isObj} from './util'
 export default {
   table: (title, cls, id) => {
+    if(id==null) 
+    {
+      return
+    }
     if (isObj(id)) {
       console.assert(id.id,"必须有 id"+id)
       return <ReadForm key={cls + id.id} title={title} id={id.id} cls={cls} />
@@ -13,6 +17,10 @@ export default {
     }
   },
   readForm: (title, cls, id) => {
+    if(id==null) 
+    {
+      return
+    }
     if (isObj(id))
     {
       console.assert(id.id,"必须有 id"+id)

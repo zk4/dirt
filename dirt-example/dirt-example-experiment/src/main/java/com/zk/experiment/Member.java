@@ -54,7 +54,7 @@ public class Member extends DirtBaseIdEntity {
     Set<Card> cards;
 
     @DirtField(title = "券包")
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     // 允许双向更新
     @JoinTable(name="member_coupon_rel",
             joinColumns={@JoinColumn(name="memberId")},
