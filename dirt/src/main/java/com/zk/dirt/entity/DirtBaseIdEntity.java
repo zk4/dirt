@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.core.eUIType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -28,7 +29,6 @@ public  class DirtBaseIdEntity implements Serializable {
     // @JsonValue
 
     @Id
-
     // https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela/32223785#32223785
     @Access(AccessType.PROPERTY)
 
@@ -36,6 +36,19 @@ public  class DirtBaseIdEntity implements Serializable {
     @Column(name = "id")
     @DirtField(title = "id",index = -999999, uiType = eUIType.digit,fixed = "left",dirtSubmit = {})
     protected Long id;
+
+    @Data
+    @AllArgsConstructor
+    public static class IdObj {
+        Long id;
+    }
+
+    @Transient
+    IdObj idObj;
+
+    public IdObj getIdObj() {
+        return new IdObj(this.id);
+    }
 
     //@JsonIgnore
     @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
