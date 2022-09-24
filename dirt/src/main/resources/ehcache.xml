@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
-         name="CM1"
-         updateCheck="false"
-         maxBytesLocalHeap="16M">
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+         <!--xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"-->
+         <!--name="CM1"-->
+         <!--updateCheck="false"-->
+         <!--maxBytesLocalHeap="16M">-->
 
-    <!--
-      This is a default configuration, it is re-configured by the CacheConfiguration Spring Bean, using the
-      properties from the resources/config/*.yml files.
-    -->
+    <!--&lt;!&ndash;-->
+      <!--This is a default configuration, it is re-configured by the CacheConfiguration Spring Bean, using the-->
+      <!--properties from the resources/config/*.yml files.-->
+    <!--&ndash;&gt;-->
 
-    <diskStore path="java.io.tmpdir"/>
+    <!--<diskStore path="java.io.tmpdir"/>-->
 
-    <defaultCache
-            eternal="false"
-            overflowToDisk="false"
-    />
+    <!--<defaultCache-->
+            <!--eternal="false"-->
+            <!--overflowToDisk="false"-->
+    <!--/>-->
 
-    <cache name="com.zk.hibernate.modules.pms.entity.Category"
-           timeToLiveSeconds="3600">
-    </cache>
+    <!--<cache name="com.zk.hibernate.modules.pms.entity.Category"-->
+           <!--timeToLiveSeconds="3600">-->
+    <!--</cache>-->
 
 
-</ehcache>
+<!--</ehcache>-->
