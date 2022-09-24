@@ -47,7 +47,7 @@ public class DirtEntityType {
         this.dirtContext = context;
         this.applicationContext = applicationContext;
         this.entityClass = classAnnotationClass;
-
+        this.init();
     }
 
 
@@ -60,16 +60,18 @@ public class DirtEntityType {
 
         return fields;
     }
-
-    public List<DirtFieldType> getHeads() {
+    public void init(){
         // TODO: 可静态的应该尽量静态化
-        //if (!inited) {
+        if (!inited) {
             initDirtFieldMap();
             initIdOfEntityMap();
             initActionMap();
             initHeads();
             inited = true;
-        //}
+        }
+    }
+    public List<DirtFieldType> getHeads() {
+
         return heads;
     }
 
@@ -322,7 +324,7 @@ public class DirtEntityType {
                                 }
 
                                 DirtContext context = applicationContext.getBean(DirtContext.class);
-                                dirtEntity = context.getDirtEntity(aClass.getName());
+                                //dirtEntity = context.getDirtEntity(aClass.getName());
 
                             }
                         } else if (manyToOne != null || oneToOne != null) {

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * 存储接口
+ */
 public interface iPersistProxy  {
 
 	<ID> Optional findById(Class clazz, ID id);

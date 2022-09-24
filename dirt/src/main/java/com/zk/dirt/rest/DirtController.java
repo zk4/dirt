@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.config.rest.DoNotWrapperResult;
 import com.zk.config.rest.Result;
 import com.zk.config.rest.rsql.QueryFilter2;
+import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.DirtActionType;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.DirtEntityType;
@@ -95,6 +96,15 @@ public class DirtController {
     public Result update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName( entityName);
         SimpleJpaRepository jpaRepository = dirtContext.getRepo(entityName);
+
+        DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
+        body.forEach((k, v) -> {
+            if("id".equals(k)) return;
+            DirtField d = dirtEntity.getDirtField((String)k);
+            if(d.dirtSubmit()==null || d.dirtSubmit().length==0){
+                throw new RuntimeException(k+"字段不支持更新");
+            }
+        });
 
         DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
         if (o2.getId() == null) throw new RuntimeException("没有 id，无法更新");
