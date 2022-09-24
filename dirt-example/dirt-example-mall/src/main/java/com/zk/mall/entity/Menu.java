@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.core.eDirtViewType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Getter
 @Setter
 @Entity
-@DirtEntity("目录")
+@DirtEntity(value = "目录",viewType = eDirtViewType.Tree)
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "t_menu")
