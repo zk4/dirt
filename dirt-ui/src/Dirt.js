@@ -8,6 +8,7 @@ import axios from 'axios';
 import WriteForm from './interface/Form/WriteForm'
 import Consts from './consts'
 import customRender from './customRender'
+import {isObj} from './util';
 const {RangePicker} = DatePicker;
 
 export default function Dirt(props) {
@@ -38,12 +39,14 @@ export default function Dirt(props) {
       c['render'] = (text, record, index) => {
         const target = record[dataIndex]
         if (target && Array.isArray(target)) {
-          debugger
-          return <> { target.map(r => <ReadForm key={r.id} title={title} id={r.id} cls={cls} />) } </>
-
-        } else {
-          debugger
+          return <> {target.map(r => <ReadForm key={r.id} title={title} id={r.id} cls={cls} />)} </>
+        }
+        else if (isObj(target)) {
           const rid = target?.id;
+          return rid ? <ReadForm key={rid} title={title} id={rid} cls={cls} /> : '';
+        }
+        else {
+          const rid = target;
           return rid ? <ReadForm key={rid} title={title} id={rid} cls={cls} /> : '';
         }
       }

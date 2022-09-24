@@ -7,7 +7,7 @@ import customRender from '../../customRender'
 import IdHolder from './IdHolder'
 const {Search} = Input;
 export default (props) => {
-  const {name, triggerCompoent, columns, onFinish, onInit , readOnly} = props;
+  const {name, triggerCompoent, columns, onFinish, onInit, readOnly} = props;
   // 有可能有多个 modal 需要保持状态，使用{}
   const [isModalOpen, setIsModalOpen] = useState({});
 
@@ -22,7 +22,7 @@ export default (props) => {
   };
 
   let createColumns = columns.map(column => {
-    const {key:columnKey,idOfEntity,relation} = column
+    const {key: columnKey, idOfEntity, relation} = column
     // 如果有 idOfEntity，则要弹框了选择
     if (idOfEntity) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
@@ -31,30 +31,37 @@ export default (props) => {
           {/*
           <IdHolder idObjs={form.getFieldValue(columnKey)} idOfEntity = {idOfEntity}/>
           */}
-           
+
           <Search placeholder={column.placeholder} readOnly
-          value={form.getFieldValue(columnKey)}
+            value={form.getFieldValue(columnKey)}
             onChange={e => {
               form.setFieldValue(columnKey, e.target.value)
             }} onSearch={e => showModal(columnKey)} enterButton />
           {
-            vals && Array.isArray(vals)?vals.map(v=>customRender.readForm(v.id,idOfEntity,v.id))
-            : customRender.readForm(vals?.id,idOfEntity,vals?.id)
+            vals && Array.isArray(vals) ? vals.map(v => customRender.readForm(v.id, idOfEntity, v.id))
+              : customRender.readForm(vals?.id, idOfEntity, vals?.id)
           }
           <Modal readOnly destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
-            <Dirt entityName={idOfEntity} 
-               rowSelection={{
-                 type: (relation === Consts.OneToMany ||  relation ===Consts.ManyToMany ) ? "checkbox" : "radio",
-                 onChange: (selectedRowKeys, selectedRows, info) => {
-                  if (relation === Consts.OneToMany  || relation === Consts.ManyToMany ) {
+            <Dirt entityName={idOfEntity}
+              rowSelection={{
+                type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
+                onChange: (selectedRowKeys, selectedRows, info) => {
+                  // JPA
+                  if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
                     const ids = selectedRows.map(v => {return {id: v.id}})
-                    form.setFieldValue(columnKey,ids)
-                  } else {
+                    form.setFieldValue(columnKey, ids)
+                  } else if (relation === Consts.ManyToOne || relation === Consts.OneToOne) {
                     const ids = selectedRows.map(v => {return {id: v.id}})
-                    form.setFieldValue(columnKey,  ids[0])
+                    form.setFieldValue(columnKey, ids[0])
                   }
+                  // Pure Id 
+                  else{
+                    const ids = selectedRows.map(v => {return v.id})
+                    form.setFieldValue(columnKey, ids[0])
+                  }
+
                 }
-            }} />
+              }} />
           </Modal>
         </>
       }
