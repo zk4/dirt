@@ -5,7 +5,7 @@ import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import com.zk.dirt.intef.iEnumProvider;
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.util.ExceptionUtils;
 import org.springframework.context.ApplicationContext;
 
@@ -177,25 +177,25 @@ public class DirtEntityType {
                         initialValue = enumProvider.initialValue();
                     } else {
                         // 如果没有提供 provider, 但又是枚举类型，且实现了 iDirtListable 接口，构造 source
-                        Class<? extends iListable> listableClass = null;
+                        Class<? extends iEnumText> listableClass = null;
 
                         boolean enumConstant = fieldRetType.isEnum();
                         if (enumConstant) {
                             Class enumType = fieldRetType;
-                            listableClass = enumType.asSubclass(iListable.class);
+                            listableClass = enumType.asSubclass(iEnumText.class);
                             // TODO： 位置调整一下，放上面一点
                             tableHeader.setValueType("select");
                         }
-                        Class<? extends iListable>[] classes1 = dirtField.enumListableType();
+                        Class<? extends iEnumText>[] classes1 = dirtField.enumListableType();
                         if (classes1.length > 0) {
                             listableClass = classes1[0];
                         }
                         if (listableClass != null) {
 
                             try {
-                                iListable[] enumConstants = listableClass.getEnumConstants();
+                                iEnumText[] enumConstants = listableClass.getEnumConstants();
                                 source = new LinkedHashMap();
-                                for (iListable value : enumConstants) {
+                                for (iEnumText value : enumConstants) {
                                     if (value.toString().equals("null")) {
                                         System.out.println("");
                                     }

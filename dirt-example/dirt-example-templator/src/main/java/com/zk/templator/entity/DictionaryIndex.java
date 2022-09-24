@@ -7,7 +7,7 @@ import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -40,7 +40,7 @@ public class DictionaryIndex extends DirtBaseIdEntity {
     String name;
 
 
-    public enum eValueType implements iListable {
+    public enum eValueType implements iEnumText {
 
         NUMBER("数字"),
         STRING("字符串"),

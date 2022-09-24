@@ -1,8 +1,8 @@
 package com.zk.member.entity.types;
 
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 
-public enum  eGender  implements iListable {
+public enum  eGender  implements iEnumText {
     MALE("男"),
     FEMALE("女"),
     UNKOWN("未知");

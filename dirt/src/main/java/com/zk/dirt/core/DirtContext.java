@@ -29,12 +29,10 @@ public class DirtContext {
     private final static Map<String,Class> nameClassMap = new HashMap<String,Class>();
     private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String,SimpleJpaRepository>();
     private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class,SimpleJpaRepository>();
-    private final static Map<String, String> nameEntityMap = new HashMap<String,String>();
+    private final static Map<String, DirtViewType> nameEntityMap = new HashMap<String,DirtViewType>();
 
 
-    public DirtContext() {
-
-    }
+    public DirtContext() {}
 
 
     @PostConstruct
@@ -56,8 +54,13 @@ public class DirtContext {
 
                  DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
 
-                 if(declaredAnnotation.visiable())
-                    nameEntityMap.put(simpleName,declaredAnnotation.value());
+                 if(declaredAnnotation.visiable()) {
+                     DirtViewType dirtViewType = new DirtViewType();
+                     dirtViewType.setText(declaredAnnotation.value());
+                     dirtViewType.setClassName(simpleName);
+                     dirtViewType.setViewType(declaredAnnotation.viewType());
+                     nameEntityMap.put(simpleName, dirtViewType);
+                 }
             }
         }
         System.out.println(nameDirtEntityMap);
@@ -97,7 +100,8 @@ public class DirtContext {
         return nameReposMap.keySet();
     }
 
-    public   Map<String, String> getNameEntityMap() {
+    public   Map<String, DirtViewType> getNameEntityMap() {
         return nameEntityMap;
     }
-}
+
+ }

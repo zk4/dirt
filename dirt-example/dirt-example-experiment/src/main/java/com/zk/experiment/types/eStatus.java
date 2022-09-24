@@ -1,8 +1,8 @@
 package com.zk.experiment.types;
 
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 
-public enum eStatus implements iListable {
+public enum eStatus implements iEnumText {
     ACTIVE("已启用"),
     DISALBE("已禁用");
 

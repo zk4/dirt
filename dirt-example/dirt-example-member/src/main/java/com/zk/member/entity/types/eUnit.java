@@ -1,8 +1,8 @@
 package com.zk.member.entity.types;
 
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 
-public enum eUnit implements iListable {
+public enum eUnit implements iEnumText {
     KG("千克"),
     G("克"),
     M("米"),

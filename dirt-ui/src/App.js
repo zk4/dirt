@@ -6,9 +6,14 @@ import Tree from './interface/Tree'
 import style from './App.module.css'
 
 function App() {
-  let [path] = useState(window.location.pathname.substr(1) || 'com.zk.experiment.Member')
+  // let [path] = useState(window.location.pathname.substr(1) || 'com.zk.experiment.Member')
   let [tables, setTables] = useState({})
+  const [path, setPath] = useState(window.location.pathname.substr(1));
+  const [name, setName] = useState('');
+  
+  
 
+  
   //   <div style={{display:'flex'}}>
   //   <div style={{width: '20%'}}>
   //     <Tree />
@@ -24,16 +29,24 @@ function App() {
       if (res.data.code === 0) {
         let tables = res.data.data;
         setTables(tables);
+        setPath(Object.entries(tables)[0][1].className);
+        setName(Object.entries(tables)[0][1].text);
       }
     })()
   }, [])
   return (
     <div >
+      
       {
         Object.keys(tables).length > 0 && Object.entries(tables).map(([t, v]) => {
-          return <a key={t} href={'/' + t}>{v} |</a>
+      return <a key={t} href="#!" onClick={e=>{
+        setPath(v.className)
+        setName(v.text)
+        // window.location.pathname=v.className
+      }}>{v.text} |</a>
         })
       }
+      <h1>{name}</h1>
       < Dirt entityName={path} />
     </div>
   );

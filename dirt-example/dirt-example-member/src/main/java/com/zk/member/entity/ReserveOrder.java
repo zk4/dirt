@@ -7,7 +7,7 @@ import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,7 +60,7 @@ public class ReserveOrder extends DirtBaseIdEntity {
     }
 
 
-    enum ePaytype implements iListable {
+    enum ePaytype implements iEnumText {
         CASH,
         APLIPAY;
 

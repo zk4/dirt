@@ -5,10 +5,7 @@ import com.zk.config.rest.DoNotWrapperResult;
 import com.zk.config.rest.Result;
 import com.zk.config.rest.rsql.QueryFilter2;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.core.DirtActionType;
-import com.zk.dirt.core.DirtContext;
-import com.zk.dirt.core.DirtEntityType;
-import com.zk.dirt.core.DirtFieldType;
+import com.zk.dirt.core.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.util.ArgsUtil;
@@ -216,7 +213,9 @@ public class DirtController {
 
 
     @GetMapping("/dirt/getTableMaps")
-    public Map<String,String> getTableMaps() {
+    public Map<String, DirtViewType> getTableMaps() {
         return dirtContext.getNameEntityMap();
     }
+
+
 }

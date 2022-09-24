@@ -1,8 +1,8 @@
 package com.zk.member.entity.types;
 
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 
-public enum eWeekDay implements iListable {
+public enum eWeekDay implements iEnumText {
     MONDAY("星期一"),
     TUESDAY("星期二"),
     WENSDAY("星期三"),

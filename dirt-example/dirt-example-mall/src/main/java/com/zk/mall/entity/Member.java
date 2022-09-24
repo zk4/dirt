@@ -8,7 +8,7 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 import com.zk.utils.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,7 +78,7 @@ public class Member extends DirtBaseIdEntity {
     private String header;
 
 
-    public enum  eGender implements iListable {
+    public enum  eGender implements iEnumText {
         MALE("男"),
         FEMALE("女");
 

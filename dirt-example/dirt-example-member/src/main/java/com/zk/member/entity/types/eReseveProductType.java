@@ -1,8 +1,8 @@
 package com.zk.member.entity.types;
 
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 
-public enum eReseveProductType implements iListable {
+public enum eReseveProductType implements iEnumText {
     STUDIO("剧场"),
     INDOOR("室内演出");
 

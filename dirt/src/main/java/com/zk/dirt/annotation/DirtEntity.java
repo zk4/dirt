@@ -1,6 +1,8 @@
 
 package com.zk.dirt.annotation;
 
+import com.zk.dirt.core.eDirtViewType;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -14,14 +16,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface DirtEntity {
 
+	// 名字
 	String value() default "";
-	enum eType  {
-		// 二维结构
-		Table,
-		// 树结构
-		Tree,
-	}
-	eType type() default  eType.Table;
+
+	// 展现形式
+	eDirtViewType viewType() default  eDirtViewType.Table;
 
 	// 是否能从目录接口里拿到
 	boolean visiable() default  true;

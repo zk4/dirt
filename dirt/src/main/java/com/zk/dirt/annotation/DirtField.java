@@ -5,7 +5,7 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.dirt.intef.iEnumProvider;
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -49,7 +49,7 @@ public @interface DirtField {
     boolean sorter() default  true;
 
     Class<? extends iEnumProvider>[] enumProvider() default {};
-    Class<? extends iListable>[] enumListableType() default {};
+    Class<? extends iEnumText>[] enumListableType() default {};
 
     DirtHQLSource[] sourceProvider() default {};
 

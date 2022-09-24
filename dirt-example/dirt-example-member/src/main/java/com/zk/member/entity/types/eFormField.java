@@ -1,8 +1,8 @@
 package com.zk.member.entity.types;
 
-import com.zk.dirt.intef.iListable;
+import com.zk.dirt.intef.iEnumText;
 
-public enum eFormField implements iListable {
+public enum eFormField implements iEnumText {
 
     auto("auto"),
     //密码输入框
