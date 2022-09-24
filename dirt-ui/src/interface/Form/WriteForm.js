@@ -4,6 +4,7 @@ import Dirt from '../../Dirt'
 import {Modal, Input} from 'antd';
 import Consts from '../../consts'
 import customRender from '../../customRender'
+import IdHolder from './IdHolder'
 const {Search} = Input;
 export default (props) => {
   const {name, triggerCompoent, columns, onFinish, onInit , readOnly} = props;
@@ -27,8 +28,12 @@ export default (props) => {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         const vals = form.getFieldValue(columnKey)
         return <>
+          {/*
+          <IdHolder idObjs={form.getFieldValue(columnKey)} idOfEntity = {idOfEntity}/>
+          */}
+           
           <Search placeholder={column.placeholder} readOnly
-            value={form.getFieldValue(columnKey)}
+          value={form.getFieldValue(columnKey)}
             onChange={e => {
               form.setFieldValue(columnKey, e.target.value)
             }} onSearch={e => showModal(columnKey)} enterButton />

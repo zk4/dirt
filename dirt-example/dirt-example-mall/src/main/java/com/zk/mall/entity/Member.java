@@ -64,6 +64,8 @@ public class Member extends DirtBaseIdEntity {
     String  memberType;
 
 
+    @DirtField(idOfEntity = Card.class)
+    Long cardId;
 
     @DirtAction(text = "详情", key = "detail")
     public void detail() {}
