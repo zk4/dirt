@@ -1,7 +1,8 @@
 
 spring:
   application:
-    name: templator
+    name: dirt-mall
+
   jpa:
     show-sql: true
     hibernate:
@@ -36,7 +37,7 @@ zk:
     nodeId: 257
 #server:
 #  servlet:
-#    context-path: /templator-script
+#    context-path: /mall-script
 server:
   port: 8081
 

@@ -2,14 +2,16 @@ package com.zk.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.env.Environment;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
 @Slf4j
 public class StartUtils {
-    public static void logApplicationStartup(Environment env) {
+    public static void logApplicationStartup(ConfigurableApplicationContext context) {
+        ConfigurableEnvironment env = context.getEnvironment();
         String protocol = Optional.ofNullable(env.getProperty("server.ssl.key-store")).map(key -> "https").orElse("http");
         String serverPort = env.getProperty("server.port");
         String contextPath = Optional
@@ -17,11 +19,13 @@ public class StartUtils {
                 .filter(StringUtils::isNotBlank)
                 .orElse("/");
         String hostAddress = "localhost";
+
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             log.warn("The host name could not be determined, using `localhost` as fallback");
         }
+
         log.info(
                 "\n----------------------------------------------------------\n\t" +
                         "Application '{}' is running! Access URLs:\n\t" +
