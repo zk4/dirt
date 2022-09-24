@@ -17,12 +17,12 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,20 +30,23 @@ import java.time.LocalDate;
 @DirtEntity("会员")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "member")
-@SQLDelete(sql = "UPDATE member SET deleted = true WHERE id=?")
+@Table(name = "mall_member")
+@SQLDelete(sql = "UPDATE mall_member SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Member.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Member extends DirtBaseIdEntity {
 
 
+    @DirtField(title =  "地址")
+    @OneToMany
+    @JoinColumn(name = "memeberId")
+    Set<MemberAddress> addresses;
 
 
-    /**
-     * 会员等级id
-     */
-    private Long levelId;
+    @DirtField(title =  "会员Level id")
+    @ManyToOne
+    private MemberLevel memberLevel;
 
     @DirtField(title = "会员姓名")
     @NotEmpty
@@ -63,7 +66,7 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtField(title = "手机号码")
     @NotEmpty
-    @Size(max = 30)
+    @Size(max = 11)
     private String mobile;
 
     @DirtField(title = "邮箱")
