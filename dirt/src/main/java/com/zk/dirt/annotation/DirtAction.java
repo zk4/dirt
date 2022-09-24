@@ -10,7 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD})
 @Retention(RUNTIME)
 public @interface DirtAction {
-    String key();
+    //String key();
     String text();
     String desc() default  "";
     String confirmMsg() default  "";

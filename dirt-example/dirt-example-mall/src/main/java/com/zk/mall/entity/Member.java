@@ -9,6 +9,7 @@ import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iListable;
+import com.zk.utils.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -17,7 +18,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -129,17 +129,18 @@ public class Member extends DirtBaseIdEntity {
     private long expiresIn;
 
 
-    @DirtAction(text = "详情", key = "detail")
+    @DirtAction(text = "详情")
     public void detail() {}
 
-    @DirtAction(text = "删除", key = "delete")
+    @DirtAction(text = "删除")
     public void delete() {}
 
-    @DirtAction(text = "编辑", key = "edit")
+    @DirtAction(text = "编辑")
     public void edit() {}
 
-    @PrePersist
-    public void changeUuid(){
-        System.out.println("");
+
+    @DirtAction(text = "刷新 token")
+    public void genToken() {
+        this.accessToken= UUID.fastUUID().toString();
     }
 }

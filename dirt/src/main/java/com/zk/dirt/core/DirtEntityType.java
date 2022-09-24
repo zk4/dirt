@@ -397,7 +397,7 @@ public class DirtEntityType {
                 dirtActionType.setMethod(declaredMethod);
                 dirtActionType.setText(actionAnnotation.text());
                 dirtActionType.setDesc(actionAnnotation.desc());
-                dirtActionType.setKey(actionAnnotation.key());
+                dirtActionType.setKey(declaredMethod.getName());
 
                 Parameter[] parameters = declaredMethod.getParameters();
 
@@ -411,7 +411,7 @@ public class DirtEntityType {
                         dirtActionType.getArgColumnsMap().put("args", dirtFieldTypes);
                     }
                 }
-                this.actionMap.put(actionAnnotation.key(), dirtActionType);
+                this.actionMap.put(declaredMethod.getName(), dirtActionType);
             }
         }
     }

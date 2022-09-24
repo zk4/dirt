@@ -93,13 +93,13 @@ public class Member extends DirtBaseIdEntity {
 
 
 
-    @DirtAction(text = "详情", key = "detail")
+    @DirtAction(text = "详情")
     public void detail() {}
 
-    @DirtAction(text = "删除", key = "delete")
+    @DirtAction(text = "删除")
     public void delete() {}
 
-    @DirtAction(text = "编辑", key = "edit")
+    @DirtAction(text = "编辑")
     public void edit() {}
 
     @DirtAction(text = "随机名称", key = "reduce", confirm = true)
