@@ -48,11 +48,11 @@ public class Menu extends DirtBaseIdEntity {
     @OneToMany
     @JoinColumn(name = "parent")
     //@JsonIdentityReference(alwaysAsId = true)
-    Set<Menu> children;
+    Set<Menu> subMenus;
 
-    public Set<Menu> getChildren() {
-        if(children.size()==0)return null;
-        return children;
+    public Set<Menu> getSubMenus() {
+        if(subMenus.size()==0)return null;
+        return subMenus;
     }
 
     @Transient

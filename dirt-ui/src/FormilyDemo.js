@@ -66,7 +66,7 @@
 //           return buf.concat({
 //             label: name,
 //             value: code,
-//             children: _cities.length
+//             subMenus: _cities.length
 //               ? _cities
 //               : _districts.length
 //               ? _districts

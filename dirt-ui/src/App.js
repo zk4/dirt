@@ -43,6 +43,7 @@ function App() {
         })
       }
       <h1>{view.text}</h1>
+      <hr style ={{marginBottom:'25px'}}/>
       {
         view.viewType === 'Table' && (< Dirt entityName={view.className} />)
       }

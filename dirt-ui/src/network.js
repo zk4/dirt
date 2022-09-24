@@ -123,8 +123,8 @@ const actionAsync = async (postData, success_cb) => {
 // function addKey(data) {
 //   let d = data.map(m => {
 //     m['key'] =++key;
-//     if (m.children && m.children.length > 0) {
-//       m.children = addKey(m.children)
+//     if (m.subMenus && m.subMenus.length > 0) {
+//       m.subMenus = addKey(m.subMenus)
 //     }
 //     return m;
 //   })

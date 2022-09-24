@@ -20,8 +20,7 @@ const treeData = [
           {
             title: (
               <>
-                <div>multiple line title</div>
-                <div>multiple line title</div>
+                <div>one line title</div>
               </>
             ),
             key: '0-0-0-1',
@@ -119,20 +118,7 @@ const App = () => {
   };
 
   return (
-    <div>
-      <div
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        showLine: <Switch checked={!!showLine} onChange={onSetShowLine} />
-        <br />
-        <br />
-        showIcon: <Switch checked={showIcon} onChange={setShowIcon} />
-        <br />
-        <br />
-        showLeafIcon: <Switch checked={showLeafIcon} onChange={onSetLeafIcon} />
-      </div>
+    <>
       <Tree
         showLine={showLine}
         showIcon={showIcon}
@@ -140,7 +126,7 @@ const App = () => {
         onSelect={onSelect}
         treeData={treeData}
       />
-    </div>
+    </>
   );
 };
 
