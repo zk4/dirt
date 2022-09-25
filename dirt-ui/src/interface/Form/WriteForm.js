@@ -1,9 +1,11 @@
 import React, {useState, useRef} from 'react';
 import {BetaSchemaForm} from '@ant-design/pro-components';
 import Dirt from '../../Dirt'
-import {Modal, Input} from 'antd';
+import {Modal, Input, Button} from 'antd';
 import Consts from '../../consts'
 import customRender from '../../customRender'
+import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined} from '@ant-design/icons';
+
 import IdHolder from './IdHolder'
 const {Search} = Input;
 export default (props) => {
@@ -32,11 +34,26 @@ export default (props) => {
           <IdHolder idObjs={form.getFieldValue(columnKey)} idOfEntity = {idOfEntity}/>
           */}
 
-          <Search placeholder={column.placeholder} readOnly
+          <Input.Search
+            allowClear
+            style={{
+              width: '100%',
+            }}
+            defaultValue="0571"
+            placeholder={column.placeholder}
             value={form.getFieldValue(columnKey)}
-            onChange={e => {
-              form.setFieldValue(columnKey, e.target.value)
-            }} onSearch={e => showModal(columnKey)} enterButton />
+            onChange={
+              e => {
+                form.setFieldValue(columnKey, e.target.value)
+              }
+            }
+            onSearch={
+              e => {
+                showModal(columnKey)
+              }
+            }
+          />
+
           {
             vals && Array.isArray(vals) ? vals.map(v => customRender.readForm(v.id, idOfEntity, v.id))
               : customRender.readForm(vals?.id, idOfEntity, vals?.id)
@@ -46,7 +63,7 @@ export default (props) => {
               rowSelection={{
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
-                  // JPA
+                  // JPA compatiable
                   if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
                     const ids = selectedRows.map(v => {return {id: v.id}})
                     form.setFieldValue(columnKey, ids)
@@ -54,8 +71,8 @@ export default (props) => {
                     const ids = selectedRows.map(v => {return {id: v.id}})
                     form.setFieldValue(columnKey, ids[0])
                   }
-                  // Pure Id 
-                  else{
+                  // Pure Id,Maybe for mabatis compatiable
+                  else {
                     const ids = selectedRows.map(v => {return v.id})
                     form.setFieldValue(columnKey, ids[0])
                   }
