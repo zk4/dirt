@@ -113,7 +113,30 @@ public class DirtFieldType {
         throw  new RuntimeException("未实现");
     }
 
+    // 在有 relation 时，onetomany 与 manytomany 已经不好排序。先全部禁了，有好的解决方案再说
+    public Boolean getSearch() {
+        if(relation != eDirtEntityRelation.None)
+            return false;
+        return search;
+    }
 
+    public Boolean getFilters() {
+        if(relation != eDirtEntityRelation.None)
+            return false;
+        return filters;
+    }
 
+    public Boolean getOnFilter() {
+        if(relation != eDirtEntityRelation.None)
+            return false;
 
+        return onFilter;
+    }
+
+    public Boolean getSorter() {
+        if(relation != eDirtEntityRelation.None)
+            return false;
+
+        return sorter;
+    }
 }

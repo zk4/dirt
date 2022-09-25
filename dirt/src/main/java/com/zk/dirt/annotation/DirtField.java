@@ -46,7 +46,7 @@ public @interface DirtField {
     boolean copyable() default  false;
 
     // 排序函数，本地排序使用一个函数(参考 Array.sort 的 compareFunction)，需要服务端排序可设为 true
-    boolean sorter() default  true;
+     boolean sorter() default  true;
 
     Class<? extends iEnumProvider>[] enumProvider() default {};
     Class<? extends iEnumText>[] enumListableType() default {};
