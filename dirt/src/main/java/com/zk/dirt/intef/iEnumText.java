@@ -3,7 +3,7 @@ package com.zk.dirt.intef;
 /**
  * enum 扩展接口
  */
-public interface iEnumText {
+public interface iEnumText<T> {
 
-    String getText();
+    T getText();
 }

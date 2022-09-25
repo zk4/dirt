@@ -53,18 +53,15 @@ export default (props) => {
                       form.setFieldValue(columnKey, e.target.value)
                     }
                   } else {
-                  // create
+                    // create
                     form.setFieldValue(columnKey, e.target.value)
                   }
                 }
               }
-              onSearch={
-                e => {
-                  showModal(columnKey)
-                }
-              }
             />
-            <Button type="primary"><SearchOutlined /></Button>
+            <Button type="primary" onClick={e => {
+              showModal(columnKey)
+            }}><SearchOutlined /></Button>
           </Input.Group>
           {
             vals && Array.isArray(vals) ? vals.map(v => customRender.readForm(v.id, idOfEntity, v.id))

@@ -46,6 +46,7 @@ public  class DirtBaseIdEntity implements Serializable {
     @Transient
     IdObj idObj;
 
+    
     public IdObj getIdObj() {
         return new IdObj(this.id);
     }
