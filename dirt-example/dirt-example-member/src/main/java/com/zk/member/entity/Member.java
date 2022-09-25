@@ -1,5 +1,6 @@
 package com.zk.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eDirtEntityRelation;
@@ -13,12 +14,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -39,6 +40,7 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtField
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    @JsonIdentityReference(alwaysAsId = true)
     Set<Item> items;
 
 
@@ -122,14 +124,14 @@ public class Member extends DirtBaseIdEntity {
     // 对于  row 的 action，默认当前 entity 要参与。
     // 什么时候显示 action 呢？
     // 参数： 不应该包含 entity 参数，这是成员函数，只应该操作自己的数据。
-    @DirtAction(text = "切换绑定", key = "bind")
+    @DirtAction(text = "切换绑定")
     public void bind() {
         if (this.binding==null)
             this.binding = false;
         this.binding = !this.binding;
     }
 
-    @DirtAction(text = "随机昵称", key = "reduce", confirm = true)
+    @DirtAction(text = "随机昵称" , confirm = true)
     public void reduce() {
             this.nickname = RandomStringUtils.randomAlphabetic(13);
     }
@@ -162,7 +164,7 @@ public class Member extends DirtBaseIdEntity {
 
     }
 
-    @DirtAction(text = "带参", key = "withArgs", confirm = true)
+    @DirtAction(text = "带参",   confirm = true)
     public void withArgs(WithArgsData args) {
 
         this.name = args.name;

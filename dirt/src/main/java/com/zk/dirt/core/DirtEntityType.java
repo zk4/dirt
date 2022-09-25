@@ -61,6 +61,9 @@ public class DirtEntityType {
         return fields;
     }
     public void init(){
+
+    }
+    public List<DirtFieldType> getHeads() {
         // TODO: 可静态的应该尽量静态化
         if (!inited) {
             initDirtFieldMap();
@@ -69,9 +72,6 @@ public class DirtEntityType {
             initHeads();
             inited = true;
         }
-    }
-    public List<DirtFieldType> getHeads() {
-
         return heads;
     }
 

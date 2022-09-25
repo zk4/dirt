@@ -1,7 +1,6 @@
 package com.zk.dirt.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zk.dirt.entity.DirtBaseIdEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.*;
@@ -60,6 +59,30 @@ public class ArgsUtil {
         throw new RuntimeException("不是 Collection 类型");
     }
 
+    public static Field getInheritedDeclaredField(Class<?> fromClass, String fieldName, Class<?> stopWhenClass) throws NoSuchFieldException {
+        if (stopWhenClass == null) {
+            stopWhenClass = Object.class;
+        }
+
+        Class<?> cls = fromClass;
+        do {
+            Field field;
+            try {
+                field = cls.getDeclaredField(fieldName);
+                if (field != null) {
+                    return field;
+                }
+            } catch (NoSuchFieldException | SecurityException e) {
+                // Nothing. We'll try to get field from superclass
+            }
+            cls = cls.getSuperclass();
+        } while (cls != null && !cls.equals(stopWhenClass));
+
+        // If we got here, we'll throw an exception
+        throw new NoSuchFieldException(fieldName);
+    }
+
+
     /**
      * 给 entity enhancedInstance 的 relation 通过 id 赋值做关联关系
      * 注意此方法，不校验 id 是否存在，即使不存在，也会拿到 id reference
@@ -73,17 +96,25 @@ public class ArgsUtil {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T> void updateEntity(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager,ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
+    public static <T> void updateEntity(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager,ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
         // types is converted, save me sometime
-        Object typedArgs = objectMapper.convertValue(args, rawType);
+        //Object typedArgs = objectMapper.convertValue(args, rawType);
+        for (Object k : args.entrySet()) {
+            Map.Entry entry = (Map.Entry) k;
+            String fieldName = (String) entry.getKey();
+            Object arg = entry.getValue();
+            Field declaredField = getInheritedDeclaredField(rawType,fieldName,null);
 
-        for (Field declaredField : rawType.getDeclaredFields()) {
-            String fieldName = declaredField.getName();
+            //}
+        //for (Field declaredField : rawType.getDeclaredFields()) {
+        //    String fieldName = declaredField.getName();
 
-            Method getter = new PropertyDescriptor(fieldName,rawType).getReadMethod();
+            //Method getter = new PropertyDescriptor(fieldName,rawType).getReadMethod();
 
-            Object arg = getter.invoke(typedArgs);
-            if (arg == null) continue;
+            // if some arg is null,  NOP
+            // Object arg = getter.invoke(typedArgs);
+            //if (arg == null) continue;
+            //Object arg = args.get(declaredField.getName());
 
             if (declaredField.isAnnotationPresent(OneToMany.class) || declaredField.isAnnotationPresent(ManyToMany.class)) {
                 Class[] classes = ArgsUtil.getCollectionItemType(declaredField);
@@ -93,12 +124,12 @@ public class ArgsUtil {
                 // 容器内部类型
                 Class innerType = classes[1];
 
-                Collection idObjs = (Collection) arg;
+                Collection ids = (Collection) arg;
 
                 // 根据 id 获取 entity reference
-                arg = idObjs.stream()
-                        .map(idObj -> {
-                            return entityManager.getReference(innerType, ((DirtBaseIdEntity)idObj).getId());
+                arg = ids.stream()
+                        .map(id -> {
+                            return entityManager.getReference(innerType, id);
                         })
                         .collect(
                                 isSet?
@@ -108,9 +139,11 @@ public class ArgsUtil {
 
             } else if (declaredField.isAnnotationPresent(ManyToOne.class) || declaredField.isAnnotationPresent(OneToOne.class)) {
                 Class<?> type = declaredField.getType();
-                arg = entityManager.getReference(type, ((DirtBaseIdEntity)arg).getId());
+                arg = objectMapper.convertValue(arg, Long.class);
+                arg = entityManager.getReference(type, arg);
             } else {
-                // primitive field
+                // primitive field, convert type
+                arg = objectMapper.convertValue(arg, declaredField.getType());
 
             }
 

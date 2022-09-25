@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.core.eUIType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -37,19 +36,21 @@ public  class DirtBaseIdEntity implements Serializable {
     @DirtField(title = "id",index = -999999, uiType = eUIType.digit,fixed = "left",dirtSubmit = {})
     protected Long id;
 
-    @Data
-    @AllArgsConstructor
-    public static class IdObj {
-        Long id;
-    }
 
-    @Transient
-    IdObj idObj;
-
-    
-    public IdObj getIdObj() {
-        return new IdObj(this.id);
-    }
+    //
+    //@Data
+    //@AllArgsConstructor
+    //public static class IdObj {
+    //    Long id;
+    //}
+    //
+    //@Transient
+    //IdObj idObj;
+    //
+    //
+    //public IdObj getIdObj() {
+    //    return new IdObj(this.id);
+    //}
 
     //@JsonIgnore
     @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")

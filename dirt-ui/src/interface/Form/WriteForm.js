@@ -74,12 +74,13 @@ export default (props) => {
                 onChange: (selectedRowKeys, selectedRows, info) => {
                   // JPA compatiable
                   if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
-                    const ids = selectedRows.map(v => {return {id: v.id}})
+                    const ids = selectedRows.map(v => {return v.id})
                     form.setFieldValue(columnKey, ids)
-                  } else if (relation === Consts.ManyToOne || relation === Consts.OneToOne) {
-                    const ids = selectedRows.map(v => {return {id: v.id}})
-                    form.setFieldValue(columnKey, ids[0])
                   }
+                  // else if (relation === Consts.ManyToOne || relation === Consts.OneToOne) {
+                  //         const ids = selectedRows.map(v => {return {id: v.id}})
+                  //         form.setFieldValue(columnKey, ids[0])
+                  //       }
                   // Pure Id,Maybe for mabatis compatiable
                   else {
                     const ids = selectedRows.map(v => {return v.id})

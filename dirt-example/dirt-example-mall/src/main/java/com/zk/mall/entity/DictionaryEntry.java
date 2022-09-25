@@ -32,7 +32,7 @@ import javax.validation.constraints.NotEmpty;
 @SQLDelete(sql = "UPDATE dictionary_entry SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = DictionaryEntry.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = DictionaryEntry.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class DictionaryEntry extends DirtBaseIdEntity implements iDirtDictionaryEntryType {
 
     @DirtField(title = "字典排序")

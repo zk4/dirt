@@ -31,7 +31,7 @@ import java.math.BigDecimal;
 @SQLDelete(sql = "UPDATE mall_member_level SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = MemberLevel.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = MemberLevel.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class MemberLevel extends DirtBaseIdEntity {
 
 

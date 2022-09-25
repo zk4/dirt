@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.google.common.collect.ImmutableMap;
 import com.zk.MemberApplication;
+import com.zk.config.rest.Result;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.intef.iPersistProxy;
+import com.zk.dirt.rest.DirtController;
 import com.zk.dirt.util.ArgsUtil;
 import com.zk.member.entity.types.eIdType;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +42,8 @@ public class LazyTest {
     @Autowired
     DirtContext dirtContext;
 
+    @Autowired
+    DirtController controller;
 
     @Test
     @DisplayName("getId() should not invoke select")
@@ -129,20 +133,72 @@ public class LazyTest {
 
         args.put("idtype", eIdType.IDCARD.toString());
 
-        args.put("moreitems", new ArrayList<>(Arrays.asList(
-                ImmutableMap.of("id", 3L),
-                ImmutableMap.of("id", 4L)
-        )));
+        //args.put("moreitems", new ArrayList<>(Arrays.asList(
+        //        ImmutableMap.of("id", 3L),
+        //        ImmutableMap.of("id", 4L)
+        //)));
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ArgsUtil.updateEntity(Member.class,one, args,entityManager,objectMapper);
+        try {
+            ArgsUtil.updateEntity(Member.class,one, args,entityManager,objectMapper);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         Member save = persistProxy.save(Member.class, one);
         System.out.println(save.getItems());
     }
 
+    @Test
+    @Transactional
+    @DisplayName("saveRelation#idObj()")
+    void saveRelationForDirtController() throws IllegalAccessException, InvocationTargetException, IntrospectionException, ClassNotFoundException {
 
+        // construct id args
+        HashMap<String, Object> args = new HashMap<>();
+        args.put("id", 1L);
+        args.put("items", new ArrayList<>(Arrays.asList(
+                ImmutableMap.of("id", 1L),
+                ImmutableMap.of("id", 2L)
+        )));
+
+        args.put("name", "zk");
+
+        args.put("idtype", eIdType.IDCARD.toString());
+
+        //args.put("moreitems", new ArrayList<>(Arrays.asList(
+        //        ImmutableMap.of("id", 3L),
+        //        ImmutableMap.of("id", 4L)
+        //)));
+        try {
+            controller.update(Member.class.getName(), args);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    @Transactional
+    @DisplayName("saveRelation#pureId()")
+    void saveRelationForDirtController2() throws IllegalAccessException, InvocationTargetException, IntrospectionException, ClassNotFoundException {
+
+        // construct id args
+        HashMap<String, Object> args = new HashMap<>();
+        args.put("id", 1L);
+        args.put("items", new ArrayList<>(Arrays.asList(
+              1L,3L
+        )));
+        args.put("name", "zk");
+        args.put("idtype", eIdType.IDCARD.toString());
+
+        try {
+            controller.update(Member.class.getName(), args);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        Result byId = controller.getById(Member.class.getName(), 1L);
+        System.out.println(byId);
+    }
     @Test
     void genereateGetterName() {
         String item = BeanUtil.okNameForMutator(null, "item", true);

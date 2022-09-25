@@ -32,7 +32,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE mall_address SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Address.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = Address.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Address extends DirtBaseIdEntity {
 
     @DirtField(title = "名称" )

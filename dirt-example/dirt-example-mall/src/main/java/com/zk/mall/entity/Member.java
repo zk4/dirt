@@ -36,7 +36,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE mall_member SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Member.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = Member.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Member extends DirtBaseIdEntity {
 
 

@@ -29,5 +29,5 @@ public interface iPersistProxy  {
 	<S extends T,T> S save(Class clazz,S entity);
 
 
-    <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException;
+    <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException, NoSuchFieldException;
 }

@@ -29,7 +29,7 @@ import javax.validation.constraints.Size;
 @SQLDelete(sql = "UPDATE mall_member_address SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = MemberAddress.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = MemberAddress.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class MemberAddress extends DirtBaseIdEntity {
 
     @DirtField(title = "收货人姓名")

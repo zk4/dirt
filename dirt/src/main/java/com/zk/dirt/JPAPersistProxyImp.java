@@ -78,7 +78,7 @@ public class JPAPersistProxyImp implements iPersistProxy {
 	}
 
 	@Override
-	public <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
+	public <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
 		ArgsUtil.updateEntity(rawType, enhancedInstance, args, entityManager,objectMapper);
 	}
 }

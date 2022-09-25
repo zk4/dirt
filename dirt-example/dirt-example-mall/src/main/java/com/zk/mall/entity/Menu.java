@@ -28,7 +28,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE t_menu SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Menu.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = Menu.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Menu extends DirtBaseIdEntity {
 
     @DirtField(title = "目录名" )

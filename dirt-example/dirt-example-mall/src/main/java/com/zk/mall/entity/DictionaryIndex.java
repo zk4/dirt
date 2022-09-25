@@ -31,7 +31,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE dictionary_index SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class DictionaryIndex extends DirtBaseIdEntity {
 
 
