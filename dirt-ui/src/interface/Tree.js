@@ -1,6 +1,7 @@
-import { CarryOutOutlined, FormOutlined } from '@ant-design/icons';
-import { Switch, Tree } from 'antd';
-import React, { useState } from 'react';
+import {CarryOutOutlined, FormOutlined} from '@ant-design/icons';
+import {Switch, Tree} from 'antd';
+import React, {useState,useEffect} from 'react';
+import Dirt from '../Dirt'
 const treeData = [
   {
     title: 'parent 1',
@@ -91,11 +92,15 @@ const treeData = [
   },
 ];
 
-const App = () => {
+const App = (props) => {
+  const {entityName} = props;
   const [showLine, setShowLine] = useState(true);
   const [showIcon, setShowIcon] = useState(false);
   const [showLeafIcon, setShowLeafIcon] = useState(true);
 
+  useEffect(() => {
+
+  }, [])
   const onSelect = (selectedKeys, info) => {
     console.log('selected', selectedKeys, info);
   };
@@ -111,21 +116,29 @@ const App = () => {
     setShowLine(
       checked
         ? {
-            showLeafIcon,
-          }
+          showLeafIcon,
+        }
         : false,
     );
   };
 
   return (
     <>
-      <Tree
-        showLine={showLine}
-        showIcon={showIcon}
-        defaultExpandedKeys={['0-0-0']}
-        onSelect={onSelect}
-        treeData={treeData}
-      />
+      <div style={{display: 'flex'}}>
+        <div style={{width: '20%'}}>
+          <Tree
+            showLine={showLine}
+            showIcon={showIcon}
+            defaultExpandedKeys={['0-0-0']}
+            onSelect={onSelect}
+            treeData={treeData}
+          />
+        </div>
+        <div style={{width: '79%', height: '100vh'}}>
+          < Dirt entityName={entityName} />
+        </div>
+      </div>
+
     </>
   );
 };

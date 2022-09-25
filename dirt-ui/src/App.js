@@ -43,22 +43,9 @@ function App() {
         })
       }
       <h1>{view.text}</h1>
-      <hr style ={{marginBottom:'25px'}}/>
-      {
-        view.viewType === 'Table' && (< Dirt entityName={view.className} />)
-      }
-      {
-        view.viewType === 'Tree' && (
-          <div style={{display: 'flex'}}>
-            <div style={{width: '20%'}}>
-              <Tree />
-            </div>
-            <div style={{width: '79%', height: '100vh'}}>
-              < Dirt entityName={view.className} />
-            </div>
-          </div>
-        )
-      }
+      <hr style={{marginBottom: '25px'}} />
+      { view.viewType === 'Table' && (< Dirt entityName={view.className} />) } 
+      { view.viewType === 'Tree' && (< Tree entityName={view.className} />) }
     </div>
   );
 }

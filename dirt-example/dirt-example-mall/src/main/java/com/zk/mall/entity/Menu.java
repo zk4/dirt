@@ -20,7 +20,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 @Setter
@@ -47,21 +46,12 @@ public class Menu extends DirtBaseIdEntity {
     @DirtField(title = "子目录")
     @OneToMany
     @JoinColumn(name = "parent")
-    //@JsonIdentityReference(alwaysAsId = true)
     Set<Menu> subMenus;
 
-    public Set<Menu> getSubMenus() {
-        if(subMenus.size()==0)return null;
-        return subMenus;
-    }
 
-    @Transient
-    Long key;
-    static AtomicLong integer=new AtomicLong(1);
-    public Long getKey() {
-        return integer.incrementAndGet();
-    }
 
+
+////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
     public void detail() {}
 
