@@ -1,6 +1,7 @@
 package com.zk.mall.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
@@ -46,6 +47,7 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtField(title =  "会员Level id")
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private MemberLevel memberLevel;
 
     @DirtField(title = "会员姓名")
@@ -74,7 +76,7 @@ public class Member extends DirtBaseIdEntity {
     @Email
     private String email;
 
-    @DirtField(title = "头像",uiType = eUIType.avatar)
+    @DirtField(title = "头像",uiType = eUIType.image)
     private String header;
 
 

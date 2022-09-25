@@ -1,6 +1,7 @@
 package com.zk.mall.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
@@ -30,7 +31,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE dictionary_index SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class DictionaryIndex extends DirtBaseIdEntity {
 
 
@@ -68,6 +69,7 @@ public class DictionaryIndex extends DirtBaseIdEntity {
     @OneToMany
     // 允许只生成两张表的情况下，双向更新
     @JoinColumn(name = "dictionaryIndex")
+    @JsonIdentityReference(alwaysAsId = true)
     List<DictionaryEntry> entries;
 
 

@@ -4,7 +4,7 @@ import Dirt from '../../Dirt'
 import {Modal, Input, Button} from 'antd';
 import Consts from '../../consts'
 import customRender from '../../customRender'
-import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined} from '@ant-design/icons';
+import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined, SearchOutlined} from '@ant-design/icons';
 
 import IdHolder from './IdHolder'
 const {Search} = Input;
@@ -33,27 +33,39 @@ export default (props) => {
           {/*
           <IdHolder idObjs={form.getFieldValue(columnKey)} idOfEntity = {idOfEntity}/>
           */}
-
-          <Input.Search
-            allowClear
-            style={{
-              width: '100%',
-            }}
-            defaultValue="0571"
-            placeholder={column.placeholder}
-            value={form.getFieldValue(columnKey)}
-            onChange={
-              e => {
-                form.setFieldValue(columnKey, e.target.value)
+          <Input.Group compact>
+            <Input
+              allowClear
+              style={{
+                width: '75%',
+              }}
+              placeholder={column.placeholder}
+              value={form.getFieldValue(columnKey)}
+              onChange={
+                e => {
+                  // clear
+                  if (e.target.value == "" || e.target.value == {}) {
+                    if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
+                      form.setFieldValue(columnKey, [])
+                    } else if (relation === Consts.ManyToOne || relation === Consts.OneToOne) {
+                      form.setFieldValue(columnKey, null)
+                    } else {
+                      form.setFieldValue(columnKey, e.target.value)
+                    }
+                  } else {
+                  // create
+                    form.setFieldValue(columnKey, e.target.value)
+                  }
+                }
               }
-            }
-            onSearch={
-              e => {
-                showModal(columnKey)
+              onSearch={
+                e => {
+                  showModal(columnKey)
+                }
               }
-            }
-          />
-
+            />
+            <Button type="primary"><SearchOutlined /></Button>
+          </Input.Group>
           {
             vals && Array.isArray(vals) ? vals.map(v => customRender.readForm(v.id, idOfEntity, v.id))
               : customRender.readForm(vals?.id, idOfEntity, vals?.id)

@@ -1,7 +1,9 @@
 package com.zk.mall.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
@@ -30,6 +32,7 @@ import javax.validation.constraints.NotEmpty;
 @SQLDelete(sql = "UPDATE dictionary_entry SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+@JsonIdentityInfo(scope = DictionaryEntry.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class DictionaryEntry extends DirtBaseIdEntity implements iDirtDictionaryEntryType {
 
     @DirtField(title = "字典排序")
