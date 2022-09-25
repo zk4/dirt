@@ -9,6 +9,7 @@ import WriteForm from './interface/Form/WriteForm'
 import Consts from './consts'
 import customRender from './customRender'
 import {isObj} from './util';
+import Cascader from './components/cascader'
 const {RangePicker} = DatePicker;
 
 export default function Dirt(props) {
@@ -22,6 +23,51 @@ export default function Dirt(props) {
   const redefineHeader = (headers, c) => {
     const {title, idOfEntity: cls, dataIndex, relation} = c
 
+    // if (dataIndex == 'menu') {
+    //
+    //   c["fieldProps"] = c["fieldProps"] || {}
+    //   c["fieldProps"]["options"] = [
+    //     {label: '全部', value: 'all'},
+    //     {label: '未解决', value: 'open'},
+    //     {label: '已解决', value: 'closed'},
+    //     {label: '解决中', value: 'processing'},
+    //     {
+    //       label: '特殊选项',
+    //       value: 'optGroup',
+    //       optionType: 'optGroup',
+    //       options: [
+    //         {label: '不解决', value: 'no'},
+    //         {label: '已废弃', value: 'clear'},
+    //       ],
+    //     },
+    //   ]
+    //   // return <Cascader />
+    // }
+    // json object 与 json 有区别。服务器过来的是 json，json 不支持key为数字，只能放在值里，如果前端需要，先放值里，再转到 key
+    if (c.valueEnum) {
+      c.valueEnum = Object.entries(c.valueEnum).reduce((a, [k, c]) => {a[c.status] = c; return a;}, {})
+    }
+
+    // 自定义搜索栏
+    if (c.searchType != null) {
+      c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        if (c.searchType.valueType  === 'cascader') {
+          return <Cascader onValueSet={v =>{
+                form.setFieldValue(dataIndex, v)
+          }}/>
+        }
+        if (c.searchType.valueType === 'dateTimeRange') {
+          return <RangePicker showTime />
+        } else if (c.searchType.valueType === 'dateRange') {
+          return <RangePicker />
+        } else if (c.searchType.valueType === 'timeRange') {
+          return <TimePicker.RangePicker />
+        }
+      }
+    }
+
+
+    //  自定义 table
     if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {
       c['render'] = (text, record, index) => {return customRender.table(title, cls, record[dataIndex]);}
       return c;
@@ -51,28 +97,13 @@ export default function Dirt(props) {
         }
       }
     }
+
     // 处理 actions
     if (c["actions"]) {
       c['render'] = (text, record, index) => Object.entries(c["actions"]).map(([key, action]) => generateAction(headers, action, record, index));
     }
 
-    // json object 与 json 有区别。服务器过来的是 json，json 不支持key为数字，只能放在值里，如果前端需要，先放值里，再转到 key
-    if (c.valueEnum) {
-      c.valueEnum = Object.entries(c.valueEnum).reduce((a, [k, c]) => {a[c.status] = c; return a;}, {})
-    }
 
-    // 自定义搜索栏
-    if (c.searchType != null) {
-      c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        if (c.searchType.valueType === 'dateTimeRange') {
-          return <RangePicker showTime />
-        } else if (c.searchType.valueType === 'dateRange') {
-          return <RangePicker />
-        } else if (c.searchType.valueType === 'timeRange') {
-          return <TimePicker.RangePicker />
-        }
-      }
-    }
     return c;
   }
 

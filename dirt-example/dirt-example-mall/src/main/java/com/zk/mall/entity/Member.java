@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.core.eDirtViewType;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
@@ -51,7 +52,7 @@ public class Member extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     private MemberLevel memberLevel;
 
-    @DirtField(title =  "目录级",uiType = eUIType.digit)
+    @DirtField(title =  "目录级",uiType = eUIType.text,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private Menu menu;

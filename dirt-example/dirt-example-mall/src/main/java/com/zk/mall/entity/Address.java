@@ -69,9 +69,14 @@ public class Address extends DirtBaseIdEntity {
     @DirtField(title = "类型" )
     eAddressType addressType;
 
+    @Transient
+    Boolean isLeaf;
 
+    public Boolean getIsLeaf() {
+        return subAddress==null || subAddress.size()==0;
+    }
 
-////////////////////////// Action //////////////////////////
+    ////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
     public void detail() {}
 

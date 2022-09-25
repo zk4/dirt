@@ -46,12 +46,11 @@ public  class DirtBaseIdEntity implements Serializable {
     @Transient
     IdObj idObj;
 
-    
     public IdObj getIdObj() {
         return new IdObj(this.id);
     }
 
-    //@JsonIgnore
+
     @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
     @DirtField(title = "更新时间",
             dirtSubmit = {},
@@ -65,7 +64,6 @@ public  class DirtBaseIdEntity implements Serializable {
 
 
     @Column(nullable = false,columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
-    //@JsonIgnore
     @OptimisticLock(excluded = true) // 不触发乐观锁
     @DirtField(title = "创建时间",
             dirtSubmit = {},
