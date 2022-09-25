@@ -2,24 +2,13 @@ import {Cascader} from 'antd';
 import React, {useState, useEffect} from 'react';
 import network from '../network'
 
-const dataAdapter = (ds) => {
-  if (ds) {
-    var obj = JSON.parse(JSON.stringify(ds)
-      .replaceAll("\"name\":", "\"label\":")
-      .replaceAll("\"id\":", "\"value\":")
-    );
-    return obj;
-  }
-  return ds;
-}
 const App = (props) => {
-  const {optionLists, onValueSet} = props;
-  const [options, setOptions] = useState(optionLists || []);
+  const {request, onValueSet} = props;
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
     (async () => {
-      let data = await network.getDataAsync("com.zk.mall.entity.Address", 3);
-      let d = dataAdapter(data.subAddress)
+      let d = await request(null)
       setOptions(d)
     })()
   }, [])
@@ -34,8 +23,9 @@ const App = (props) => {
     targetOption.loading = true; // load options lazily
 
     let id = targetOption.value
-    let data = await network.getDataAsync("com.zk.mall.entity.Address", id);
-    targetOption.children = dataAdapter(data.subAddress);
+    // let data = await network.getDataAsync("com.zk.mall.entity.Address", id);
+    let d = await request(id)
+    targetOption.children = d;
     targetOption.loading = false;
     setOptions([...options]);
   };
