@@ -30,7 +30,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity(value = "会员",viewType = eDirtViewType.Tree)
+@DirtEntity(value = "会员")
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "mall_member")

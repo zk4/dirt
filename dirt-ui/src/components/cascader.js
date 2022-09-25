@@ -1,42 +1,26 @@
 import {Cascader} from 'antd';
 import React, {useState, useEffect} from 'react';
 import network from '../network'
-const static_optionLists = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    isLeaf: false,
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    isLeaf: false,
-  },
-];
 
-  const dataAdapter = (ds) => {
-    if(ds)
-    {
-      var obj = JSON.parse(JSON.stringify(ds)
-        .replaceAll("\"name\":", "\"label\":")
-        .replaceAll("\"id\":", "\"value\":")
-        .replaceAll("\"id\":", "\"value\":")
-      );
-      return obj;
-    }
-    return ds;
+const dataAdapter = (ds) => {
+  if (ds) {
+    var obj = JSON.parse(JSON.stringify(ds)
+      .replaceAll("\"name\":", "\"label\":")
+      .replaceAll("\"id\":", "\"value\":")
+    );
+    return obj;
   }
+  return ds;
+}
 const App = (props) => {
   const {optionLists, onValueSet} = props;
-  const [options, setOptions] = useState(optionLists || static_optionLists);
+  const [options, setOptions] = useState(optionLists || []);
 
   useEffect(() => {
     (async () => {
       let data = await network.getDataAsync("com.zk.mall.entity.Address", 3);
       let d = dataAdapter(data.subAddress)
-      // debugger
       setOptions(d)
-
     })()
   }, [])
 
@@ -51,23 +35,9 @@ const App = (props) => {
 
     let id = targetOption.value
     let data = await network.getDataAsync("com.zk.mall.entity.Address", id);
-    targetOption.loading = false;
     targetOption.children = dataAdapter(data.subAddress);
+    targetOption.loading = false;
     setOptions([...options]);
-    // setTimeout(() => {
-    //   targetOption.loading = false;
-    //   targetOption.children = [
-    //     {
-    //       label: `${targetOption.label} Dynamic 1`,
-    //       value: 'dynamic1',
-    //     },
-    //     {
-    //       label: `${targetOption.label} Dynamic 2`,
-    //       value: 'dynamic2',
-    //     },
-    //   ];
-    //   setOptions([...options]);
-    // }, 1000);
   };
 
   return <Cascader options={options} loadData={loadData} onChange={onChange} changeOnSelect />;
