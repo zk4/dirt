@@ -1,7 +1,8 @@
 import {CarryOutOutlined, FormOutlined} from '@ant-design/icons';
 import {Switch, Tree} from 'antd';
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import Dirt from '../Dirt'
+import network from '../network'
 const treeData = [
   {
     title: 'parent 1',
@@ -97,30 +98,31 @@ const App = (props) => {
   const [showLine, setShowLine] = useState(true);
   const [showIcon, setShowIcon] = useState(false);
   const [showLeafIcon, setShowLeafIcon] = useState(true);
+  const [data, setData] = useState(treeData);
+
+  const dataAdapter = (ds) => {
+    var obj = JSON.parse(JSON.stringify(ds)
+      .replaceAll("\"name\":", "\"title\":")
+      .replaceAll("\"subMenus\":", "\"children\":")
+      .replaceAll("\"id\":", "\"key\":")
+
+    );
+    console.log(obj)
+    return obj;
+  }
 
   useEffect(() => {
-
+    (async () => {
+      const data = await network.getDataAsync('com.zk.mall.entity.Menu', 1)
+      setData(dataAdapter(data).children)
+    }
+    )()
   }, [])
   const onSelect = (selectedKeys, info) => {
     console.log('selected', selectedKeys, info);
   };
 
-  const onSetLeafIcon = (checked) => {
-    setShowLeafIcon(checked);
-    setShowLine({
-      showLeafIcon: checked,
-    });
-  };
 
-  const onSetShowLine = (checked) => {
-    setShowLine(
-      checked
-        ? {
-          showLeafIcon,
-        }
-        : false,
-    );
-  };
 
   return (
     <>
@@ -131,7 +133,7 @@ const App = (props) => {
             showIcon={showIcon}
             defaultExpandedKeys={['0-0-0']}
             onSelect={onSelect}
-            treeData={treeData}
+            treeData={data}
           />
         </div>
         <div style={{width: '79%', height: '100vh'}}>

@@ -1,9 +1,6 @@
 package com.zk.mall.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
@@ -46,12 +43,13 @@ public class Menu extends DirtBaseIdEntity {
     @DirtField(title = "子目录")
     @OneToMany
     @JoinColumn(name = "parent")
+    //@JsonIdentityReference(alwaysAsId = true)
     Set<Menu> subMenus;
 
 
 
 
-////////////////////////// Action //////////////////////////
+    ////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
     public void detail() {}
 

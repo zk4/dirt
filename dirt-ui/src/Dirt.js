@@ -223,7 +223,6 @@ export default function Dirt(props) {
 
 
   return (columns && <ProTable
-    key={entityName}
     scroll={{x: columns.length * 200}}
     columns={columns}
     actionRef={actionRef}

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.core.eDirtViewType;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iEnumText;
@@ -28,7 +29,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity("会员")
+@DirtEntity(value = "会员",viewType = eDirtViewType.Tree)
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "mall_member")
@@ -49,6 +50,11 @@ public class Member extends DirtBaseIdEntity {
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private MemberLevel memberLevel;
+
+    @DirtField(title =  "目录级",uiType = eUIType.digit)
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private Menu menu;
 
     @DirtField(title = "会员姓名")
     @NotEmpty
