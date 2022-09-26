@@ -20,6 +20,8 @@ public interface iPersistProxy  {
 
 	<T,ID>  T getOne(Class<T> clazz, ID id) ;
 
+
+
 	<ID>  void deleteById(Class clazz,ID id);
 
 	<ID>  void deleteByIds(Class clazz,List<ID> ids);

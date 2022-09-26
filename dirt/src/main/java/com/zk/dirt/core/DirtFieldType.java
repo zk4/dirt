@@ -109,6 +109,11 @@ public class DirtFieldType {
     // JPA 映射关系
     eDirtEntityRelation relation= eDirtEntityRelation.None;
 
+
+
+    // subtree Name
+    String subTreeName;
+
     public static DirtFieldType fromParameter(Parameter parameter) {
         throw  new RuntimeException("未实现");
     }

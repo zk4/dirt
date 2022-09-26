@@ -1,6 +1,7 @@
 package com.zk.dirt.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zk.config.rest.CodeMsg;
 import com.zk.config.rest.DoNotWrapperResult;
 import com.zk.config.rest.Result;
 import com.zk.config.rest.rsql.QueryFilter2;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +26,7 @@ import javax.persistence.EntityManager;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class DirtController {
@@ -190,11 +189,16 @@ public class DirtController {
     @GetMapping("/dirt/getData")
     @ApiOperation(value = "数据")
     @Transactional(readOnly = true)
+    @SneakyThrows
     public Result getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName( entityName);
-        Object one = persistProxy.getOne(entityClass,id);
+        Object one = persistProxy.findById(entityClass,id);
+        if(((Optional) one).isPresent()){
+            return Result.success(((Optional) one).get());
+        }else {
+            return Result.error(CodeMsg.ENTITY_ID_NOT_EXIST_ERROR);
+        }
 
-        return Result.success(one);
     }
 
     @GetMapping("/dirt/getTableHeaders")

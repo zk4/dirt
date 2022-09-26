@@ -12,11 +12,12 @@ import {isObj} from './util';
 import Cascader from './components/cascader'
 const {RangePicker} = DatePicker;
 
-const dataAdapter = (ds) => {
+const dataAdapter = (ds,childAlias) => {
   if (ds) {
     var obj = JSON.parse(JSON.stringify(ds)
       .replaceAll("\"name\":", "\"label\":")
       .replaceAll("\"id\":", "\"value\":")
+      .replaceAll("\""+childAlias+"\":", "\"children\":")
     );
     return obj;
   }
@@ -42,21 +43,18 @@ export default function Dirt(props) {
     if (c.searchType != null) {
       c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         if (c.searchType.valueType === 'cascader') {
-          return <Cascader request={async (id) => {
+          return <Cascader idOfEntity={c.idOfEntity} request={async (id) => {
             if (id == null) {
-
-              // TODO: what is the default root id? 1 is OK?
-              const rootId = 1  
-              let data = await network.getDataAsync("com.zk.mall.entity.Address", rootId);
-              return dataAdapter(data.subAddress)
-
-            } else {
-              let data = await network.getDataAsync("com.zk.mall.entity.Address", id);
-              return dataAdapter(data.subAddress)
+              // TODO: what is the default id? 1 is OK?
+              // A bit tricky, since the root data is set after server is deployed. No way to know what it is.
+              // Maybe we should force define it 
+              id = 1
             }
+            let data = await network.getDataAsync(c.idOfEntity, id);
+            return dataAdapter(data[c.subTreeName],c.subTreeName)
+
           }} onValueSet={v => {
-            // debugger
-            form.setFieldValue(dataIndex,{id: v})
+            form.setFieldValue(dataIndex, {id: v})
           }} />
         }
         if (c.searchType.valueType === 'dateTimeRange') {
@@ -257,7 +255,7 @@ export default function Dirt(props) {
 
 
   return (columns && <ProTable
-    key ={entityName}
+    key={entityName}
     scroll={{x: columns.length * 200}}
     columns={columns}
     actionRef={actionRef}

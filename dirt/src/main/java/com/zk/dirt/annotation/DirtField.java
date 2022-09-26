@@ -36,6 +36,10 @@ public @interface DirtField {
     // 表头宽度, -1: auto
     eSubmitWidth width() default eSubmitWidth.MD;
 
+    // subTree　节点的　名字
+    String subTreeName() default  "";
+
+
     // 表头排序
     int index() default 0;
     // 表头固定在左侧，相当于 excel 里的冻结

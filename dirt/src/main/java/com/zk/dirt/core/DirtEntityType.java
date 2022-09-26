@@ -108,6 +108,13 @@ public class DirtEntityType {
                     tableHeader.setFilters(dirtField.filters());
                     tableHeader.setHideInTable(dirtField.hideInTable());
                     tableHeader.setSorter(dirtField.sorter());
+
+                    // 设置　subTree　name，支持每个 field　都不一样的复杂醋
+                    String subTreeName = dirtField.subTreeName();
+                    if(subTreeName.length()>0){
+                        tableHeader.setSubTreeName(subTreeName);
+                    }
+
                     eUIType uiType = dirtField.uiType();
                     Class<? extends DirtBaseIdEntity>[] classes = dirtField.idOfEntity();
                     Class<?> fieldRetType = field.getType();

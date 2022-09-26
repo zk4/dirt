@@ -1,6 +1,5 @@
 import {Cascader} from 'antd';
 import React, {useState, useEffect} from 'react';
-import network from '../network'
 
 const App = (props) => {
   const {request, onValueSet} = props;
@@ -14,16 +13,13 @@ const App = (props) => {
   }, [])
 
   const onChange = (valueArrays, optionArrays) => {
-    // console.log(value, value);
     onValueSet(valueArrays.slice(-1))
   };
 
   const loadData = async (selectedOptions) => {
     const targetOption = selectedOptions[selectedOptions.length - 1];
     targetOption.loading = true; // load options lazily
-
     let id = targetOption.value
-    // let data = await network.getDataAsync("com.zk.mall.entity.Address", id);
     let d = await request(id)
     targetOption.children = d;
     targetOption.loading = false;

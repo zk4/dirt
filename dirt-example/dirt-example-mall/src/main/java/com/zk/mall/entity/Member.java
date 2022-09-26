@@ -51,7 +51,7 @@ public class Member extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     private MemberLevel memberLevel;
 
-    @DirtField(title =  "目录级",uiType = eUIType.text,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
+    @DirtField(title =  "目录级",subTreeName = "subMenus", uiType = eUIType.text,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private Menu menu;
