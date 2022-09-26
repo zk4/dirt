@@ -97,9 +97,7 @@ public class DirtEntityType {
                     OneToOne oneToOne = field.getAnnotation(OneToOne.class);
                     ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
 
-
                     tableHeader.setIndex(dirtField.index());
-                    //tableHeader.setWidth(dirtField.width());
                     tableHeader.setFixed(dirtField.fixed());
                     tableHeader.setEllipsis(dirtField.ellipsis());
                     tableHeader.setCopyable(dirtField.copyable());
@@ -109,7 +107,7 @@ public class DirtEntityType {
                     tableHeader.setHideInTable(dirtField.hideInTable());
                     tableHeader.setSorter(dirtField.sorter());
 
-                    // 设置　subTree　name，支持每个 field　都不一样的复杂醋
+                    // 设置　subTree　name，支持每个 field　都不一样的复杂模型
                     String subTreeName = dirtField.subTreeName();
                     if(subTreeName.length()>0){
                         tableHeader.setSubTreeName(subTreeName);

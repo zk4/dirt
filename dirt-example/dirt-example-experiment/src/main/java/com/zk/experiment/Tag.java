@@ -30,7 +30,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE tag SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Tag.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Tag.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Tag extends DirtBaseIdEntity {
 
 

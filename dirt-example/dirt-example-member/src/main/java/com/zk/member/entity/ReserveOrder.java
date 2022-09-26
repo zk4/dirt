@@ -91,7 +91,7 @@ public class ReserveOrder extends DirtBaseIdEntity {
     }
 
 
-    @DirtAction(text = "下单", key = "makeOrder")
+    @DirtAction(text = "下单" )
     public void makeOrder(OrderSubmitVo arggggg) {
         System.out.println(arggggg);
     }

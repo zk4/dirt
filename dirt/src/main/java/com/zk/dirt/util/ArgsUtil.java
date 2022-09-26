@@ -73,14 +73,14 @@ public class ArgsUtil {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T> void updateEntity(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager,ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
+    public static <T> void updateEntity(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager, ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
         // types is converted, save me sometime
         Object typedArgs = objectMapper.convertValue(args, rawType);
 
         for (Field declaredField : rawType.getDeclaredFields()) {
             String fieldName = declaredField.getName();
 
-            Method getter = new PropertyDescriptor(fieldName,rawType).getReadMethod();
+            Method getter = new PropertyDescriptor(fieldName, rawType).getReadMethod();
 
             Object arg = getter.invoke(typedArgs);
             if (arg == null) continue;
@@ -98,24 +98,20 @@ public class ArgsUtil {
                 // 根据 id 获取 entity reference
                 arg = idObjs.stream()
                         .map(idObj -> {
-                            return entityManager.getReference(innerType, ((DirtBaseIdEntity)idObj).getId());
+                            return entityManager.getReference(innerType, ((DirtBaseIdEntity) idObj).getId());
                         })
-                        .collect(
-                                isSet?
-                                Collectors.toSet():
-                                        Collectors.toList()
-                        );
+                        .collect(isSet ? Collectors.toSet() : Collectors.toList());
 
             } else if (declaredField.isAnnotationPresent(ManyToOne.class) || declaredField.isAnnotationPresent(OneToOne.class)) {
                 Class<?> type = declaredField.getType();
-                arg = entityManager.getReference(type, ((DirtBaseIdEntity)arg).getId());
+                arg = entityManager.getReference(type, ((DirtBaseIdEntity) arg).getId());
             } else {
                 // primitive field
 
             }
 
             // set entity reference back to annotated field
-            Method setter = new PropertyDescriptor(fieldName,enhancedInstance.getClass()).getWriteMethod();
+            Method setter = new PropertyDescriptor(fieldName, enhancedInstance.getClass()).getWriteMethod();
             System.out.println(fieldName);
             setter.invoke(enhancedInstance, arg);
         }

@@ -7,7 +7,7 @@ import com.zk.dirt.annotation.DirtAction;
 @DirtEntity
 public class SellContext {
 
-    @DirtAction(text = "帮用户下单", key = "sell")
+    @DirtAction(text = "帮用户下单" )
     public void sell(Member member) {
 
     }

@@ -28,7 +28,7 @@ import java.util.Set;
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 //@ToString
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Benifit extends DirtBaseIdEntity {
 
 

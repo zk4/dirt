@@ -26,7 +26,7 @@ import java.util.Set;
 
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
-@JsonIdentityInfo(scope = Card.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Card.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Card extends DirtBaseIdEntity {
 
 
@@ -78,7 +78,7 @@ public class Card extends DirtBaseIdEntity {
     @DirtField(title = "实名")
     Boolean binding= true;
 
-    @DirtAction(text = "状态改变", key = "changeStatus")
+    @DirtAction(text = "状态改变" )
     public void changeStatus() {
 
         if (this.status==null)
@@ -87,7 +87,7 @@ public class Card extends DirtBaseIdEntity {
     }
 
 
-    @DirtAction(text = "切换绑定", key = "bind")
+    @DirtAction(text = "切换绑定" )
     public void bind() {
         if (this.binding==null)
             this.binding = false;

@@ -28,7 +28,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE my_group SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = MyGroup.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = MyGroup.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class MyGroup extends DirtBaseIdEntity {
 
 
@@ -42,6 +42,9 @@ public class MyGroup extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
 
     Set<Member> members;
+
+
+
 
 
     @DirtAction(text = "详情")
