@@ -44,8 +44,12 @@ export default function Dirt(props) {
         if (c.searchType.valueType === 'cascader') {
           return <Cascader request={async (id) => {
             if (id == null) {
-              let data = await network.getDataAsync("com.zk.mall.entity.Address", 3);
+
+              // TODO: what is the default root id? 1 is OK?
+              const rootId = 1  
+              let data = await network.getDataAsync("com.zk.mall.entity.Address", rootId);
               return dataAdapter(data.subAddress)
+
             } else {
               let data = await network.getDataAsync("com.zk.mall.entity.Address", id);
               return dataAdapter(data.subAddress)
