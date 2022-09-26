@@ -13,9 +13,9 @@ const App = (props) => {
     })()
   }, [])
 
-  const onChange = (value, selectedOptions) => {
-    console.log(value, selectedOptions);
-    onValueSet(selectedOptions)
+  const onChange = (valueArrays, optionArrays) => {
+    // console.log(value, value);
+    onValueSet(valueArrays.slice(-1))
   };
 
   const loadData = async (selectedOptions) => {

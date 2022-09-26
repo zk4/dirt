@@ -51,7 +51,8 @@ export default function Dirt(props) {
               return dataAdapter(data.subAddress)
             }
           }} onValueSet={v => {
-            form.setFieldValue(dataIndex, v)
+            // debugger
+            form.setFieldValue(dataIndex,{id: v})
           }} />
         }
         if (c.searchType.valueType === 'dateTimeRange') {
