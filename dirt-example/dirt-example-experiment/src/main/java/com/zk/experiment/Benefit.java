@@ -1,6 +1,7 @@
 package com.zk.experiment;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
@@ -29,7 +30,7 @@ import java.util.Set;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 //@ToString
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
-public class Benifit extends DirtBaseIdEntity {
+public class Benefit extends DirtBaseIdEntity {
 
 
     @DirtField(title = "权益名称")
@@ -40,10 +41,20 @@ public class Benifit extends DirtBaseIdEntity {
     @DirtField(title = "卡包",dirtSubmit = {})
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="card_benifit_rel",
-            joinColumns={@JoinColumn(name="benifitId")},
+    @JoinTable(name="card_benefit_rel",
+            joinColumns={@JoinColumn(name="benefitId")},
             inverseJoinColumns={@JoinColumn(name="cardId")})
     Set<Card> cards;
+
+    @DirtField(title = "权益集合")
+    @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="member_benefit_rel",
+            joinColumns={@JoinColumn(name="benefitId")},
+            inverseJoinColumns={@JoinColumn(name="memberId")})
+    @JsonIdentityReference(alwaysAsId = true)
+    Set<Member> members;
+
 
     @DirtAction(text = "详情")
     public void detail() {}

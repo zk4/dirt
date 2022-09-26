@@ -41,11 +41,12 @@ public class Menu extends DirtBaseIdEntity {
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name="parentId")
     Menu parent;
 
     @DirtField(title = "子目录")
     @OneToMany
-    @JoinColumn(name = "parent")
+    @JoinColumn(name = "parentId")
     //@JsonIdentityReference(alwaysAsId = true)
     Set<Menu> children;
 

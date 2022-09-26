@@ -76,12 +76,14 @@ public class Member extends DirtBaseIdEntity {
 
 
     @ManyToOne
+    @JoinColumn(name="enterpriseParentId")
+
     Member enterpriseParent;
 
     @DirtField(title = "企业会员组")
     @OneToMany
     // 允许双向更新
-    @JoinTable(name="enterpriseParent")
+    @JoinColumn(name="enterpriseParentId")
     @JsonIdentityReference(alwaysAsId = true)
     Set<Member> enterpriseMembers;
 
@@ -115,6 +117,16 @@ public class Member extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
 
     Set<Tag> tags;
+
+
+    @DirtField(title = "权益集合")
+    @ManyToMany
+    // 允许双向更新
+    @JoinTable(name="member_benefit_rel",
+            joinColumns={@JoinColumn(name="memberId")},
+            inverseJoinColumns={@JoinColumn(name="benefitId")})
+    @JsonIdentityReference(alwaysAsId = true)
+    Set<Benefit> benefits;
 
 
 

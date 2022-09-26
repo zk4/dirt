@@ -40,11 +40,12 @@ public class MyGroup extends DirtBaseIdEntity {
             joinColumns={@JoinColumn(name="myGroupId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})
     @JsonIdentityReference(alwaysAsId = true)
-
     Set<Member> members;
 
-
-
+    @DirtField(title = "群主")
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    Member owner;
 
 
     @DirtAction(text = "详情")
