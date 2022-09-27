@@ -38,14 +38,31 @@ public class Menu extends DirtBaseIdEntity {
     public static class IdNameObj {
         Long id;
         String name;
+        Boolean isLeaf;
     }
 
     @Transient
     IdNameObj idNameObj;
 
     public IdNameObj getIdNameObj() {
-        return new  IdNameObj(this.id,this.name);
+        return new  IdNameObj(this.id,this.name,this.isLeaf);
     }
+
+
+    Boolean isLeaf;
+
+    @PreUpdate
+    @PrePersist
+    public void preUpdateAndPersist(){
+        if(this.subMenus!=null
+                && this.subMenus.size()>0)
+            isLeaf = false;
+        else
+            isLeaf = true;
+    }
+
+
+
 
     @DirtField(title = "目录名" )
     @NotEmpty
