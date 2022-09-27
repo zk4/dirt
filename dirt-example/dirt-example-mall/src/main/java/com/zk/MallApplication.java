@@ -14,7 +14,7 @@ import static com.zk.utils.StartUtils.logApplicationStartup;
 
 @SpringBootApplication
 @EnableAsync
-@DirtScanPacakge({"com.zk"})
+@DirtScanPacakge({"com.zk.mall.entity"})
 public class MallApplication {
 
 

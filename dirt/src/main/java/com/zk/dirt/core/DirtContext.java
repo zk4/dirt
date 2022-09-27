@@ -12,10 +12,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class DirtContext {
@@ -41,12 +39,15 @@ public class DirtContext {
     public void init() throws ClassNotFoundException {
         String mainClassName = PackageUtil.getMainClassName();
         Class<?> aClass = Class.forName(mainClassName);
-        DirtScanPacakge scanPaths = (DirtScanPacakge) aClass.getDeclaredAnnotation(DirtScanPacakge.class);
-        if (scanPaths == null) {
-            throw new RuntimeException("You should add @DirtScanPacakge on main class");
+        DirtScanPacakge scanPackageAnno = (DirtScanPacakge) aClass.getDeclaredAnnotation(DirtScanPacakge.class);
+        // default is "com.zk"
+        String[] scanPackages = new String[]{"com.zk"};
+        if (scanPackageAnno != null) {
+            scanPackages = scanPackageAnno.value();
         }
+        System.out.println("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining()));
 
-        for (String packagePath : scanPaths.value()) {
+        for (String packagePath : scanPackages) {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
             for (Class classAnnotationClass : classAnnotationClasses) {
                 String simpleName = classAnnotationClass.getName();
