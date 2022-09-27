@@ -73,7 +73,19 @@ export default function Dirt(props) {
     }
 
 
-    //  自定义 table
+    // 自定义 table row
+    // 1.　relation 关系处理优先级更高
+    if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {
+      c['render'] = (text, record, index) => {return customRender.table(title, cls, record[dataIndex]);}
+      return c;
+    }
+    else if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
+      c['render'] = (text, record, index) => {
+        return record[dataIndex]?.map(d => {return customRender.table(title, cls, d)})
+      }
+      return c;
+    }
+    // 2. 然后是自定义 table row
     if (c.valueType === UIConsts.richtext) {
       c['render'] = (text, record, index) => {
         return <RichText.TableRowView value={record[dataIndex]} />
@@ -86,16 +98,7 @@ export default function Dirt(props) {
       }
       return c;
     }
-    if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {
-      c['render'] = (text, record, index) => {return customRender.table(title, cls, record[dataIndex]);}
-      return c;
-    }
-    else if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
-      c['render'] = (text, record, index) => {
-        return record[dataIndex]?.map(d => {return customRender.table(title, cls, d)})
-      }
-      return c;
-    }
+    
     // 生成 id 关连的实际 entity 详情跳转
     // 可以是多对一的关系，也可以是纯 id
     if (cls) {
