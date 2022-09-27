@@ -83,18 +83,19 @@ ManyToMany 多对多，关系任意，可重复
 1. [x] 自动生成 以 id 为主导的关联代码，
     当前利用了 @JsonIdentityInfo，与 @JsonIdentityReference 两个注解。将 entity 转化成了 {id: xxx} 的形式。之所以用 IdObject， 是为了别名的扩展，
     如不显示 id，但要显示 name。但又觉得直接使用 id 也许会更方便，也可以统一 mbyatis 与 hibernate 的数据操作形式
+1. [x] 树状结构组织，单纯的树状组织意义不大，很多时候树状结构，是为了方便用户的一种筛选条件。如左右而已，左树，右表，所以，不打算将树状态结构组织做成单独的功能。而是集成到筛选里。
+1. [x] 关系支持查询
+1. [x] 支持带循环结构关系显示 name，参看　IdNameObj，依赖　@JsonIdentityInfo，与 @JsonIdentityReference。
+　　　　如果不带循环，直接返回 name 即可。　　　　　
 1. [ ] 支持 Map 映射
 1. [ ] schema 标准化
 1. [ ] 业务事件驱动
-1. [ ] thrift ？ 
+1. [ ] thrift ？
 1. [ ] 虚拟 entity 支持
 1. [ ] embeded 支持
 1. [ ] 输出表单联动 schema
 1. [ ] eFilterOperator 实现
 1. [ ] action 动态返回显不显示的方案
-1. [ ] 树状结构组织，单纯的树状组织意义不大，很多时候树状结构，是为了方便用户的一种筛选条件。如左右而已，左树，右表，所以，不打算将树状态结构组织做成单独的功能。而是集成到筛选里。
-1. [ ] 完善 search 字段的前端映射
-1. [ ] 关系支持查询
 1. [ ] 在获取数据时，只获取需要显示的数据， 尤其是关联关系，只返回 id，或者 id list/set
 1. [ ] 抛出关键可 debug　的异常
 ## 前端
