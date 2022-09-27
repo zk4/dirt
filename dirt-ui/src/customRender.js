@@ -2,34 +2,34 @@ import React from 'react';
 import ReadForm from './interface/Form/ReadForm'
 import {isObj} from './util'
 export default {
-  table: (title, cls, id) => {
-    if(id==null) 
+  table: (title, cls, idObj) => {
+    if(idObj==null) 
     {
       return
     }
-    if (isObj(id)) {
-      console.assert(id.id,"必须有 id"+id)
-      return <ReadForm key={cls + id.id} title={title} id={id.id} cls={cls} />
+    if (isObj(idObj)) {
+      console.assert(idObj.id,"必须有 id"+idObj)
+      return <ReadForm key={cls + idObj.id} title={title} id={idObj.id} cls={cls} name={idObj?.name} />
     }
     else {
-      console.assert(id,"必须有 id"+id)
-      return <ReadForm key={cls + id} title={title} id={id} cls={cls} />
+      console.assert(idObj,"必须有 id"+idObj)
+      return <ReadForm key={cls + idObj} title={title} id={idObj} cls={cls} name={idObj?.name}/>
     }
   },
-  readForm: (title, cls, id) => {
-    if(id==null) 
+  readForm: (title, cls, idObj) => {
+    if(idObj==null) 
     {
       return
     }
-    if (isObj(id))
+    if (isObj(idObj))
     {
-      console.assert(id.id,"必须有 id"+id)
-      return <ReadForm key={cls + id.id} title={title} id={id.id} cls={cls} />
+      console.assert(idObj.id,"必须有 id"+idObj)
+      return <ReadForm key={cls + idObj.id} title={title} id={idObj.id} cls={cls} name={idObj?.name} />
       }
     else
     {
-      console.assert(id,"必须有 id"+id)
-      return <ReadForm key={cls + id} title={title} id={id} cls={cls} />
+      console.assert(idObj,"必须有 id"+idObj)
+      return <ReadForm key={cls + idObj} title={title} id={idObj} cls={cls}  name={idObj?.name} />
       }
   }
 }

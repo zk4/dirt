@@ -8,8 +8,10 @@ import Consts from "../../consts"
 import customRender from '../../customRender'
 import { isObj } from '../../util';
 
-export default function ({title, cls, id}) {
+export default function ({title, cls, id,name}) {
   let [formData, setFormData] = useState([])
+  // 如果没有 name，则使用 id
+  if (name ==null) name = id
   const [show, setShow] = useState(false);
 
   useEffect(
@@ -53,7 +55,7 @@ export default function ({title, cls, id}) {
     title={title + ":" + id}
     readonly={true}
     onInit={e => setShow(true)}
-    trigger={<a href="#/"> {id} </a>}
+    trigger={<a href="#/"> {name} </a>}
     layoutType='ModalForm'
     columns={formData}
     autoFocusFirstInput
