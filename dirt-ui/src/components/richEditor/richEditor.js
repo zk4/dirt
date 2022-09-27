@@ -2,9 +2,8 @@ import React, {useState, useCallback} from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-/**
- *  回车才设值，测试先这样吧 
- */
+
+//TODO: 回车才设值，测试先这样吧 
 function WriteView(props) {
   const [value, setValue] = useState(props.value || '');
   let innerChange = useCallback((value) => {
