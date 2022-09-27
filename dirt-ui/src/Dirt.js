@@ -12,15 +12,16 @@ import customRender from './customRender'
 import {isObj} from './util';
 import Cascader from './components/cascader'
 import RichText from './components/richEditor'
+import ImageUploader from './components/imageUploader'
 const {RangePicker} = DatePicker;
 
 
-const dataAdapter = (ds,childAlias) => {
+const dataAdapter = (ds, childAlias) => {
   if (ds) {
     var obj = JSON.parse(JSON.stringify(ds)
       .replaceAll("\"name\":", "\"label\":")
       .replaceAll("\"id\":", "\"value\":")
-      .replaceAll("\""+childAlias+"\":", "\"children\":")
+      .replaceAll("\"" + childAlias + "\":", "\"children\":")
     );
     return obj;
   }
@@ -54,10 +55,10 @@ export default function Dirt(props) {
               id = 1
             }
             let data = await network.getDataAsync(c.idOfEntity, id);
-            return dataAdapter(data[c.subTreeName],c.subTreeName)
+            return dataAdapter(data[c.subTreeName], c.subTreeName)
 
           }} onValueSet={(valueArrays, optionArrays) => {
-            const v =  valueArrays.slice(-1)?.[0]
+            const v = valueArrays.slice(-1)?.[0]
             form.setFieldValue(dataIndex, {id: v})
           }} />
         }
@@ -75,7 +76,14 @@ export default function Dirt(props) {
     //  自定义 table
     if (c.valueType === UIConsts.richtext) {
       c['render'] = (text, record, index) => {
-        return <RichText.TableRowView value={record[dataIndex]}/>}
+        return <RichText.TableRowView value={record[dataIndex]} />
+      }
+      return c;
+    }
+    if (c.valueType === UIConsts.imageUploader) {
+      c['render'] = (text, record, index) => {
+        return <ImageUploader.TableRowView value={record[dataIndex]} />
+      }
       return c;
     }
     if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {

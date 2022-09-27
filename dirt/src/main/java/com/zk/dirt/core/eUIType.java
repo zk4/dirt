@@ -73,8 +73,7 @@ public enum eUIType {
     imageUploader,
 
 
-    // 图片例表上传
-    imagesUploader,
+ 
     //代码框，但是带了 json 格式化
     jsonCode,
     //颜色选择器

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload } from 'antd';
+import { Upload ,Carousel} from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 function WriteView(props) {
@@ -35,7 +35,7 @@ function WriteView(props) {
   };
 
   return (
-    <ImgCrop rotate>
+    <ImgCrop rotate readOnly>
       <Upload
         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         listType="picture-card"
@@ -49,9 +49,34 @@ function WriteView(props) {
   );
 };
 
+
+const contentStyle = {
+  height: '160px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: '#364d79',
+};
+
+const TableRowView = () => (
+  <Carousel autoplay>
+    <div>
+      <h3 style={contentStyle}>1</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>2</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>3</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>4</h3>
+    </div>
+  </Carousel>
+);
 export default {
   WriteView,
-  TableRowView:null,
+  TableRowView,
   SearchView: null,
   ReadView: null,
 }
