@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.zk.dirt.annotation.DirtAction;
-import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.*;
+import com.zk.dirt.core.eDirtEntityRelation;
+import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iEnumText;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -197,5 +198,41 @@ public class Member extends DirtBaseIdEntity {
             }
         }
     }
+
+    @Data
+    @DirtEntity
+    static class WithArgsData {
+        @DirtField(title = "会员姓名")
+        @NotEmpty
+        @Size(min = 2, max = 30)
+        String name;
+
+        @DirtField(title = "会员小名")
+        @NotEmpty
+        @Size(min = 2, max = 30)
+        String littlename;
+
+        @DirtField(title = "性别2", uiType = eUIType.select)
+        @Enumerated
+        eGender gender2;
+
+        @DirtField(title = "会员 id",
+                idOfEntity = Member.class,
+                relation = eDirtEntityRelation.OneToOne,
+                dirtSubmit = @DirtSubmit
+        )
+        @Column(name = "member")
+        Long memberId;
+
+
+    }
+
+    @DirtAction(text = "带参",   confirm = true)
+    public void withArgs(@DirtArg("args") WithArgsData args) {
+
+        this.name = args.name;
+
+    }
+
 
 }

@@ -61,16 +61,15 @@ public class DirtContext {
                     SimpleJpaRepository jpaRepository = new SimpleJpaRepository(classAnnotationClass, entityManager);
                     nameReposMap.put(simpleName, jpaRepository);
                     classReposMap.put(classAnnotationClass, jpaRepository);
+                }
 
-                    DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
-
-                    if (declaredAnnotation.visiable()) {
-                        DirtViewType dirtViewType = new DirtViewType();
-                        dirtViewType.setText(declaredAnnotation.value());
-                        dirtViewType.setClassName(simpleName);
-                        dirtViewType.setViewType(declaredAnnotation.viewType());
-                        nameEntityMap.put(simpleName, dirtViewType);
-                    }
+                DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
+                if (declaredAnnotation.visiable()) {
+                    DirtViewType dirtViewType = new DirtViewType();
+                    dirtViewType.setText(declaredAnnotation.value());
+                    dirtViewType.setClassName(simpleName);
+                    dirtViewType.setViewType(declaredAnnotation.viewType());
+                    nameEntityMap.put(simpleName, dirtViewType);
                 }
             }
         }

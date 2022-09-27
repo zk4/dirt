@@ -122,12 +122,11 @@ ManyToMany 多对多，关系任意，可重复
 
 
 ## BUG
-1. [ ] 可用星期排序有 bug，会多出几条
-1. [ ] 在 runtime 别依赖 paramter.getName()，比如  public void call(String name){...} "name" 这个名字很可能被编译器改成 arg0 或其他。 
+1. [x] 可用星期排序有 bug，会多出几条,　与 relation 有关
+1. [x] 在 runtime 别依赖 paramter.getName()，比如  public void call(String name){...} "name" 这个名字很可能被编译器改成 arg0 或其他。
 1. [ ] 逻辑删除有问题， deleteInBatch 不走逻辑删除，先用 deleteAll，性能可优化
 1. [ ] 前端颜色选择有问题
-1. [ ] 因为将构建 header 的逻辑放到了 DirtEntity初始化时, 一些动态的 enum 在添加后是看不到的。需要给接口
-1. [ ] action 提交表单时，丢失了 rules
+1. [ ] 因为将构建 header 的逻辑放到了 DirtEntity初始化时, 一些动态的 enum 在添加后是看不到的。需要做成 lambda 或接口形式延迟获得
 1. [x] objectMapper 不是 bug 的 bug， https://github.com/FasterXML/jackson-databind/issues/2868
        aInteger 会被当成 ainteger , （一个小写开头的camelcase）， 但是 anInteger 却可以正常解析。之所以这样，是因为要顾及 JavaBeans spec，比如 getUrl/setUrl => property name: url
         

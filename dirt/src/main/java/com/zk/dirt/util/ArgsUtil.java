@@ -1,6 +1,7 @@
 package com.zk.dirt.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zk.dirt.annotation.DirtArg;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class ArgsUtil {
     public final static Object[] ZERO_OBJECT = new Object[]{};
 
+    // convert {"a":1,"b":2} => [1,2] when function is someFunc(Object a,Object b){}
     public static Object[] mapToArray(ObjectMapper objectMapper, Parameter[] parameters, Map map) {
         if (parameters == null) {
             throw new RuntimeException("parameters can not be null");
@@ -28,7 +30,12 @@ public class ArgsUtil {
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             Class<?> type = parameter.getType();
-            Object o = map.get(parameter.getName());
+            // getName 拿不到真实的值，已经被 JVM 改掉
+            DirtArg declaredAnnotation = parameter.getDeclaredAnnotation(DirtArg.class);
+            if(declaredAnnotation==null){
+                throw new RuntimeException("必须用@DirtArg 声明由　@DirtAction 注解的函数参数，否则无法绑定参数");
+            }
+            Object o = map.get(declaredAnnotation.value());
             args[i] = objectMapper.convertValue(o, type);
         }
 

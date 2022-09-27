@@ -74,7 +74,7 @@ public class Member extends DirtBaseIdEntity {
     @DirtAction(text = "编辑")
     public void edit() {}
 
-    @DirtAction(text = "随机名称", key = "reduce", confirm = true)
+    @DirtAction(text = "随机名称", confirm = true)
     public void reduce() {
         this.nickname = RandomStringUtils.randomAlphabetic(13);
     }
