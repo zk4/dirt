@@ -2,6 +2,7 @@ package com.zk.dirt.core;
 
 
 import com.zk.dirt.annotation.DirtEntity;
+import com.zk.dirt.annotation.DirtScanPacakge;
 import com.zk.dirt.util.PackageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -26,82 +27,96 @@ public class DirtContext {
     EntityManager entityManager;
 
     private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
-    private final static Map<String,Class> nameClassMap = new HashMap<String,Class>();
-    private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String,SimpleJpaRepository>();
-    private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class,SimpleJpaRepository>();
-    private final static Map<String, DirtViewType> nameEntityMap = new HashMap<String,DirtViewType>();
+    private final static Map<String, Class> nameClassMap = new HashMap<String, Class>();
+    private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String, SimpleJpaRepository>();
+    private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class, SimpleJpaRepository>();
+    private final static Map<String, DirtViewType> nameEntityMap = new HashMap<String, DirtViewType>();
 
 
-    public DirtContext() {}
+    public DirtContext() {
+    }
 
 
     @PostConstruct
-    public void init(){
-        // TODO: dynamic config dirtEntity scan path
-        Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses("com.zk", DirtEntity.class);
-        for (Class classAnnotationClass : classAnnotationClasses) {
-            String simpleName = classAnnotationClass.getName();
-            if(nameDirtEntityMap.get(simpleName)!=null){
-                throw new RuntimeException("重复的 DirtEntity "+simpleName);
-            }
-            nameDirtEntityMap.put(simpleName, new DirtEntityType(this,applicationContext,classAnnotationClass));
-            nameClassMap.put(simpleName,classAnnotationClass);
+    public void init() throws ClassNotFoundException {
+        String mainClassName = PackageUtil.getMainClassName();
+        Class<?> aClass = Class.forName(mainClassName);
+        DirtScanPacakge scanPaths = (DirtScanPacakge) aClass.getDeclaredAnnotation(DirtScanPacakge.class);
+        if (scanPaths == null) {
+            throw new RuntimeException("You should add @DirtScanPacakge on main class");
+        }
 
-            if(classAnnotationClass.getAnnotation(Entity.class)!=null) {
-                SimpleJpaRepository jpaRepository = new SimpleJpaRepository(classAnnotationClass, entityManager);
-                nameReposMap.put(simpleName, jpaRepository);
-                classReposMap.put(classAnnotationClass,jpaRepository);
+        for (String packagePath : scanPaths.value()) {
+            Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
+            for (Class classAnnotationClass : classAnnotationClasses) {
+                String simpleName = classAnnotationClass.getName();
+                if (nameDirtEntityMap.get(simpleName) != null) {
+                    throw new RuntimeException("重复的 DirtEntity " + simpleName);
+                }
+                nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
+                nameClassMap.put(simpleName, classAnnotationClass);
 
-                 DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
+                if (classAnnotationClass.getAnnotation(Entity.class) != null) {
+                    SimpleJpaRepository jpaRepository = new SimpleJpaRepository(classAnnotationClass, entityManager);
+                    nameReposMap.put(simpleName, jpaRepository);
+                    classReposMap.put(classAnnotationClass, jpaRepository);
 
-                 if(declaredAnnotation.visiable()) {
-                     DirtViewType dirtViewType = new DirtViewType();
-                     dirtViewType.setText(declaredAnnotation.value());
-                     dirtViewType.setClassName(simpleName);
-                     dirtViewType.setViewType(declaredAnnotation.viewType());
-                     nameEntityMap.put(simpleName, dirtViewType);
-                 }
+                    DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
+
+                    if (declaredAnnotation.visiable()) {
+                        DirtViewType dirtViewType = new DirtViewType();
+                        dirtViewType.setText(declaredAnnotation.value());
+                        dirtViewType.setClassName(simpleName);
+                        dirtViewType.setViewType(declaredAnnotation.viewType());
+                        nameEntityMap.put(simpleName, dirtViewType);
+                    }
+                }
             }
         }
         System.out.println(nameDirtEntityMap);
     }
 
 
-    public Class getClassByName(String name){
-        Class aClass = nameClassMap.get(name);;
-        if(aClass==null) {
+    public Class getClassByName(String name) {
+        Class aClass = nameClassMap.get(name);
+        ;
+        if (aClass == null) {
             throw new RuntimeException("不存在 " + aClass);
         }
         return aClass;
     }
-    public DirtEntityType getDirtEntity(String name){
+
+    public DirtEntityType getDirtEntity(String name) {
         DirtEntityType dirtEntity = nameDirtEntityMap.get(name);
-        if(dirtEntity==null) {
+        if (dirtEntity == null) {
             System.out.println(nameDirtEntityMap);
             throw new RuntimeException("不存在 " + name);
         }
         return dirtEntity;
     }
-    public  SimpleJpaRepository getRepoByType(Class type){
+
+    public SimpleJpaRepository getRepoByType(Class type) {
         SimpleJpaRepository simpleJpaRepository = classReposMap.get(type);
-        if(simpleJpaRepository==null) {
+        if (simpleJpaRepository == null) {
             throw new RuntimeException("不存在 simpleJpaRepository" + classReposMap);
         }
         return simpleJpaRepository;
     }
-    public  SimpleJpaRepository getRepo(String name){
+
+    public SimpleJpaRepository getRepo(String name) {
         SimpleJpaRepository simpleJpaRepository = nameReposMap.get(name);
-        if(simpleJpaRepository==null) {
+        if (simpleJpaRepository == null) {
             throw new RuntimeException("不存在 simpleJpaRepository" + name);
         }
         return simpleJpaRepository;
     }
-    public Set<String>  getAllEntityNames(){
+
+    public Set<String> getAllEntityNames() {
         return nameReposMap.keySet();
     }
 
-    public   Map<String, DirtViewType> getNameEntityMap() {
+    public Map<String, DirtViewType> getNameEntityMap() {
         return nameEntityMap;
     }
 
- }
+}

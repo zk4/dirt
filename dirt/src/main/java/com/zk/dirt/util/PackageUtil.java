@@ -29,6 +29,18 @@ public class PackageUtil {
     //扫描  scanPackages 下的文件的匹配符
     protected static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
+    /**
+     * get Main Classname
+     * @return
+     */
+    public static String getMainClassName()
+    {
+        StackTraceElement trace[] = Thread.currentThread().getStackTrace();
+        if (trace.length > 0) {
+            return trace[trace.length - 1].getClassName();
+        }
+        return null;
+    }
 
     /**
      * 结合spring的类扫描方式
