@@ -13,7 +13,7 @@ export default {
     }
     else {
       console.assert(idObj,"必须有 id"+idObj)
-      return <ReadForm key={cls + idObj} title={title} id={idObj} cls={cls} name={idObj?.name}/>
+      return <ReadForm key={cls + idObj} title={title} id={idObj} cls={cls}/>
     }
   },
   readForm: (title, cls, idObj) => {
@@ -29,7 +29,7 @@ export default {
     else
     {
       console.assert(idObj,"必须有 id"+idObj)
-      return <ReadForm key={cls + idObj} title={title} id={idObj} cls={cls}  name={idObj?.name} />
+      return <ReadForm key={cls + idObj} title={title} id={idObj} cls={cls} />
       }
   }
 }
