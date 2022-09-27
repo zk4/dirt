@@ -21,7 +21,7 @@ const getDataAsync = async (entityName, id) => {
       return headers;
     }
     else {
-      const reasson = Array.isArray(res.data.data)?res.data.data.join(";"):res.data.data;
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
       message.error(res.data.msg + ":" + reasson);
     }
   } catch (e) {
@@ -40,7 +40,7 @@ const deleteByIdAsync = async (entityName, id, success_cb) => {
       message.success('删除成功');
       success_cb();
     } else {
-      const reasson = Array.isArray(res.data.data)?res.data.data.join(";"):res.data.data;
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
       message.error(res.data.msg + ":" + reasson);
     }
   } catch (e) {
@@ -56,7 +56,7 @@ const deleteByIdsAsync = async (postData, success_cb) => {
         success_cb();
       }
     } else {
-      const reasson = Array.isArray(res.data.data)?res.data.data.join(";"):res.data.data;
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
       message.error(res.data.msg + ":" + reasson);
     }
   } catch (e) {
@@ -77,7 +77,7 @@ const createAsync = async (entityName, values, success_cb) => {
         success_cb();
       }
     } else {
-      const reasson = Array.isArray(res.data.data)?res.data.data.join(";"):res.data.data;
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
       message.error(res.data.msg + ":" + reasson);
     }
   } catch (e) {
@@ -94,7 +94,7 @@ const updateAsync = async (entityName, postData, success_cb) => {
         success_cb();
       }
     } else {
-      const reasson = Array.isArray(res.data.data)?res.data.data.join(";"):res.data.data;
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
       message.error(res.data.msg + ":" + reasson);
     }
   } catch (e) {
@@ -111,7 +111,7 @@ const actionAsync = async (postData, success_cb) => {
         success_cb();
       }
     } else {
-      const reasson = Array.isArray(res.data.data)?res.data.data.join(";"):res.data.data;
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
       message.error(res.data.msg + ":" + reasson);
     }
   } catch (e) {
@@ -139,6 +139,7 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
   let paramsCpy = Object.assign({}, params)
   delete paramsCpy["pageNumber"];
   delete paramsCpy["pageSize"];
+
 
   const filters = Object.entries(params)
     .filter(([key, value]) => {
@@ -186,7 +187,9 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
   if (sortQuery.length)
     sortParams = `&sort=${sortQuery}`;
 
-  let url = `http://127.0.0.1:8081/dirt/getDatas?entityName=${entityName}${sortParams}`;
+  const pageParam = `&size=${params.pageSize}&page=${params.pageNumber-1}`
+
+  let url = `http://127.0.0.1:8081/dirt/getDatas?entityName=${entityName}${pageParam}${sortParams}`;
 
   // 要符合 ProTalbe 的数据格式
   let o = await axios.post(url, {...filterParams});
@@ -196,7 +199,11 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
         // let d = addKey(o.data.data)
         // console.log("d", d)
         // o.data.data = d;
-        resolve(o.data);
+        resolve({
+          data: o.data.data,
+          total:o.data.page.totalPages*o.data.page.pageSize,
+          success:true
+        });
       } else {
         reject(o);
       }
