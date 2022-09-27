@@ -2329,6 +2329,12 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
+antd-img-crop@^4.2.4:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/antd-img-crop/-/antd-img-crop-4.2.4.tgz#daf5385c1bf041a55a8d178026de1b8fea18dc30"
+  dependencies:
+    react-easy-crop "^4.4.2"
+
 antd@^2.8.3:
   version "2.13.14"
   resolved "https://registry.yarnpkg.com/antd/-/antd-2.13.14.tgz#a3162a36839dd1be03c34062c5b14234b87e415f"
@@ -7362,6 +7368,10 @@ normalize-url@^3.0.0:
   version "3.3.0"
   resolved "https://registry.npmjs.org/normalize-url/-/normalize-url-3.3.0.tgz"
 
+normalize-wheel@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/normalize-wheel/-/normalize-wheel-1.0.1.tgz#aec886affdb045070d856447df62ecf86146ec45"
+
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.npmjs.org/npm-run-path/-/npm-run-path-2.0.2.tgz"
@@ -9442,6 +9452,13 @@ react-drag-listview@^0.1.6:
     babel-runtime "^6.26.0"
     prop-types "^15.5.8"
 
+react-easy-crop@^4.4.2:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/react-easy-crop/-/react-easy-crop-4.5.1.tgz#8c3f0fad048eae0d3003725b5a71dc1085fb10ca"
+  dependencies:
+    normalize-wheel "^1.0.1"
+    tslib "2.0.1"
+
 react-error-overlay@^6.0.3:
   version "6.0.11"
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.11.tgz"
@@ -10804,6 +10821,10 @@ ts-pnp@1.1.2:
 ts-pnp@^1.0.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/ts-pnp/-/ts-pnp-1.2.0.tgz"
+
+tslib@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
 
 tslib@^1.8.1, tslib@^1.9.0:
   version "1.14.1"

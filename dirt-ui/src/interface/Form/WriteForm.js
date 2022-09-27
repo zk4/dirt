@@ -5,7 +5,8 @@ import {Modal, Input, Button} from 'antd';
 import Consts from '../../consts'
 import UIConsts from '../../uiConsts'
 import customRender from '../../customRender'
-import RichText from '../../components/richEditor/richEditor'
+import RichText from '../../components/richEditor'
+import ImageUploader from '../../components/imageUploader'
 import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined, SearchOutlined} from '@ant-design/icons';
 
 import IdHolder from './IdHolder'
@@ -29,11 +30,17 @@ export default (props) => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 form
     if (column.valueType === UIConsts.richtext) {
-      // debugger
       column["colProps"] = {xs: 24, md: 24}
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        // debugger
         return <RichText.WriteView key={item?.id} vaule={form.getFieldValue(columnKey)} onChange={value => {
+          form.setFieldValue(columnKey, value)
+        }} />
+      }
+    }
+    else if (column.valueType === UIConsts.imageUploader) {
+      column["colProps"] = {xs: 24, md: 24}
+      column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        return <ImageUploader.WriteView key={item?.id} vaule={form.getFieldValue(columnKey)} onChange={value => {
           form.setFieldValue(columnKey, value)
         }} />
       }

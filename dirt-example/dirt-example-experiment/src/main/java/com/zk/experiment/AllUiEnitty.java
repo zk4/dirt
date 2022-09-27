@@ -35,6 +35,11 @@ public class AllUiEnitty extends DirtBaseIdEntity {
     @DirtField(uiType = eUIType.richtext)
     String rich;
 
+
+    @DirtField(uiType = eUIType.imageUploader)
+    String imageUplaoders;
+
+
     @DirtAction(text = "详情")
     public void detail() {}
 

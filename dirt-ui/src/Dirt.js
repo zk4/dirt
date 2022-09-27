@@ -11,7 +11,7 @@ import UIConsts from './uiConsts'
 import customRender from './customRender'
 import {isObj} from './util';
 import Cascader from './components/cascader'
-import RichText from './components/richEditor/richEditor'
+import RichText from './components/richEditor'
 const {RangePicker} = DatePicker;
 
 

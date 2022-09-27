@@ -70,6 +70,11 @@ export default {
   //级联选择器
   cascader: "cascader",
 
+  // 图片上传
+  imageUploader: "imageUploader",
+  // 图片例表上传
+  imagesUploader: 'imagesUploader',
+
   group: "group",
   formList: "formList",
   slide: "slide"
