@@ -3,7 +3,9 @@ import {BetaSchemaForm} from '@ant-design/pro-components';
 import Dirt from '../../Dirt'
 import {Modal, Input, Button} from 'antd';
 import Consts from '../../consts'
+import UIConsts from '../../uiConsts'
 import customRender from '../../customRender'
+import RichText from '../../components/richEditor/richEditor'
 import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined, SearchOutlined} from '@ant-design/icons';
 
 import IdHolder from './IdHolder'
@@ -25,7 +27,18 @@ export default (props) => {
 
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
-    // 如果有 idOfEntity，则要弹框了选择
+    // 自定义创建 form
+    if (column.valueType === UIConsts.richtext) {
+      // debugger
+      column["colProps"] = {xs: 24, md: 24}
+      column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        // debugger
+        return <RichText.WriteView key={item?.id} vaule={form.getFieldValue(columnKey)} onChange={value => {
+          form.setFieldValue(columnKey, value)
+        }} />
+      }
+    }
+    // 如果有 idOfEntity，也就是要处理 relation，弹框去查 relation
     if (idOfEntity) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         const vals = form.getFieldValue(columnKey)

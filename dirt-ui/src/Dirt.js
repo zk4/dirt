@@ -7,10 +7,13 @@ import ReadForm from './interface/Form/ReadForm'
 import axios from 'axios';
 import WriteForm from './interface/Form/WriteForm'
 import Consts from './consts'
+import UIConsts from './uiConsts'
 import customRender from './customRender'
 import {isObj} from './util';
 import Cascader from './components/cascader'
+import RichText from './components/richEditor/richEditor'
 const {RangePicker} = DatePicker;
+
 
 const dataAdapter = (ds,childAlias) => {
   if (ds) {
@@ -70,6 +73,11 @@ export default function Dirt(props) {
 
 
     //  自定义 table
+    if (c.valueType === UIConsts.richtext) {
+      c['render'] = (text, record, index) => {
+        return <RichText.TableRowView value={record[dataIndex]}/>}
+      return c;
+    }
     if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {
       c['render'] = (text, record, index) => {return customRender.table(title, cls, record[dataIndex]);}
       return c;
@@ -191,7 +199,6 @@ export default function Dirt(props) {
 
       return <WriteForm key={key} name={text} readOnly={isDetailed} columns={formData}
         onFinish={(postdata) =>
-          // network.createAsync(entityName, values, () => {actionRef.current.reload()})
           network.updateAsync(entityName, postdata, () => {
             actionRef.current.reload();
           }
