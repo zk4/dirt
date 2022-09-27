@@ -26,8 +26,8 @@ import java.util.Set;
 @DirtEntity("会员标签")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "tag")
-@SQLDelete(sql = "UPDATE tag SET deleted = true WHERE id=?")
+@Table(name = "t_tag")
+@SQLDelete(sql = "UPDATE t_tag SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Tag.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
@@ -44,7 +44,7 @@ public class Tag extends DirtBaseIdEntity {
     @DirtField(title = "会员集合")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="member_tag_rel",
+    @JoinTable(name="mms_member_tag_rel",
             joinColumns={@JoinColumn(name="tagId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})
     @JsonIdentityReference(alwaysAsId = true)

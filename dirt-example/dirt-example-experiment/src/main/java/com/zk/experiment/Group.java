@@ -24,20 +24,20 @@ import java.util.Set;
 @DirtEntity("会员组")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "my_group")
-@SQLDelete(sql = "UPDATE my_group SET deleted = true WHERE id=?")
+@Table(name = "mms_group")
+@SQLDelete(sql = "UPDATE mms_group SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = MyGroup.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
-public class MyGroup extends DirtBaseIdEntity {
+@JsonIdentityInfo(scope = Group.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+public class Group extends DirtBaseIdEntity {
 
 
 
     @DirtField(title = "会员集合")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="my_group_member_rel",
-            joinColumns={@JoinColumn(name="myGroupId")},
+    @JoinTable(name="mms_group_member_rel",
+            joinColumns={@JoinColumn(name="groupId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})
     @JsonIdentityReference(alwaysAsId = true)
     Set<Member> members;

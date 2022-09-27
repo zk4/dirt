@@ -23,8 +23,8 @@ import javax.validation.constraints.NotEmpty;
 @DirtEntity(value = "字典键值",visiable = false)
 @DynamicUpdate
 @DynamicInsert
-@Table(name = " dictionary_entry")
-@SQLDelete(sql = "UPDATE dictionary_entry SET deleted = true WHERE id=?")
+@Table(name = "t_dictionary_entry")
+@SQLDelete(sql = "UPDATE t_dictionary_entry SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class DictionaryEntry extends DirtBaseIdEntity implements iDirtDictionaryEntryType {

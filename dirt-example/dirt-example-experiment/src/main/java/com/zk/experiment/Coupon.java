@@ -11,11 +11,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -27,6 +26,9 @@ import java.util.Set;
 @DirtEntity("优惠券")
 @DynamicUpdate
 @DynamicInsert
+@Table(name = "mms_coupon")
+@SQLDelete(sql = "UPDATE mms_coupon SET deleted = true WHERE id=?  and version=? ")
+@Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Coupon.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Coupon extends DirtBaseIdEntity {
@@ -45,7 +47,7 @@ public class Coupon extends DirtBaseIdEntity {
     @DirtField(title = "拥有者")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="member_coupon_rel",
+    @JoinTable(name="mms_member_coupon_rel",
             joinColumns={@JoinColumn(name="couponId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})
     @JsonIdentityReference(alwaysAsId = true)

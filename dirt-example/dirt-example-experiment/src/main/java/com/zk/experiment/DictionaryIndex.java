@@ -26,8 +26,8 @@ import java.util.List;
 @DirtEntity("字典索引")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = " dictionary_index")
-@SQLDelete(sql = "UPDATE dictionary_index SET deleted = true WHERE id=?")
+@Table(name = "t_dictionary_index")
+@SQLDelete(sql = "UPDATE t_dictionary_index SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

@@ -28,9 +28,11 @@ import java.util.Set;
 @DirtEntity("会员")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "member")
-@SQLDelete(sql = "UPDATE member SET deleted = true WHERE id=?")
+@Table(name = "mms_member")
+@SQLDelete(sql = "UPDATE mms_member SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
+// @SQLDelete(sql="UPDATE mms_member SET deleted=true WHERE id=? and version=? ")
+// @Where(clause="date_deletion IS NULL ")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Member.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Member extends DirtBaseIdEntity {
@@ -49,7 +51,7 @@ public class Member extends DirtBaseIdEntity {
     @DirtField(title = "卡包")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="member_card_rel",
+    @JoinTable(name="mms_member_card_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="cardId")})
     @JsonIdentityReference(alwaysAsId = true)
@@ -58,7 +60,7 @@ public class Member extends DirtBaseIdEntity {
     @DirtField(title = "券包")
     @ManyToMany(cascade = CascadeType.ALL)
     // 允许双向更新
-    @JoinTable(name="member_coupon_rel",
+    @JoinTable(name="mms_member_coupon_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="couponId")})
     @JsonIdentityReference(alwaysAsId = true)
@@ -67,12 +69,12 @@ public class Member extends DirtBaseIdEntity {
     @DirtField(title = "分组")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="my_group_member_rel",
+    @JoinTable(name="mms_group_member_rel",
             joinColumns={@JoinColumn(name="memberId")},
-            inverseJoinColumns={@JoinColumn(name="myGroupId")})
+            inverseJoinColumns={@JoinColumn(name="groupId")})
     @JsonIdentityReference(alwaysAsId = true)
 
-    Set<MyGroup> myGroups;
+    Set<Group> groups;
 
 
     @ManyToOne
@@ -111,7 +113,7 @@ public class Member extends DirtBaseIdEntity {
     @DirtField(title = "标签集合")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="member_tag_rel",
+    @JoinTable(name="mms_member_tag_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="tagId")})
     @JsonIdentityReference(alwaysAsId = true)
@@ -122,7 +124,7 @@ public class Member extends DirtBaseIdEntity {
     @DirtField(title = "权益集合")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="member_benefit_rel",
+    @JoinTable(name="mms_member_benefit_rel",
             joinColumns={@JoinColumn(name="memberId")},
             inverseJoinColumns={@JoinColumn(name="benefitId")})
     @JsonIdentityReference(alwaysAsId = true)

@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 // The dynamic update allows you to set just the columns that were modified in the associated entity. （包含设了 null) , 子类如果需要也要加
 @DynamicUpdate
 @MappedSuperclass
-
 public  class DirtBaseIdEntity implements Serializable {
 
     private static final long serialVersionUID = 2359852974346431431L;
@@ -87,8 +86,9 @@ public  class DirtBaseIdEntity implements Serializable {
     // 使用下面试试
     // @SQLDelete(sql="UPDATE service SET date_deletion=CURRENT_DATE WHERE id=? and version=? ")
     // @Where(clause="date_deletion IS NULL ")
-    //@Version
-    //private Integer version;
+    @Version
+    @Column(nullable = false,columnDefinition="int default 0 COMMENT '乐观锁'")
+    private Integer version;
 
 
     //@PrePersist- 在新实体持久化之前（添加到EntityManager）

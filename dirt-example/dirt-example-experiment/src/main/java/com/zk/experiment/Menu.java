@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "t_menu")
-@SQLDelete(sql = "UPDATE t_menu SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE t_menu SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Menu.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

@@ -11,11 +11,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Getter
@@ -23,8 +22,10 @@ import java.util.Set;
 @Entity
 @DirtEntity("卡")
 @DynamicUpdate
-
 @DynamicInsert
+@Table(name = "mms_card")
+@SQLDelete(sql = "UPDATE mms_card SET deleted = true WHERE id=?  and version=? ")
+@Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 @JsonIdentityInfo(scope = Card.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Card extends DirtBaseIdEntity {
@@ -44,7 +45,7 @@ public class Card extends DirtBaseIdEntity {
     @DirtField(title = "权益集合")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="card_benefit_rel",
+    @JoinTable(name="mms_card_benefit_rel",
             joinColumns={@JoinColumn(name="cardId")},
             inverseJoinColumns={@JoinColumn(name="benefitId")})
     @JsonIdentityReference(alwaysAsId = true)
@@ -55,7 +56,7 @@ public class Card extends DirtBaseIdEntity {
     @DirtField(title = "会员集合")
     @ManyToMany
     // 允许双向更新
-    @JoinTable(name="member_card_rel",
+    @JoinTable(name="mms_member_card_rel",
             joinColumns={@JoinColumn(name="cardId")},
             inverseJoinColumns={@JoinColumn(name="memberId")})
     // json 仅序列化为 id，避免循环
