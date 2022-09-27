@@ -20,6 +20,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -47,6 +48,36 @@ public class Member extends DirtBaseIdEntity {
     @NotEmpty
     @Size(min = 2, max = 30)
     String nickname;
+
+    @DirtField(title = "手机号")
+    @NotEmpty
+    @Size(max = 16)
+    String phoneNumber;
+
+    enum  eGender implements  iEnumText{
+        FEMALE("女性"),
+        MALE("男性");
+
+        String text;
+
+        eGender(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public Object getText() {
+            return text;
+        }
+    }
+    @DirtField(title = "性别")
+    eGender gender;
+
+    @DirtField(title = "会员生日")
+    LocalDate birthday;
+
+    @DirtField(title = "会员住址")
+    String address;
+
 
     @DirtField(title = "卡包")
     @ManyToMany
@@ -79,7 +110,6 @@ public class Member extends DirtBaseIdEntity {
 
     @ManyToOne
     @JoinColumn(name="enterpriseParentId")
-
     Member enterpriseParent;
 
     @DirtField(title = "企业会员组")
@@ -89,7 +119,7 @@ public class Member extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     Set<Member> enterpriseMembers;
 
-    public enum MemberType implements iEnumText {
+    enum MemberType implements iEnumText {
         ENTERPISE("企业会员"),
         PERSONAL("个人会员");
 
