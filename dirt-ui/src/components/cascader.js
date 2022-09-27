@@ -13,7 +13,7 @@ const App = (props) => {
   }, [])
 
   const onChange = (valueArrays, optionArrays) => {
-    onValueSet(valueArrays.slice(-1))
+    onValueSet(valueArrays, optionArrays)
   };
 
   const loadData = async (selectedOptions) => {

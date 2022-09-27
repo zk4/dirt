@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {message} from 'antd';
 import {SpringFilterQueryBuilder as SFQB} from './query_builder/index';
+import {isObj} from './util'
 
 // respone拦截器
 
@@ -162,19 +163,26 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
           return SFQB.like(key, `${value}`);
         return null;
       } else {
-        return SFQB.equal(key, `${value}`);
+        if(isObj(value)){
+          // convert key {a:1,b:1} ==>  "key.a : 1 AND key.b : 2"
+          return Object.entries(value).map(([k,v])=>SFQB.equal(key+'.'+k, v))
+        }
+        else
+        {
+          return SFQB.equal(key, `${value}`);
+        }
       }
     })
 
-  // debugger
+  // 手动组装spring-filter 
   let filterParams = ""
+  //  全部组装成 and 条件，在 table　里没有例外
   let filterStr = SFQB.and(...filters).toString();
-  if (filterStr !== "()") {
-    filterParams = {filter: filterStr}
-  }
+  //  复合spring-filter 标准
+  if (filterStr !== "()") { filterParams = {filter: filterStr} }
 
 
-  // 制作 JPA sort
+  // 制作 JPA page 里的sort
   let sortQuery = Object.entries(sort)
     .map(v => {
       let arrow = "desc"

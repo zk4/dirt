@@ -53,7 +53,8 @@ export default function Dirt(props) {
             let data = await network.getDataAsync(c.idOfEntity, id);
             return dataAdapter(data[c.subTreeName],c.subTreeName)
 
-          }} onValueSet={v => {
+          }} onValueSet={(valueArrays, optionArrays) => {
+            const v =  valueArrays.slice(-1)?.[0]
             form.setFieldValue(dataIndex, {id: v})
           }} />
         }
