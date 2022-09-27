@@ -6,6 +6,8 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eDirtViewType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -28,22 +30,39 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE t_menu SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Menu.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = Menu.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idNameObj")
 public class Menu extends DirtBaseIdEntity {
 
-    //@Data
-    //@AllArgsConstructor
-    //public static class IdNameObj {
-    //    Long id;
-    //    String name;
-    //}
-    //
-    //@Transient
-    //IdNameObj idNameObj;
-    //
-    //public IdNameObj getIdNameObj() {
-    //    return new  IdNameObj(this.id,this.name);
-    //}
+    @Data
+    @AllArgsConstructor
+    public static class IdNameObj {
+        Long id;
+        String name;
+        Boolean isLeaf;
+    }
+
+    @Transient
+    IdNameObj idNameObj;
+
+    public IdNameObj getIdNameObj() {
+        return new  IdNameObj(this.id,this.name,this.isLeaf);
+    }
+
+
+    Boolean isLeaf;
+
+    @PreUpdate
+    @PrePersist
+    public void preUpdateAndPersist(){
+        if(this.subMenus!=null
+                && this.subMenus.size()>0)
+            isLeaf = false;
+        else
+            isLeaf = true;
+    }
+
+
+
 
     @DirtField(title = "目录名" )
     @NotEmpty
