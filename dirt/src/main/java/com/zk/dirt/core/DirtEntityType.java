@@ -47,7 +47,6 @@ public class DirtEntityType {
         this.dirtContext = context;
         this.applicationContext = applicationContext;
         this.entityClass = classAnnotationClass;
-        this.init();
     }
 
 
@@ -60,9 +59,9 @@ public class DirtEntityType {
 
         return fields;
     }
-    public void init(){
 
-    }
+
+
     public List<DirtFieldType> getHeads() {
         // TODO: 可静态的应该尽量静态化
         if (!inited) {
@@ -313,32 +312,30 @@ public class DirtEntityType {
                         if (initialValue != null)
                             dirtSubmitType.setInitialValue(initialValue);
 
+                        //DirtEntityType dirtEntity = null;
+                        //if (oneToMany != null || manyToMany != null) {
+                            //ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                            //Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                            //if (actualTypeArguments.length == 1) {
+                                //Type actualTypeArgument = actualTypeArguments[0];
+                                //Class aClass = null;
+                                //try {
+                                //    aClass = Class.forName(actualTypeArgument.getTypeName());
+                                //} catch (ClassNotFoundException e) {
+                                //    e.printStackTrace();
+                                //}
 
-
-                        DirtEntityType dirtEntity = null;
-                        if (oneToMany != null || manyToMany != null) {
-                            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-                            if (actualTypeArguments.length == 1) {
-                                Type actualTypeArgument = actualTypeArguments[0];
-                                Class aClass = null;
-                                try {
-                                    aClass = Class.forName(actualTypeArgument.getTypeName());
-                                } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-
-                                DirtContext context = applicationContext.getBean(DirtContext.class);
+                                //DirtContext context = applicationContext.getBean(DirtContext.class);
                                 //dirtEntity = context.getDirtEntity(aClass.getName());
 
-                            }
-                        } else if (manyToOne != null || oneToOne != null) {
+                            //}
+                        //} else if (manyToOne != null || oneToOne != null) {
 
                             //Class<?> ret = fieldRetType;
                             //DirtContext context = applicationContext.getBean(DirtContext.class);
                             //dirtEntity = context.getDirtEntity(ret.getName());
 
-                        }
+                        //}
                         //if (dirtEntity != null) {
                         //    List<DirtFieldType> heads = dirtEntity.getHeads();
                         //    ArrayList<Object> objects = new ArrayList<>();

@@ -8,7 +8,6 @@ public class DirtEnumValue<K,T> {
     private T status;
     private String color;
     private  Integer sort;
-    //private List<DirtEnumValue> subMenus;
 
 
     public DirtEnumValue(K text, T status) {

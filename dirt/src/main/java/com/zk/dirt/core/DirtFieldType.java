@@ -3,7 +3,6 @@ package com.zk.dirt.core;
 import com.zk.dirt.experiment.ColProps;
 import lombok.Data;
 
-import java.lang.reflect.Parameter;
 import java.util.Map;
 
 // https://procomponents.ant.design/components/table#columns-%E5%88%97%E5%AE%9A%E4%B9%89
@@ -109,16 +108,11 @@ public class DirtFieldType {
     // JPA 映射关系
     eDirtEntityRelation relation= eDirtEntityRelation.None;
 
-
-
     // subtree Name
     String subTreeName;
 
-    public static DirtFieldType fromParameter(Parameter parameter) {
-        throw  new RuntimeException("未实现");
-    }
 
-    // 在有 relation 时，onetomany 与 manytomany 已经不好排序。先全部禁了，有好的解决方案再说
+    // 在有 relation 时，onetomany 与 manytomany 按 column 排序就很尴尬。先禁了，有场景再说
     public Boolean getSearch() {
         if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany)
             return false;
