@@ -44,7 +44,7 @@ public class DirtController {
     EntityManager entityManager;
 
     @PostMapping("/dirt/action")
-    @ApiOperation(value = "动作")
+    @ApiOperation(value = "执行动作")
     @Transactional
     public Result action(@RequestBody ActionReq req) throws IllegalAccessException, InvocationTargetException {
         String entityName = req.entityName;
@@ -158,7 +158,7 @@ public class DirtController {
     }
 
     @PostMapping("/dirt/deleteByIds")
-    @ApiOperation(value = "根据 ids 删除")
+    @ApiOperation(value = "根据 ids 批量删除")
     @Transactional
     public Result deleteByids(@RequestBody DeleteByidsReq req) throws ClassNotFoundException {
         String entityName = req.entityName;
@@ -178,7 +178,7 @@ public class DirtController {
     }
 
     @PostMapping("/dirt/getDatas")
-    @ApiOperation(value = "分页数据")
+    @ApiOperation(value = "获取分页数据")
     @Transactional(readOnly = true)
     public Result page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName( entityName);
@@ -187,7 +187,7 @@ public class DirtController {
     }
 
     @GetMapping("/dirt/getData")
-    @ApiOperation(value = "数据")
+    @ApiOperation(value = "获取单条数据")
     @Transactional(readOnly = true)
     @SneakyThrows
     public Result getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) throws ClassNotFoundException {
@@ -201,7 +201,8 @@ public class DirtController {
 
     }
 
-    @GetMapping("/dirt/getTableHeaders")
+    @GetMapping("/dirt/getEntitySchema")
+    @ApiOperation(value = "获取标准 schema")
     @DoNotWrapperResult
     public Result getTableHeaders(@RequestParam(name = "entityName") String entityName) throws ClassNotFoundException {
         DirtEntityType bySimpleName = dirtContext.getDirtEntity(entityName);

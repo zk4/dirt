@@ -6,7 +6,7 @@ import {isObj} from './util'
 // respone拦截器
 
 const getTableHeadersAsync = async (entityName) => {
-  let res = await axios.get(`http://127.0.0.1:8081/dirt/getTableHeaders?entityName=${entityName}`)
+  let res = await axios.get(`http://127.0.0.1:8081/dirt/getEntitySchema?entityName=${entityName}`)
   if (res.data.code === 0) {
     let headers = res.data.data;
     return headers;

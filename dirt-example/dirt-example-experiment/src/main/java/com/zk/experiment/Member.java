@@ -9,6 +9,7 @@ import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iEnumText;
+import com.zk.dirt.util.SpringUtil;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -200,7 +201,7 @@ public class Member extends DirtBaseIdEntity {
     }
 
     @Data
-    @DirtEntity
+    @DirtEntity(visiable = false)
     static class WithArgsData {
         @DirtField(title = "会员姓名")
         @NotEmpty
@@ -227,11 +228,11 @@ public class Member extends DirtBaseIdEntity {
 
     }
 
-    @DirtAction(text = "带参",   confirm = true)
+    @DirtAction(text = "带参")
     public void withArgs(@DirtArg("args") WithArgsData args) {
-
         this.name = args.name;
-
+        SpringUtil.getApplicationContext().publishEvent("hello");
+        throw new RuntimeException("action error");
     }
 
 
