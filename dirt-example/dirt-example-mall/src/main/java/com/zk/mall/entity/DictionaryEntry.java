@@ -29,7 +29,7 @@ import javax.validation.constraints.NotEmpty;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = " dictionary_entry")
-@SQLDelete(sql = "UPDATE dictionary_entry SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE dictionary_entry SET deleted = true WHERE id=? and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = DictionaryEntry.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

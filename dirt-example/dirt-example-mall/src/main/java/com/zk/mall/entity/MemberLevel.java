@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "mall_member_level")
-@SQLDelete(sql = "UPDATE mall_member_level SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE mall_member_level SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = MemberLevel.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

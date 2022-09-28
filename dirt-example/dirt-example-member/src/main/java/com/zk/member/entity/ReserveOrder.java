@@ -14,10 +14,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Getter
@@ -31,11 +28,15 @@ public class ReserveOrder extends DirtBaseIdEntity {
 
     @DirtField(title = "预约商品 id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reserveProductId")
+
     ReserveProduct reserveProduct;
 
 
     @DirtField(title = "预约商品2")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reserveProduct2Id")
+
     ReserveProduct reserveProduct2;
 
     @DirtField

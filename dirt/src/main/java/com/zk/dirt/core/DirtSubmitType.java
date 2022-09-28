@@ -57,7 +57,16 @@ public class DirtSubmitType {
     }
 
     public String getTooltip() {
-        if(tooltip==null) return this.fieldType.getTooltip();
+        if (this.tooltip == null && this.fieldType != null) {
+            return this.fieldType.tooltip;
+        }
         return tooltip;
+    }
+
+    public String getValueType() {
+        if (this.valueType == null && this.fieldType != null) {
+            return this.fieldType.valueType;
+        }
+        return valueType;
     }
 }

@@ -29,7 +29,7 @@ import java.util.Set;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "mall_address")
-@SQLDelete(sql = "UPDATE mall_address SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE mall_address SET deleted = true WHERE id=?   and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Address.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

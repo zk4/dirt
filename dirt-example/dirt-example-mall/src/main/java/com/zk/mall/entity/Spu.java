@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.zk.dirt.annotation.*;
-import com.zk.dirt.core.eUIType;
+import com.zk.dirt.annotation.DirtAction;
+import com.zk.dirt.annotation.DirtEntity;
+import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,44 +16,64 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Getter
 @Setter
 @Entity
-@DirtEntity("卡")
+@DirtEntity("Spu")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "mall_card")
-@SQLDelete(sql = "UPDATE mall_card SET deleted = true WHERE id=?   and version=? ")
+@Table(name = "mall_spu")
+@SQLDelete(sql = "UPDATE mall_spu SET deleted = true WHERE id=?   and version=? ")
 @Where(clause = "deleted=false")
-
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
-@JsonIdentityInfo(scope = Card.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
-public class Card extends DirtBaseIdEntity {
+@JsonIdentityInfo(scope = Spu.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+public class Spu extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "卡名")
-    String name;
 
-    @DirtField(title = "卡类型",
-            uiType = eUIType.select,
-            sourceProvider = @DirtHQLSource(hql = "select d.entries from DictionaryIndex as d where d.name='卡类型\'"),
-            dirtSubmit = @DirtSubmit
-    )
+    /**
+     * 商品名称
+     */
+    @DirtField(title = "商品名称")
+    private String name;
+    /**
+     * 商品描述
+     */
+    @DirtField(title = "商品描述")
 
-    String  cardType;
-
-    @DirtField(title = "会员集合")
-    @ManyToMany
-    // 允许双向更新
-    @JoinTable(name="member_card_rel",
-            joinColumns={@JoinColumn(name="cardId")},
-            inverseJoinColumns={@JoinColumn(name="memberId")})
-    // json 仅序列化为 id，避免循环
+    private String spuDescription;
+    /**
+     * 所属分类id
+     */
+    @ManyToOne
+    @DirtField(title = "所属分类")
     @JsonIdentityReference(alwaysAsId = true)
-    Set<Member> members;
+    private Category  category;
+    /**
+     * 品牌id
+     */
+    private Brand brand;
+
+    /**
+     * 品牌名
+     */
+    //@TableField(exist = false)
+    //private String brandName;
+    //
+    //@DirtField(title = "品牌名")
+    //private BigDecimal weight;
+    /**
+     * 商品介绍
+     */
+    @DirtField(title = "商品介绍")
+    private String decript;
+
+    @DirtSearch(title = "上架状态")
+    private Boolean publishStatus;
 
 
     @DirtAction(text = "详情")

@@ -30,6 +30,7 @@ public class ReserveAttr extends DirtBaseIdEntity {
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @DirtField(title = "属性类型",idOfEntity = ReserveAttrType.class)
+    @JoinColumn(name = "reserveAttrTypeId")
     ReserveAttrType reserveAttrType;
 
     @DirtAction(text = "详情")

@@ -283,7 +283,7 @@ public class DirtEntityType {
                         dirtSubmitType.setPlaceholder(submitable.placeholder());
                         dirtSubmitType.setWidth(submitable.width().getValue());
                         dirtSubmitType.setIndex(submitable.index());
-                        dirtSubmitType.setValueType(tableHeader.getValueType());
+                        dirtSubmitType.setValueType(submitable.valueType().toString());
                         HashMap formItemProps = new HashMap();
 
                         // 兼容 JSR

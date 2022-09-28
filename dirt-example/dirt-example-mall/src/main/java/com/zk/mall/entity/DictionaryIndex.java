@@ -28,7 +28,7 @@ import java.util.List;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = " dictionary_index")
-@SQLDelete(sql = "UPDATE dictionary_index SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE dictionary_index SET deleted = true WHERE id=? and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
