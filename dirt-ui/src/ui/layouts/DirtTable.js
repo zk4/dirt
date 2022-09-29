@@ -2,17 +2,16 @@ import React, {useState, useEffect, useRef} from 'react';
 import {PlusOutlined, } from '@ant-design/icons';
 import {ProTable} from '@ant-design/pro-components';
 import {Button, message, DatePicker, TimePicker, Space, Popconfirm} from 'antd';
-import network from './network'
-import ReadForm from './interface/Form/ReadForm'
-import axios from 'axios';
-import WriteForm from './interface/Form/WriteForm'
-import Consts from './consts/consts'
-import UIConsts from './consts/uiConsts'
-import customRender from './customRender'
-import {isObj} from './util';
-import Cascader from './components/cascader'
-import RichText from './components/richEditor'
-import ImageUploader from './components/imageUploader'
+import network from '../../logic/network'
+import ReadForm from './ReadForm'
+import WriteForm from './WriteForm'
+import Consts from '../../logic/consts/consts'
+import UIConsts from '../../logic/consts/uiConsts'
+import customRender from '../components/customRender'
+import {isObj} from '../../logic/util';
+import Cascader from '../components/cascader'
+import RichText from '../components/richEditor'
+import ImageUploader from '../components/imageUploader'
 const {RangePicker} = DatePicker;
 
 
@@ -27,8 +26,10 @@ const dataAdapter = (ds, childAlias) => {
   }
   return ds;
 }
-export default function Dirt(props) {
-  let {entityName, onSelected, rowSelection, readOnly} = props;
+export default function DirtTable(props) {
+  // excludeIds: default self id
+  // excludeIds: default self id
+  let {entityName, onSelected, rowSelection, readOnly, excludeId} = props;
   rowSelection = rowSelection || {}
   let [columns, setColumns] = useState([]);
   let [columnKeyMap, setColumnKeyMap] = useState({})
@@ -46,20 +47,22 @@ export default function Dirt(props) {
     // 自定义搜索栏
     if (c.searchType != null) {
       c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        if (c.searchType.valueType === 'cascader') {
-          return <Cascader idOfEntity={c.idOfEntity} request={async (id) => {
+        if (c.searchType.valueType === UIConsts.cascader) {
+          return <Cascader.SearchView idOfEntity={c.idOfEntity} request={async (id) => {
+            let data = []
             if (id == null) {
-              // TODO: what is the default id? 1 is OK?
-              // A bit tricky, since the root data is set after server is deployed. No way to know what it is.
-              // Maybe we should force define it 
-              id = 1
+              // ugly as hell, maybe I shoud use if parent is null
+              data = await network.searchFullAsync(c.idOfEntity, "(name : 'root')");
+              data = data[0] 
+            } else {
+              data = await network.getDataAsync(c.idOfEntity, id);
             }
-            let data = await network.getDataAsync(c.idOfEntity, id);
-            return dataAdapter(data[c.subTreeName], c.subTreeName)
+            return data?dataAdapter(data[c.subTreeName], c.subTreeName):[]
 
           }} onValueSet={(valueArrays, optionArrays) => {
-            const v = valueArrays.slice(-1)?.[0]
-            form.setFieldValue(dataIndex, {id: v})
+            const v = valueArrays?.slice(-1)?.[0]
+            if(v)
+              form.setFieldValue(dataIndex, {id: v})
           }} />
         }
         if (c.searchType.valueType === 'dateTimeRange') {
@@ -98,7 +101,7 @@ export default function Dirt(props) {
       }
       return c;
     }
-    
+
     // 生成 id 关连的实际 entity 详情跳转
     // 可以是多对一的关系，也可以是纯 id
     if (cls) {
@@ -143,7 +146,7 @@ export default function Dirt(props) {
       setColumns(headers)
 
     })()
-  }, [columnKeyMap, entityName]);
+  }, [columnKeyMap, entityName, readOnly, redefineHeader]);
 
 
   const searchAsyncWrapper = async (params = {}, sort, filter) => {
@@ -258,15 +261,10 @@ export default function Dirt(props) {
 
   const doAction = async (text, params) => {
 
-    let res = await axios.post('http://127.0.0.1:8081/dirt/action', params)
-    if (res.data.code === 0) {
-      if (res.data) {
+    let res = await network.actionAsync( params,()=>{
         message.success(`${text} 成功`);
         actionRef.current.reload();
-      }
-    } else {
-      message.error(`${text}  失败`);
-    }
+    })
   }
   // 用来操作 ProTable
   // https://procomponents.ant.design/components/table/#actionref-%E6%89%8B%E5%8A%A8%E8%A7%A6%E5%8F%91
@@ -313,12 +311,18 @@ export default function Dirt(props) {
 
         <span>
           已选 {selectedRowKeys.length} 项
+          [{
+            selectedRowKeys.map(id => customRender.readForm(id, entityName, id))
+          }]
           <a href="#!" style={{marginInlineStart: 16}} onClick={() => network.deleteByIdsAsync(
             {
               entityName,
               ids: selectedRowKeys
-            }, () => {actionRef.current.reload()}
-          )}>批量删除</a>
+            }, () => {
+              onCleanSelected()
+              actionRef.current.reload()
+            }
+          )}>远程删除</a>
           <a href="#!" style={{marginInlineStart: 16}} onClick={onCleanSelected}>导出数据</a>
           {onSelected && <a href="#!" style={{marginInlineStart: 16}} onClick={e => onSelected(selectedRows)}>选择</a>}
         </span>

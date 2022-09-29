@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from "react";
 import 'antd/dist/antd.css';
 import axios from 'axios'
-import Dirt from './Dirt'
-import Tree from './interface/Tree'
-import style from './App.module.css'
+import DirtTable from './ui/layouts/DirtTable'
+import Tree from './ui/layouts/Tree'
 
 function App() {
   // let [path] = useState(window.location.pathname.substr(1) || 'com.zk.experiment.Member')
@@ -33,8 +32,8 @@ function App() {
       }
       <h1>{view.text}</h1>
       <hr style={{marginBottom: '25px'}} />
-      {view.viewType === 'Table' && (< Dirt entityName={view.className} />)}
-      {view.viewType === 'Tree' && (< Dirt entityName={view.className} />)}
+      {view.viewType === 'Table' && (< DirtTable entityName={view.className} />)}
+      {view.viewType === 'Tree' && (< DirtTable entityName={view.className} />)}
     </div>
   );
 }

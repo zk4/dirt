@@ -1,6 +1,6 @@
 import {Select, Tag} from 'antd';
 import React, {useState} from 'react';
-import customRender from '../../customRender'
+import customRender from '../components/customRender'
 
 const handleChange = (value) => {
   console.log(`selected ${value}`);

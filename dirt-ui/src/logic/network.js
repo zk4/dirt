@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {message} from 'antd';
-import {SpringFilterQueryBuilder as SFQB} from './query_builder/index';
+import {SpringFilterQueryBuilder as SFQB} from '../lib/query_builder';
 import {isObj} from './util'
 
 // respone拦截器

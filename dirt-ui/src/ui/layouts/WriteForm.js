@@ -1,12 +1,12 @@
 import React, {useState, useRef} from 'react';
 import {BetaSchemaForm} from '@ant-design/pro-components';
-import Dirt from '../../Dirt'
+import DirtTable from './DirtTable'
 import {Modal, Input, Button} from 'antd';
-import Consts from '../../consts/consts'
-import UIConsts from '../../consts/uiConsts'
-import customRender from '../../customRender'
-import RichText from '../../components/richEditor'
-import ImageUploader from '../../components/imageUploader'
+import Consts from '../../logic/consts/consts'
+import UIConsts from '../../logic/consts/uiConsts'
+import customRender from '../components/customRender'
+import RichText from '../components/richEditor'
+import ImageUploader from '../components/imageUploader'
 import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined, SearchOutlined} from '@ant-design/icons';
 
 import IdHolder from './IdHolder'
@@ -88,8 +88,8 @@ export default (props) => {
               : customRender.readForm(vals?.id, idOfEntity, vals?.id)
           }
           <Modal readOnly destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
-            <Dirt entityName={idOfEntity}
-              rowSelection={{
+            <DirtTable entityName={idOfEntity}
+                       rowSelection={{
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
                   // JPA compatiable

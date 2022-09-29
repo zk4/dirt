@@ -3,10 +3,10 @@ import React, {
   useEffect,
 } from 'react';
 import {BetaSchemaForm, } from '@ant-design/pro-components';
-import network from '../../network'
-import Consts from "../../consts/consts"
-import customRender from '../../customRender'
-import { isObj } from '../../util';
+import network from '../../logic/network'
+import Consts from "../../logic/consts/consts"
+import customRender from '../components/customRender'
+import { isObj } from '../../logic/util';
 
 export default function ({title, cls, id,name}) {
   let [formData, setFormData] = useState([])

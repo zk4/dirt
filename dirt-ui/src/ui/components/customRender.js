@@ -1,6 +1,6 @@
 import React from 'react';
-import ReadForm from './interface/Form/ReadForm'
-import {isObj} from './util'
+import ReadForm from '../layouts/ReadForm'
+import {isObj} from '../../logic/util'
 export default {
   table: (title, cls, idObj) => {
     if(idObj==null) 
