@@ -204,9 +204,6 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
   return new Promise(
     (resolve, reject) => {
       if (o.data && o.data.code === 0) {
-        // let d = addKey(o.data.data)
-        // console.log("d", d)
-        // o.data.data = d;
         resolve({
           data: o.data.data,
           total:o.data.page.totalPages*o.data.page.pageSize,

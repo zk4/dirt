@@ -9,10 +9,9 @@ import RichText from '../../components/richEditor'
 import ImageUploader from '../../components/imageUploader'
 import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined, SearchOutlined} from '@ant-design/icons';
 
-import IdHolder from './IdHolder'
-const {Search} = Input;
 export default (props) => {
   const {name, triggerCompoent, columns, onFinish, onInit, readOnly} = props;
+  // debugger
   // 有可能有多个 modal 需要保持状态，使用{}
   const [isModalOpen, setIsModalOpen] = useState({});
 
@@ -90,6 +89,7 @@ export default (props) => {
           <Modal readOnly destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
             <Dirt entityName={idOfEntity}
               rowSelection={{
+              defaultSelectedRowKeys:vals?.map(v=>v.id),
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
                   // JPA compatiable

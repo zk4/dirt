@@ -28,7 +28,9 @@ const dataAdapter = (ds, childAlias) => {
   return ds;
 }
 export default function Dirt(props) {
-  let {entityName, onSelected, rowSelection, readOnly} = props;
+  // excludeIds: default self id
+  // excludeIds: default self id
+  let {entityName, onSelected, rowSelection, readOnly, excludeIds} = props;
   rowSelection = rowSelection || {}
   let [columns, setColumns] = useState([]);
   let [columnKeyMap, setColumnKeyMap] = useState({})
@@ -98,7 +100,7 @@ export default function Dirt(props) {
       }
       return c;
     }
-    
+
     // 生成 id 关连的实际 entity 详情跳转
     // 可以是多对一的关系，也可以是纯 id
     if (cls) {
@@ -313,12 +315,18 @@ export default function Dirt(props) {
 
         <span>
           已选 {selectedRowKeys.length} 项
+          [{
+            selectedRowKeys.map(id =>customRender.readForm(id, entityName, id))
+          }]
           <a href="#!" style={{marginInlineStart: 16}} onClick={() => network.deleteByIdsAsync(
             {
               entityName,
               ids: selectedRowKeys
-            }, () => {actionRef.current.reload()}
-          )}>批量删除</a>
+          }, () => {
+            onCleanSelected()
+            actionRef.current.reload()
+          }
+          )}>远程删除</a>
           <a href="#!" style={{marginInlineStart: 16}} onClick={onCleanSelected}>导出数据</a>
           {onSelected && <a href="#!" style={{marginInlineStart: 16}} onClick={e => onSelected(selectedRows)}>选择</a>}
         </span>
