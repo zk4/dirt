@@ -52,6 +52,7 @@ export default function Dirt(props) {
           return <Cascader.SearchView idOfEntity={c.idOfEntity} request={async (id) => {
             let data = []
             if (id == null) {
+              // ugly as hell, maybe I shoud use if parent is null
               data = await network.searchFullAsync(c.idOfEntity, "(name : 'root')");
               data = data[0] 
             } else {
@@ -60,8 +61,9 @@ export default function Dirt(props) {
             return data?dataAdapter(data[c.subTreeName], c.subTreeName):[]
 
           }} onValueSet={(valueArrays, optionArrays) => {
-            const v = valueArrays.slice(-1)?.[0]
-            form.setFieldValue(dataIndex, {id: v})
+            const v = valueArrays?.slice(-1)?.[0]
+            if(v)
+              form.setFieldValue(dataIndex, {id: v})
           }} />
         }
         if (c.searchType.valueType === 'dateTimeRange') {

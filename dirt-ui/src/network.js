@@ -5,148 +5,69 @@ import {isObj} from './util'
 
 // respone拦截器
 
-const getTableHeadersAsync = async (entityName) => {
-  let res = await axios.get(`http://127.0.0.1:8081/dirt/getEntitySchema?entityName=${entityName}`)
+axios.defaults.baseURL = 'http://127.0.0.1:8081/dirt/'
+
+// 添加响应拦截器
+axios.interceptors.response.use(function (res) {
+  // 2xx 范围内的状态码都会触发该函数。
+  // 对响应数据做点什么
   if (res.data.code === 0) {
-    let headers = res.data.data;
-    return headers;
+    message.success('成功');
+    return res.data;
+  } else {
+    const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
+    message.error(res.data.msg + ":" + reasson);
+    return Promise.reject(reasson);
   }
-  return [];
+}, function (error) {
+    message.error(error);
+  // 超出 2xx 范围的状态码都会触发该函数。
+  // 对响应错误做点什么
+  return Promise.reject(error);
+});
+const getTableHeadersAsync = async (entityName) => {
+  const ret = await axios.get(`getEntitySchema?entityName=${entityName}`)
+  return ret.data;
 }
 
 const getDataAsync = async (entityName, id) => {
-  try {
-    let res = await axios.get(`http://127.0.0.1:8081/dirt/getData?entityName=${entityName}&id=${id}`)
-    if (res.data.code === 0) {
-      let headers = res.data.data;
-      return headers;
-    }
-    else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-    }
-  } catch (e) {
-    message.error(' 网络失败,请查看 console');
-  }
-  return [];
+  const ret = await axios.get(`getData?entityName=${entityName}&id=${id}`)
+  return ret.data;
 }
 
 const deleteByIdAsync = async (entityName, id, success_cb) => {
-  try {
-    let res = await axios.post(`http://127.0.0.1:8081/dirt/deleteById`, {
-      entityName,
-      id
-    })
-    if (res.data.code === 0) {
-      message.success('删除成功');
-      success_cb();
-    } else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-    }
-  } catch (e) {
-    message.error(' 网络失败,请查看 console');
-  }
+  let ret = await axios.post(`deleteById`, {entityName, id})
+  success_cb && success_cb()
+  return ret.data;
 }
 const deleteByIdsAsync = async (postData, success_cb) => {
-  try {
-    let res = await axios.post('http://127.0.0.1:8081/dirt/deleteByIds', postData)
-    if (res.data.code === 0) {
-      if (res.data) {
-        message.success('删除成功');
-        success_cb();
-      }
-    } else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-    }
-  } catch (e) {
-    message.error(' 网络失败,请查看 console');
-  }
-  return true;
+  const ret = axios.post('deleteByIds', postData)
+  success_cb && success_cb();
+  return ret.data;
 }
 
 
 const createAsync = async (entityName, values, success_cb) => {
-  try {
-    let res = await axios.post(`http://127.0.0.1:8081/dirt/create?entityName=${entityName}`, {
-      ...values
-    })
-    if (res.data.code === 0) {
-      if (res.data) {
-        message.success('提交成功');
-        success_cb();
-      }
-    } else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-    }
-  } catch (e) {
-    message.error(' 网络失败,请查看 console');
-  }
-  return true;
+  const ret = await axios.post(`create?entityName=${entityName}`, {
+    ...values
+  })
+  success_cb && success_cb();
+  return ret.data;
 }
 const updateAsync = async (entityName, postData, success_cb) => {
-  try {
-    let res = await axios.post(`http://127.0.0.1:8081/dirt/update?entityName=${entityName}`, postData)
-    if (res.data.code === 0) {
-      if (res.data) {
-        message.success('提交成功');
-        success_cb();
-      }
-    } else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-    }
-  } catch (e) {
-    message.error(' 网络失败,请查看 console');
-  }
-  return true;
+  const ret = await axios.post(`update?entityName=${entityName}`, postData)
+  success_cb && success_cb();
+  return ret.data;
 }
 const actionAsync = async (postData, success_cb) => {
-  try {
-    let res = await axios.post(`http://127.0.0.1:8081/dirt/action`, postData)
-    if (res.data.code === 0) {
-      if (res.data) {
-        message.success('action 成功');
-        success_cb();
-      }
-    } else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-    }
-  } catch (e) {
-    message.error(' 网络失败,请查看 console');
-  }
-  return true;
+  const ret = await axios.post(`action`, postData)
+  success_cb && success_cb();
+  return ret.data;
 }
-// const key = 0;
-// function addKey(data) {
-//   let d = data.map(m => {
-//     m['key'] =++key;
-//     if (m.subMenus && m.subMenus.length > 0) {
-//       m.subMenus = addKey(m.subMenus)
-//     }
-//     return m;
-//   })
-//   return d;
-// }
-const searchFullAsync = async (entityName,filter, success_cb) => {
-  try {
-    let res = await axios.post(`http://127.0.0.1:8081/dirt/getFullDatas?entityName=${entityName}`, {filter})
-    if (res.data.code === 0) {
-      if (res.data) {
-        // message.success('获取成功');
-        return res.data.data;
-      }
-    } else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-    }
-  } catch (e) {
-    message.error(' 网络失败,请查看 console');
-  }
-  return true;
+const searchFullAsync = async (entityName, filter, success_cb) => {
+  const ret = await axios.post(`getFullDatas?entityName=${entityName}`, {filter})
+  success_cb && success_cb();
+  return ret.data;
 }
 const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, success_cb) => {
   // 映射 current 到 pageNumber
@@ -181,12 +102,11 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
           return SFQB.like(key, `${value}`);
         return null;
       } else {
-        if(isObj(value)){
+        if (isObj(value)) {
           // convert key {a:1,b:1} ==>  "key.a : 1 AND key.b : 2"
-          return Object.entries(value).map(([k,v])=>SFQB.equal(key+'.'+k, v))
+          return Object.entries(value).map(([k, v]) => SFQB.equal(key + '.' + k, v))
         }
-        else
-        {
+        else {
           return SFQB.equal(key, `${value}`);
         }
       }
@@ -197,7 +117,7 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
   //  全部组装成 and 条件，在 table　里没有例外
   let filterStr = SFQB.and(...filters).toString();
   //  复合spring-filter 标准
-  if (filterStr !== "()") { filterParams = {filter: filterStr} }
+  if (filterStr !== "()") {filterParams = {filter: filterStr}}
 
 
   // 制作 JPA page 里的sort
@@ -214,23 +134,20 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
     sortParams = `&sort=${sortQuery}`;
 
   // params.pageNumber-1 从 0 页开始
-  const pageParam = `&size=${params.pageSize}&page=${params.pageNumber-1}`
+  const pageParam = `&size=${params.pageSize}&page=${params.pageNumber - 1}`
 
-  let url = `http://127.0.0.1:8081/dirt/getDatas?entityName=${entityName}${pageParam}${sortParams}`;
+  let url = `getDatas?entityName=${entityName}${pageParam}${sortParams}`;
 
   // 要符合 ProTalbe 的数据格式
-  let o = await axios.post(url, {...filterParams});
+  let ret = await axios.post(url, {...filterParams});
   return new Promise(
     (resolve, reject) => {
-      if (o.data && o.data.code === 0) {
-        resolve({
-          data: o.data.data,
-          total:o.data.page.totalPages*o.data.page.pageSize,
-          success:true
-        });
-      } else {
-        reject(o);
-      }
+      resolve({
+        data: ret.data,
+        total: ret.page.totalPages * ret.page.pageSize,
+        success: true
+      });
+
     }
   );
 }

@@ -11,22 +11,11 @@ function App() {
   // const [path, setPath] = useState(window.location.pathname.substr(1));
   // const [name, setName] = useState('');
   const [view, setView] = useState(null);
-
-
-
-
-
-
   useEffect(() => {
     (async () => {
-      let res = await axios.get(`http://127.0.0.1:8081/dirt/getTableMaps`)
-      if (res.data.code === 0) {
-        let tables = res.data.data;
-        setTables(tables);
-        setView(Object.entries(tables)[0][1]);
-        // setPath(Object.entries(tables)[0][1].className);
-        // setName(Object.entries(tables)[0][1].text);
-      }
+      let data = await axios.get(`getTableMaps`)
+      setTables(data.data);
+      setView(Object.entries(data.data)[0][1]);
     })()
   }, [])
   return (
@@ -44,8 +33,8 @@ function App() {
       }
       <h1>{view.text}</h1>
       <hr style={{marginBottom: '25px'}} />
-      { view.viewType === 'Table' && (< Dirt entityName={view.className} />) } 
-      { view.viewType === 'Tree' && (< Dirt entityName={view.className} />) }
+      {view.viewType === 'Table' && (< Dirt entityName={view.className} />)}
+      {view.viewType === 'Tree' && (< Dirt entityName={view.className} />)}
     </div>
   );
 }
