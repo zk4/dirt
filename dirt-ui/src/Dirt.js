@@ -48,16 +48,10 @@ export default function Dirt(props) {
     // 自定义搜索栏
     if (c.searchType != null) {
       c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        if (c.searchType.valueType === 'cascader') {
-          return <Cascader idOfEntity={c.idOfEntity} request={async (id) => {
+        if (c.searchType.valueType === UIConsts.cascader) {
+          return <Cascader.SearchView idOfEntity={c.idOfEntity} request={async (id) => {
             let data = []
-          // debugger
             if (id == null) {
-              // TODO: what is the default id?
-              // A bit tricky, since the root data is set after server is deployed. No way to know what it is.
-              // Maybe we should force define it 
-              // id = 1
-              // Solution: maybe I should search for name is root rows as data 
               data = await network.searchFullAsync(c.idOfEntity, "(name : 'root')");
               data = data[0] 
             } else {

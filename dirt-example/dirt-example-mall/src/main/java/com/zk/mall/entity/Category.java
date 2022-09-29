@@ -62,7 +62,7 @@ public class Category extends DirtBaseIdEntity {
 
     @DirtField(title = "层级" )
     @NotNull
-    private Integer catLevel;
+    private Integer level;
 
     @DirtField(title = "图标地址" ,uiType = eUIType.avatar)
     private String icon;

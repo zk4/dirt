@@ -1,7 +1,7 @@
 import {Cascader} from 'antd';
 import React, {useState, useEffect} from 'react';
 
-const App = (props) => {
+const SearchView = (props) => {
   const {request, onValueSet} = props;
   const [options, setOptions] = useState([]);
 
@@ -29,4 +29,11 @@ const App = (props) => {
   return <Cascader options={options} loadData={loadData} onChange={onChange} changeOnSelect />;
 };
 
-export default App;
+// export default App;
+export default {
+  WriteView:null,
+  TableRowView:null,
+  SearchView,
+  ReadView: null,
+}
+

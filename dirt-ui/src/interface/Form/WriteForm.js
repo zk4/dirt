@@ -28,6 +28,8 @@ export default (props) => {
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 form
+    if (column.valueType === UIConsts.cascader) {
+    }
     if (column.valueType === UIConsts.richtext) {
       column["colProps"] = {xs: 24, md: 24}
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
@@ -45,7 +47,7 @@ export default (props) => {
       }
     }
     // 如果有 idOfEntity，也就是要处理 relation，弹框去查 relation
-    if (idOfEntity) {
+    else if (idOfEntity) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         const vals = form.getFieldValue(columnKey)
         return <>
