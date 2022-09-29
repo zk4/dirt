@@ -18,9 +18,9 @@ const {RangePicker} = DatePicker;
 const dataAdapter = (ds, childAlias) => {
   if (ds) {
     var obj = JSON.parse(JSON.stringify(ds)
-      .replaceAll("\"name\":", "\"label\":")
-      .replaceAll("\"id\":", "\"value\":")
-      .replaceAll("\"" + childAlias + "\":", "\"children\":")
+        .replaceAll("\"name\":", "\"label\":")
+        .replaceAll("\"id\":", "\"value\":")
+        .replaceAll("\"" + childAlias + "\":", "\"children\":")
     );
     return obj;
   }
@@ -53,7 +53,7 @@ export default function DirtTable(props) {
             if (id == null) {
               // ugly as hell, maybe I shoud use if parent is null
               data = await network.searchFullAsync(c.idOfEntity, "(name : 'root')");
-              data = data[0] 
+              data = data[0]
             } else {
               data = await network.getDataAsync(c.idOfEntity, id);
             }
@@ -146,27 +146,37 @@ export default function DirtTable(props) {
       setColumns(headers)
 
     })()
-  }, [entityName]);
+  }, [columnKeyMap, entityName]);
 
 
   const searchAsyncWrapper = async (params = {}, sort, filter) => {
     return network.searchAsync(entityName, columnKeyMap, params, sort, filter)
+
+    // return new Promise(
+    //   (resolve, reject) => {
+    //     resolve({
+    //       data: result.data.filter(d => d.id != excludeId),
+    //       total: result.total,
+    //       success: result.success
+    //     });
+    //   }
+    // );
   }
 
   const generateCreateForm = () => {
     let submitTypes = columns
-      .filter(c => c.submitType != null)
-      .map(c => c.submitType)
-      .map(c => {
-        // TODO:  定义 ManyToOne OneToMany 的 render 筛选器
-        return c;
-      })
-      .sort((a, b) => a.index - b.index);
+        .filter(c => c.submitType != null)
+        .map(c => c.submitType)
+        .map(c => {
+          // TODO:  定义 ManyToOne OneToMany 的 render 筛选器
+          return c;
+        })
+        .sort((a, b) => a.index - b.index);
     return <WriteForm name="创建" columns={submitTypes}
-      onFinish={values =>
-        network.createAsync(entityName, values, () => {actionRef.current.reload()})
-      }
-      triggerCompoent={<Button type="primary"> <PlusOutlined /> 创建 </Button>} />
+                      onFinish={values =>
+                          network.createAsync(entityName, values, () => {actionRef.current.reload()})
+                      }
+                      triggerCompoent={<Button type="primary"> <PlusOutlined /> 创建 </Button>} />
   }
 
   const generateAction = (headers, action, record, index) => {
@@ -175,13 +185,13 @@ export default function DirtTable(props) {
     if (key === 'edit' || key === 'detail') {
 
       let formData = headers
-        //  只剔除  actions
-        .filter(c => c["actions"] == null)
-        //  取出 submitType
-        .map(c => c.submitType)
-        //   过滤掉 null
-        .filter(c => c)
-        .sort((a, b) => a.index - b.index);
+      //  只剔除  actions
+          .filter(c => c["actions"] == null)
+          //  取出 submitType
+          .map(c => c.submitType)
+          //   过滤掉 null
+          .filter(c => c)
+          .sort((a, b) => a.index - b.index);
       // 增加 id  显示
       formData.splice(0, 0, {
         "index": 10000,
@@ -203,7 +213,7 @@ export default function DirtTable(props) {
         d.initialValue = record[d.key];
         return d;
       })
-        .sort((a, b) => a.index - b.index);
+          .sort((a, b) => a.index - b.index);
 
       // console.log(headers, action, record, index)
       let isDetailed = key === 'detail'
@@ -212,12 +222,12 @@ export default function DirtTable(props) {
       // https://github.com/ant-design/pro-components/issues/3323
 
       return <WriteForm key={key} name={text} readOnly={isDetailed} columns={formData}
-        onFinish={(postdata) =>
-          network.updateAsync(entityName, postdata, () => {
-            actionRef.current.reload();
-          }
-          )
-        } triggerCompoent={<a href="#!"> {text} </a>} />
+                        onFinish={(postdata) =>
+                            network.updateAsync(entityName, postdata, () => {
+                                  actionRef.current.reload();
+                                }
+                            )
+                        } triggerCompoent={<a href="#!"> {text} </a>} />
     }
     else if (key === 'delete') {
 
@@ -229,7 +239,7 @@ export default function DirtTable(props) {
         {<span className='link delete'> {text} </span>}
       </Popconfirm>
     } else {
-      // action 
+      // action
       const entries = Object.entries(action.argColumnsMap)
 
       if (entries.length == 0) {
@@ -242,7 +252,7 @@ export default function DirtTable(props) {
           });
         }}>{text}</a>
       } else {
-        //  自定义action 带参数，弹出 form 由用户输入 
+        //  自定义action 带参数，弹出 form 由用户输入
         let actionFormArgs = entries.reduce((a, [k, v]) => {a.push(v); return a;}, [])
         // console.log(actionFormArgs)
         return <WriteForm key={key} name={text} columns={action.argColumnsMap.args} onFinish={(postdata) => {
@@ -262,9 +272,17 @@ export default function DirtTable(props) {
   const doAction = async (text, params) => {
 
     let res = await network.actionAsync( params,()=>{
-        message.success(`${text} 成功`);
-        actionRef.current.reload();
+      message.success(`${text} 成功`);
+      actionRef.current.reload();
     })
+    // if (res.data.code === 0) {
+    //   if (res.data) {
+    //     message.success(`${text} 成功`);
+    //     actionRef.current.reload();
+    //   }
+    // } else {
+    //   message.error(`${text}  失败`);
+    // }
   }
   // 用来操作 ProTable
   // https://procomponents.ant.design/components/table/#actionref-%E6%89%8B%E5%8A%A8%E8%A7%A6%E5%8F%91
@@ -272,62 +290,62 @@ export default function DirtTable(props) {
 
 
   return (columns && <ProTable
-    key={entityName}
-    scroll={{x: columns.length * 200}}
-    columns={columns}
-    actionRef={actionRef}
-    cardBordered
-    request={searchAsyncWrapper}
-    editable={{type: 'multiple', }}
-    columnsState={{
-      persistenceKey: 'Dirt',
-      persistenceType: 'localStorage',
-      onChange(value) {},
-    }}
-    rowKey="id"
-    search={{labelWidth: 'auto', }}
-    options={{setting: {listsHeight: 400, }, }}
-    form={{
-      // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-      // 这个地方会改变 url，可以在一定程度上通过 url 保持 form 的状态
-      syncToUrl: (values, type) => {return false;},
-    }
-    }
-    pagination={
-      {
-        pageSize: 10,
-        onChange: (page) => console.log(page),
-      }
-    }
-    dateFormatter="string"
-    headerTitle=""
-    toolBarRender={() => [generateCreateForm()]}
+          key={entityName}
+          scroll={{x: columns.length * 200}}
+          columns={columns}
+          actionRef={actionRef}
+          cardBordered
+          request={searchAsyncWrapper}
+          editable={{type: 'multiple', }}
+          columnsState={{
+            persistenceKey: 'Dirt',
+            persistenceType: 'localStorage',
+            onChange(value) {},
+          }}
+          rowKey="id"
+          search={{labelWidth: 'auto', }}
+          options={{setting: {listsHeight: 400, }, }}
+          form={{
+            // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
+            // 这个地方会改变 url，可以在一定程度上通过 url 保持 form 的状态
+            syncToUrl: (values, type) => {return false;},
+          }
+          }
+          pagination={
+            {
+              pageSize: 10,
+              onChange: (page) => console.log(page),
+            }
+          }
+          dateFormatter="string"
+          headerTitle=""
+          toolBarRender={() => [generateCreateForm()]}
 
-    // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
-    rowSelection={{...rowSelection}}
+          // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
+          rowSelection={{...rowSelection}}
 
-    tableAlertRender={({selectedRowKeys, selectedRows, onCleanSelected}) => (
-      <Space size={24} >
+          tableAlertRender={({selectedRowKeys, selectedRows, onCleanSelected}) => (
+              <Space size={24} >
 
         <span>
           已选 {selectedRowKeys.length} 项
           [{
-            selectedRowKeys.map(id => customRender.readForm(id, entityName, id))
-          }]
+          selectedRowKeys.map(id => customRender.readForm(id, entityName, id))
+        }]
           <a href="#!" style={{marginInlineStart: 16}} onClick={() => network.deleteByIdsAsync(
-            {
-              entityName,
-              ids: selectedRowKeys
-            }, () => {
-              onCleanSelected()
-              actionRef.current.reload()
-            }
+              {
+                entityName,
+                ids: selectedRowKeys
+              }, () => {
+                onCleanSelected()
+                actionRef.current.reload()
+              }
           )}>远程删除</a>
           <a href="#!" style={{marginInlineStart: 16}} onClick={onCleanSelected}>导出数据</a>
           {onSelected && <a href="#!" style={{marginInlineStart: 16}} onClick={e => onSelected(selectedRows)}>选择</a>}
         </span>
-      </ Space>
-    )}
-  />
+              </ Space>
+          )}
+      />
   );
 };
