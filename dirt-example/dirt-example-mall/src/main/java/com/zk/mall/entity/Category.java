@@ -81,11 +81,7 @@ public class Category extends DirtBaseIdEntity {
 
     @NotEmpty
     @Size(max = 30)
-    @DirtField(title = "类名",
-            uiType = eUIType.select,
-            sourceProvider = @DirtHQLSource(hql = "select d.subCategories from Category as d where d.catLevel='1\'"),
-            dirtSubmit = @DirtSubmit(valueType = eUIType.text)
-    )
+    @DirtField(title = "类名", uiType = eUIType.text)
     String name;
 
     @ManyToOne
