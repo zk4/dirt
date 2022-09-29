@@ -51,10 +51,11 @@ export default function Dirt(props) {
         if (c.searchType.valueType === 'cascader') {
           return <Cascader idOfEntity={c.idOfEntity} request={async (id) => {
             if (id == null) {
-              // TODO: what is the default id? 1 is OK?
+              // TODO: what is the default id?
               // A bit tricky, since the root data is set after server is deployed. No way to know what it is.
               // Maybe we should force define it 
               id = 1
+              // Solution: maybe I should search for null parent rows as data 
             }
             let data = await network.getDataAsync(c.idOfEntity, id);
             return dataAdapter(data[c.subTreeName], c.subTreeName)

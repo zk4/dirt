@@ -90,9 +90,9 @@ export default (props) => {
             <Dirt entityName={idOfEntity}
               rowSelection={{
                 getCheckboxProps: (record) => ({
-                  disabled: record.id === form.getFieldValue('id'), 
+                  disabled: record.id === form.getFieldValue('id'),
                 }),
-                defaultSelectedRowKeys: vals?.map(v => v.id),
+                defaultSelectedRowKeys: vals ? Array.isArray(vals) ? vals.map(v => v.id) : [vals] : [],
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
                   // JPA compatiable

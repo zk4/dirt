@@ -8,6 +8,7 @@ import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSearch;
+import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,12 +51,15 @@ public class Spu extends DirtBaseIdEntity {
      * 所属分类id
      */
     @ManyToOne
-    @DirtField(title = "所属分类")
+    @DirtField(title = "所属分类",subTreeName = "subCategories", uiType = eUIType.cascader,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
     @JsonIdentityReference(alwaysAsId = true)
     private Category  category;
     /**
      * 品牌id
      */
+    @ManyToOne
+    @DirtField
+    @JsonIdentityReference(alwaysAsId = true)
     private Brand brand;
 
     /**
