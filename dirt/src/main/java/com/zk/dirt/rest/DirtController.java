@@ -10,6 +10,7 @@ import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iPersistProxy;
+import com.zk.dirt.intef.iResourceUploader;
 import com.zk.dirt.util.ArgsUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import java.beans.IntrospectionException;
@@ -42,6 +44,19 @@ public class DirtController {
 
     @Autowired
     EntityManager entityManager;
+
+    @Autowired(required = false)
+    iResourceUploader resourceUploader;
+
+
+    @PostMapping("/dirt/upload")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+        if (resourceUploader == null) {
+            throw new RuntimeException("没实现 iResourceUploader, 无法上传");
+        }
+        return  resourceUploader.store(file);
+    }
+
 
     @PostMapping("/dirt/action")
     @ApiOperation(value = "执行动作")

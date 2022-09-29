@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { Upload ,Carousel} from 'antd';
+import React, {useState} from 'react';
+import {Upload, Carousel} from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 function WriteView(props) {
   const [fileList, setFileList] = useState([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
+    // {
+    //   uid: '-1',
+    //   name: 'image.png',
+    //   status: 'done',
+    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    // },
   ]);
 
-  const onChange = ({ fileList: newFileList }) => {
+  const onChange = ({fileList: newFileList}) => {
+    console.log(newFileList)
     setFileList(newFileList);
   };
 
@@ -31,13 +32,13 @@ function WriteView(props) {
     const image = new Image();
     image.src = src;
     const imgWindow = window.open(src);
-    const a =imgWindow?.document.write(image.outerHTML);
+    const a = imgWindow?.document.write(image.outerHTML);
   };
 
   return (
     <ImgCrop rotate readOnly>
       <Upload
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        action="http://127.0.0.1:8081/dirt/upload"
         listType="picture-card"
         fileList={fileList}
         onChange={onChange}
