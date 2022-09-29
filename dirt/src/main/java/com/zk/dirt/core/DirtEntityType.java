@@ -68,7 +68,7 @@ public class DirtEntityType {
     }
 
     private void lazyInit() {
-        // TODO: 可静态的应该尽量静态化
+        // 可静态的应该尽量静态化
         if (!inited) {
             initDirtFieldMap();
             initIdOfEntityMap();

@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "mall_brand")
-@SQLDelete(sql = "UPDATE mall_brand SET deleted = true WHERE id=?   and version=? ")
+@SQLDelete(sql = "UPDATE mall_brand SET deleted = true WHERE id=? and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Brand.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

@@ -48,6 +48,9 @@ public class DirtSubmitType {
     Object columns;
 
 
+    String subTreeName;
+
+
     public String getIdOfEntity() {
         return this.fieldType.getIdOfEntity();
     }
@@ -68,5 +71,12 @@ public class DirtSubmitType {
             return this.fieldType.valueType;
         }
         return valueType;
+    }
+
+    public String getSubTreeName() {
+        if (this.subTreeName == null && this.fieldType != null) {
+            return this.fieldType.subTreeName;
+        }
+        return subTreeName;
     }
 }

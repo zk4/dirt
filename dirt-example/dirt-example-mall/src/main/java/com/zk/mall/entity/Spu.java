@@ -51,9 +51,7 @@ public class Spu extends DirtBaseIdEntity {
      * 所属分类id
      */
     @ManyToOne
-    //@DirtField(title = "所属分类",subTreeName = "subCategories", uiType = eUIType.cascader,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
-    @DirtField(title =  "所属分类",subTreeName = "subCategories", uiType = eUIType.text,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
-
+    @DirtField(title =  "所属分类",subTreeName = "subCategories", uiType = eUIType.cascader,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
     @JsonIdentityReference(alwaysAsId = true)
     private Category  category;
     /**
