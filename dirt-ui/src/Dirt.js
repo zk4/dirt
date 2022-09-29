@@ -50,15 +50,20 @@ export default function Dirt(props) {
       c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         if (c.searchType.valueType === 'cascader') {
           return <Cascader idOfEntity={c.idOfEntity} request={async (id) => {
+            let data = []
+          // debugger
             if (id == null) {
               // TODO: what is the default id?
               // A bit tricky, since the root data is set after server is deployed. No way to know what it is.
               // Maybe we should force define it 
-              id = 1
-              // Solution: maybe I should search for null parent rows as data 
+              // id = 1
+              // Solution: maybe I should search for name is root rows as data 
+              data = await network.searchFullAsync(c.idOfEntity, "(name : 'root')");
+              data = data[0] 
+            } else {
+              data = await network.getDataAsync(c.idOfEntity, id);
             }
-            let data = await network.getDataAsync(c.idOfEntity, id);
-            return dataAdapter(data[c.subTreeName], c.subTreeName)
+            return data?dataAdapter(data[c.subTreeName], c.subTreeName):[]
 
           }} onValueSet={(valueArrays, optionArrays) => {
             const v = valueArrays.slice(-1)?.[0]
@@ -150,7 +155,7 @@ export default function Dirt(props) {
 
 
   const searchAsyncWrapper = async (params = {}, sort, filter) => {
-    return  network.searchAsync(entityName, columnKeyMap, params, sort, filter)
+    return network.searchAsync(entityName, columnKeyMap, params, sort, filter)
 
     // return new Promise(
     //   (resolve, reject) => {

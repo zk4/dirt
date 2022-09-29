@@ -28,6 +28,10 @@ public interface iPersistProxy  {
 
 	<T> Page<T> findAll(Class clazz,@Nullable Specification<T> spec, Pageable pageable);
 
+
+	<T> List<T> findAll(Class clazz,@Nullable Specification<T> spec);
+
+
 	<S extends T,T> S save(Class clazz,S entity);
 
 

@@ -72,6 +72,12 @@ public class JPAPersistProxyImp implements iPersistProxy {
 	}
 
 	@Override
+	public <T> List<T> findAll(Class clazz, Specification<T> spec) {
+		SimpleJpaRepository jpaRepository = dirtContext.getRepoByType(clazz);
+		return jpaRepository.findAll(spec);
+	}
+
+	@Override
 	public <S extends T, T> S save(Class clazz, S entity) {
 		SimpleJpaRepository jpaRepository = dirtContext.getRepoByType(clazz);
 		return (S) jpaRepository.save(entity);

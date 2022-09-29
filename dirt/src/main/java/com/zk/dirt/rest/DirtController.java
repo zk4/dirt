@@ -186,6 +186,16 @@ public class DirtController {
         return Result.success(all);
     }
 
+    @PostMapping("/dirt/getFullDatas")
+    @ApiOperation(value = "获取全量数据")
+    @Transactional(readOnly = true)
+    public Result fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+        Class<?> entityClass = Class.forName( entityName);
+        List<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec());
+        return Result.success(all);
+    }
+
+
     @GetMapping("/dirt/getData")
     @ApiOperation(value = "获取单条数据")
     @Transactional(readOnly = true)

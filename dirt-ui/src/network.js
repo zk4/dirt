@@ -131,6 +131,23 @@ const actionAsync = async (postData, success_cb) => {
 //   })
 //   return d;
 // }
+const searchFullAsync = async (entityName,filter, success_cb) => {
+  try {
+    let res = await axios.post(`http://127.0.0.1:8081/dirt/getFullDatas?entityName=${entityName}`, {filter})
+    if (res.data.code === 0) {
+      if (res.data) {
+        // message.success('获取成功');
+        return res.data.data;
+      }
+    } else {
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
+      message.error(res.data.msg + ":" + reasson);
+    }
+  } catch (e) {
+    message.error(' 网络失败,请查看 console');
+  }
+  return true;
+}
 const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, success_cb) => {
   // 映射 current 到 pageNumber
   params.pageNumber = params.current;
@@ -147,6 +164,7 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
       return key !== 'pageNumber' && key !== 'pageSize' && value
     })
 
+    // 处理 eFilterOperator 
     .map(([key, value]) => {
       if (Array.isArray(value)) {
         let column = columnKeyMap[key];
@@ -224,6 +242,7 @@ export default {
   createAsync,
   updateAsync,
   actionAsync,
+  searchFullAsync,
   searchAsync
 }
 
