@@ -28,8 +28,7 @@ const dataAdapter = (ds, childAlias) => {
 }
 export default function DirtTable(props) {
   // excludeIds: default self id
-  // excludeIds: default self id
-  let {entityName, onSelected, rowSelection, readOnly, excludeId} = props;
+  let {entityName, onSelected, rowSelection, readOnly} = props;
   rowSelection = rowSelection || {}
   let [columns, setColumns] = useState([]);
   let [columnKeyMap, setColumnKeyMap] = useState({})

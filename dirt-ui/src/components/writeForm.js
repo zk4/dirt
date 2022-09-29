@@ -9,11 +9,8 @@ import RichText from './richEditor'
 import ImageUploader from './imageUploader'
 import {SearchOutlined} from '@ant-design/icons';
 
-
-const {Search} = Input;
-
 export default (props) => {
-  const {name, triggerCompoent, columns, onFinish, onInit, readOnly} = props;
+  const {name, triggerCompoent, columns, onFinish, onInit} = props;
   // debugger
   // 有可能有多个 modal 需要保持状态，使用{}
   const [isModalOpen, setIsModalOpen] = useState({});
@@ -91,7 +88,7 @@ export default (props) => {
             vals && Array.isArray(vals) ? vals.map(v => customRender.readForm(v.id, idOfEntity, v.id))
                 : customRender.readForm(vals?.id, idOfEntity, vals?.id)
           }
-          <Modal readOnly destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
+          <Modal destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
             <DirtTable entityName={idOfEntity}
                   rowSelection={{
                     getCheckboxProps: (record) => ({
