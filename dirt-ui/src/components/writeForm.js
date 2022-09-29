@@ -1,15 +1,15 @@
 import React, {useState, useRef} from 'react';
 import {BetaSchemaForm} from '@ant-design/pro-components';
-import DirtTable from './DirtTable'
+import DirtTable from './dirtTable'
 import {Modal, Input, Button} from 'antd';
-import Consts from '../../logic/consts/consts'
-import UIConsts from '../../logic/consts/uiConsts'
-import customRender from '../components/customRender'
-import RichText from '../components/richEditor'
-import ImageUploader from '../components/imageUploader'
-import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined, SearchOutlined} from '@ant-design/icons';
+import Consts from '../consts/consts'
+import UIConsts from '../consts/uiConsts'
+import customRender from './customRender'
+import RichText from './richEditor'
+import ImageUploader from './imageUploader'
+import {SearchOutlined} from '@ant-design/icons';
 
-import IdHolder from './IdHolder'
+
 const {Search} = Input;
 export default (props) => {
   const {name, triggerCompoent, columns, onFinish, onInit, readOnly} = props;
@@ -105,7 +105,6 @@ export default (props) => {
                     const ids = selectedRows.map(v => {return v.id})
                     form.setFieldValue(columnKey, ids[0])
                   }
-
                 }
               }} />
           </Modal>

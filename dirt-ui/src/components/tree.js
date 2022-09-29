@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {CarryOutOutlined, FormOutlined} from '@ant-design/icons';
 import {Switch, Tree} from 'antd';
-import DirtTable from './DirtTable';
-import network from '../../logic/network';
+import Table from './dirtTable';
+import network from '../logic/network';
 const treeData = [
   {
     title: 'parent 1',
@@ -137,7 +137,7 @@ const App = (props) => {
           />
         </div>
         <div style={{width: '79%', height: '100vh'}}>
-          < DirtTable entityName={entityName} />
+          < Table entityName={entityName} />
         </div>
       </div>
 

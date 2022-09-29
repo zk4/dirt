@@ -2,16 +2,16 @@ import React, {useState, useEffect, useRef} from 'react';
 import {PlusOutlined, } from '@ant-design/icons';
 import {ProTable} from '@ant-design/pro-components';
 import {Button, message, DatePicker, TimePicker, Space, Popconfirm} from 'antd';
-import network from '../../logic/network'
-import ReadForm from './ReadForm'
-import WriteForm from './WriteForm'
-import Consts from '../../logic/consts/consts'
-import UIConsts from '../../logic/consts/uiConsts'
-import customRender from '../components/customRender'
-import {isObj} from '../../logic/util';
-import Cascader from '../components/cascader'
-import RichText from '../components/richEditor'
-import ImageUploader from '../components/imageUploader'
+import network from '../logic/network'
+import ReadForm from './readForm'
+import WriteForm from './writeForm'
+import Consts from '../consts/consts'
+import UIConsts from '../consts/uiConsts'
+import customRender from './customRender'
+import {isObj} from '../logic/util';
+import Cascader from './cascader'
+import RichText from './richEditor'
+import ImageUploader from './imageUploader'
 const {RangePicker} = DatePicker;
 
 
