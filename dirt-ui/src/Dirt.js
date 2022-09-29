@@ -272,15 +272,18 @@ export default function Dirt(props) {
 
   const doAction = async (text, params) => {
 
-    let res = await axios.post('http://127.0.0.1:8081/dirt/action', params)
-    if (res.data.code === 0) {
-      if (res.data) {
+    let res = await network.actionAsync( params,()=>{
         message.success(`${text} 成功`);
         actionRef.current.reload();
-      }
-    } else {
-      message.error(`${text}  失败`);
-    }
+    })
+    // if (res.data.code === 0) {
+    //   if (res.data) {
+    //     message.success(`${text} 成功`);
+    //     actionRef.current.reload();
+    //   }
+    // } else {
+    //   message.error(`${text}  失败`);
+    // }
   }
   // 用来操作 ProTable
   // https://procomponents.ant.design/components/table/#actionref-%E6%89%8B%E5%8A%A8%E8%A7%A6%E5%8F%91
