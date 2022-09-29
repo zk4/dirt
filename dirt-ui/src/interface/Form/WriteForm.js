@@ -2,16 +2,17 @@ import React, {useState, useRef} from 'react';
 import {BetaSchemaForm} from '@ant-design/pro-components';
 import Dirt from '../../Dirt'
 import {Modal, Input, Button} from 'antd';
-import Consts from '../../consts'
-import UIConsts from '../../uiConsts'
+import Consts from '../../consts/consts'
+import UIConsts from '../../consts/uiConsts'
 import customRender from '../../customRender'
 import RichText from '../../components/richEditor'
 import ImageUploader from '../../components/imageUploader'
 import {EyeInvisibleOutlined, EyeTwoTone, CopyOutlined, SearchOutlined} from '@ant-design/icons';
 
+import IdHolder from './IdHolder'
+const {Search} = Input;
 export default (props) => {
   const {name, triggerCompoent, columns, onFinish, onInit, readOnly} = props;
-  // debugger
   // 有可能有多个 modal 需要保持状态，使用{}
   const [isModalOpen, setIsModalOpen] = useState({});
 
@@ -28,8 +29,6 @@ export default (props) => {
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 form
-    if (column.valueType === UIConsts.cascader) {
-    }
     if (column.valueType === UIConsts.richtext) {
       column["colProps"] = {xs: 24, md: 24}
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
@@ -47,7 +46,7 @@ export default (props) => {
       }
     }
     // 如果有 idOfEntity，也就是要处理 relation，弹框去查 relation
-    else if (idOfEntity) {
+    if (idOfEntity) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         const vals = form.getFieldValue(columnKey)
         return <>
@@ -91,10 +90,6 @@ export default (props) => {
           <Modal readOnly destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
             <Dirt entityName={idOfEntity}
               rowSelection={{
-                getCheckboxProps: (record) => ({
-                  disabled: record.id === form.getFieldValue('id'),
-                }),
-                defaultSelectedRowKeys: vals ? Array.isArray(vals) ? vals.map(v => v.id) : [vals] : [],
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
                   // JPA compatiable

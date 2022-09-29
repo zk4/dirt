@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import {BetaSchemaForm, } from '@ant-design/pro-components';
 import network from '../../network'
-import Consts from "../../consts"
+import Consts from "../../consts/consts"
 import customRender from '../../customRender'
 import { isObj } from '../../util';
 
