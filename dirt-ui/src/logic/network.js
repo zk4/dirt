@@ -25,7 +25,7 @@ axios.interceptors.response.use(function (res) {
   // 对响应错误做点什么
   return Promise.reject(error);
 });
-const getTableHeadersAsync = async (entityName) => {
+const getEntitySchemaAsync = async (entityName) => {
   const ret = await axios.get(`getEntitySchema?entityName=${entityName}`)
   return ret.data;
 }
@@ -64,12 +64,12 @@ const actionAsync = async (postData, success_cb) => {
   success_cb && success_cb();
   return ret.data;
 }
-const searchFullAsync = async (entityName, filter, success_cb) => {
+const getFullDataslAsync = async (entityName, filter, success_cb) => {
   const ret = await axios.post(`getFullDatas?entityName=${entityName}`, {filter})
   success_cb && success_cb();
   return ret.data;
 }
-const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, success_cb) => {
+const getDatasAsync = async (entityName, columnKeyMap, params = {}, sort, filter, success_cb) => {
   // 映射 current 到 pageNumber
   params.pageNumber = params.current;
   delete params["current"];
@@ -152,15 +152,15 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
   );
 }
 export default {
-  getTableHeadersAsync,
+  getTableHeadersAsync: getEntitySchemaAsync,
   getDataAsync,
   deleteByIdAsync,
   deleteByIdsAsync,
   createAsync,
   updateAsync,
   actionAsync,
-  searchFullAsync,
-  searchAsync
+  searchFullAsync: getFullDataslAsync,
+  searchAsync: getDatasAsync
 }
 
 

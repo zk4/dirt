@@ -146,7 +146,7 @@ export default function DirtTable(props) {
       setColumns(headers)
 
     })()
-  }, [columnKeyMap, entityName, readOnly, redefineHeader]);
+  }, [entityName]);
 
 
   const searchAsyncWrapper = async (params = {}, sort, filter) => {
