@@ -6,6 +6,7 @@ import com.zk.config.rest.DoNotWrapperResult;
 import com.zk.config.rest.Result;
 import com.zk.config.rest.rsql.QueryFilter2;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iPersistProxy;
@@ -18,7 +19,6 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,10 +79,19 @@ public class DirtController {
     @PostMapping("/dirt/create")
     @ApiOperation(value = "创建")
     @Transactional
-    public Result create(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Class<?> entityClass = Class.forName( entityName);
-        Object o2 = objectMapper.convertValue(body, entityClass);
-        persistProxy.save(entityClass,o2);
+    public Result create(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException {
+        Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
+        DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
+        body.forEach((k, v) -> {
+            if ("id".equals(k)) return;
+            DirtField d = dirtEntity.getDirtField((String) k);
+            DirtSubmit[] dirtSubmits = d.dirtSubmit();
+            if (dirtSubmits.length == 0) {
+                throw new RuntimeException(k + "字段不支持创建");
+            }
+        });
+        DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
+        persistProxy.update(entityClass, o2, body);
         return Result.ok();
     }
 
@@ -90,48 +99,21 @@ public class DirtController {
     @ApiOperation(value = "更新")
     @Transactional
     public Result update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
-        Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName( entityName);
-        SimpleJpaRepository jpaRepository = dirtContext.getRepo(entityName);
+        Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
 
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {
-            if("id".equals(k)) return;
-            DirtField d = dirtEntity.getDirtField((String)k);
-            if(d.dirtSubmit()==null || d.dirtSubmit().length==0){
-                throw new RuntimeException(k+"字段不支持更新");
+            if ("id".equals(k)) return;
+            DirtField d = dirtEntity.getDirtField((String) k);
+            DirtSubmit[] dirtSubmits = d.dirtSubmit();
+            if (dirtSubmits.length == 0) {
+                throw new RuntimeException(k + "字段不支持更新");
             }
         });
 
         DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
-        if (o2.getId() == null) throw new RuntimeException("没有 id，无法更新");
-
-        Object one = persistProxy.getOne(entityClass,o2.getId());
-
-        persistProxy.update(entityClass,one,body);
-        //// 不需要传入，直接忽略
-        //String[] ignoreList = {"createdTime", "updatedTime", "deleted"};
-        //BeanUtils.copyProperties(o2, one, ignoreList);
-
-        //  检测manytoone id 是否存在
-        //DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityClass.getName());
-
-        //Map<String, Class> idOfEntityMap = dirtEntity.getIdOfEntityMap();
-        //Iterator<Map.Entry<String, Class>> iterator = idOfEntityMap.entrySet().iterator();
-        //while (iterator.hasNext()) {
-        //    Map.Entry<String, Class> next = iterator.next();
-        //    String key = next.getKey();
-        //
-        //    if (body.get(key) == null) continue;
-        //
-        //    Class targetClass = next.getValue();
-        //    Object o1 = objectMapper.convertValue(body.get(key), targetClass);
-        //    BaseIdEntity2 o = (BaseIdEntity2) body.get(key);
-        //    Long lid =o.getId();
-        //    Optional byId = persistProxy.findById(next.getValue(),lid);
-        //    if (!byId.isPresent())
-        //        throw new RuntimeException(dirtEntity.getDirtField(key).title() + ":" + lid + " 数据不存在");
-        //}
-        jpaRepository.save(one);
+        Object one = persistProxy.getOne(entityClass, o2.getId());
+        persistProxy.update(entityClass, one, body);
         return Result.ok();
 
     }
@@ -142,9 +124,9 @@ public class DirtController {
     public Result deleteByid(@RequestBody DeleteByIdReq req) throws ClassNotFoundException {
         String entityName = req.entityName;
         Long id = req.id;
-        Class<?> entityClass = Class.forName( entityName);
+        Class<?> entityClass = Class.forName(entityName);
 
-        persistProxy.deleteById(entityClass,id);
+        persistProxy.deleteById(entityClass, id);
         return Result.ok();
     }
 
@@ -162,9 +144,9 @@ public class DirtController {
     @Transactional
     public Result deleteByids(@RequestBody DeleteByidsReq req) throws ClassNotFoundException {
         String entityName = req.entityName;
-        Class<?> entityClass = Class.forName( entityName);
+        Class<?> entityClass = Class.forName(entityName);
         List<Long> ids = req.ids;
-        persistProxy.deleteByIds(entityClass,ids);
+        persistProxy.deleteByIds(entityClass, ids);
         return Result.ok();
     }
 
@@ -181,8 +163,8 @@ public class DirtController {
     @ApiOperation(value = "获取分页数据")
     @Transactional(readOnly = true)
     public Result page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
-        Class<?> entityClass = Class.forName( entityName);
-        Page all = persistProxy.findAll(entityClass,reqFilter.getSpec(), pageable);
+        Class<?> entityClass = Class.forName(entityName);
+        Page all = persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
         return Result.success(all);
     }
 
@@ -190,7 +172,7 @@ public class DirtController {
     @ApiOperation(value = "获取全量数据")
     @Transactional(readOnly = true)
     public Result fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
-        Class<?> entityClass = Class.forName( entityName);
+        Class<?> entityClass = Class.forName(entityName);
         List<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec());
         return Result.success(all);
     }
@@ -201,11 +183,11 @@ public class DirtController {
     @Transactional(readOnly = true)
     @SneakyThrows
     public Result getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) throws ClassNotFoundException {
-        Class<?> entityClass = Class.forName( entityName);
-        Object one = persistProxy.findById(entityClass,id);
-        if(((Optional) one).isPresent()){
+        Class<?> entityClass = Class.forName(entityName);
+        Object one = persistProxy.findById(entityClass, id);
+        if (((Optional) one).isPresent()) {
             return Result.success(((Optional) one).get());
-        }else {
+        } else {
             return Result.error(CodeMsg.ENTITY_ID_NOT_EXIST_ERROR);
         }
 
