@@ -89,7 +89,10 @@ export default (props) => {
           <Modal readOnly destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
             <Dirt entityName={idOfEntity}
               rowSelection={{
-              defaultSelectedRowKeys:vals?.map(v=>v.id),
+                getCheckboxProps: (record) => ({
+                  disabled: record.id === form.getFieldValue('id'), 
+                }),
+                defaultSelectedRowKeys: vals?.map(v => v.id),
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
                   // JPA compatiable

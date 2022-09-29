@@ -30,7 +30,7 @@ const dataAdapter = (ds, childAlias) => {
 export default function Dirt(props) {
   // excludeIds: default self id
   // excludeIds: default self id
-  let {entityName, onSelected, rowSelection, readOnly, excludeIds} = props;
+  let {entityName, onSelected, rowSelection, readOnly, excludeId} = props;
   rowSelection = rowSelection || {}
   let [columns, setColumns] = useState([]);
   let [columnKeyMap, setColumnKeyMap] = useState({})
@@ -149,7 +149,17 @@ export default function Dirt(props) {
 
 
   const searchAsyncWrapper = async (params = {}, sort, filter) => {
-    return network.searchAsync(entityName, columnKeyMap, params, sort, filter)
+    return  network.searchAsync(entityName, columnKeyMap, params, sort, filter)
+
+    // return new Promise(
+    //   (resolve, reject) => {
+    //     resolve({
+    //       data: result.data.filter(d => d.id != excludeId),
+    //       total: result.total,
+    //       success: result.success
+    //     });
+    //   }
+    // );
   }
 
   const generateCreateForm = () => {
@@ -316,16 +326,16 @@ export default function Dirt(props) {
         <span>
           已选 {selectedRowKeys.length} 项
           [{
-            selectedRowKeys.map(id =>customRender.readForm(id, entityName, id))
+            selectedRowKeys.map(id => customRender.readForm(id, entityName, id))
           }]
           <a href="#!" style={{marginInlineStart: 16}} onClick={() => network.deleteByIdsAsync(
             {
               entityName,
               ids: selectedRowKeys
-          }, () => {
-            onCleanSelected()
-            actionRef.current.reload()
-          }
+            }, () => {
+              onCleanSelected()
+              actionRef.current.reload()
+            }
           )}>远程删除</a>
           <a href="#!" style={{marginInlineStart: 16}} onClick={onCleanSelected}>导出数据</a>
           {onSelected && <a href="#!" style={{marginInlineStart: 16}} onClick={e => onSelected(selectedRows)}>选择</a>}

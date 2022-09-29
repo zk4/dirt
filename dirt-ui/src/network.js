@@ -195,6 +195,7 @@ const searchAsync = async (entityName, columnKeyMap, params = {}, sort, filter, 
   if (sortQuery.length)
     sortParams = `&sort=${sortQuery}`;
 
+  // params.pageNumber-1 从 0 页开始
   const pageParam = `&size=${params.pageSize}&page=${params.pageNumber-1}`
 
   let url = `http://127.0.0.1:8081/dirt/getDatas?entityName=${entityName}${pageParam}${sortParams}`;
