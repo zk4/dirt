@@ -63,6 +63,11 @@ public class DirtEntityType {
 
 
     public List<DirtFieldType> getHeads() {
+        lazyInit();
+        return heads;
+    }
+
+    private void lazyInit() {
         // TODO: 可静态的应该尽量静态化
         if (!inited) {
             initDirtFieldMap();
@@ -71,7 +76,6 @@ public class DirtEntityType {
             initHeads();
             inited = true;
         }
-        return heads;
     }
 
     private void initHeads() {
@@ -419,8 +423,7 @@ public class DirtEntityType {
     }
 
     private List<DirtFieldType> fromParameter(Parameter parameter) {
-        // 这里有顺序问题，
-        // DirtContext 收集 DirtEntity 过程中，会调用 this.dirtContet.getDirtEntity，很可能拿不到还拿到的 DirtEntity.
+        lazyInit();
         DirtEntityType dirtEntity = this.dirtContext.getDirtEntity(parameter.getType().getName());
         if(dirtEntity == null){
             System.out.println("bug here");
@@ -438,12 +441,14 @@ public class DirtEntityType {
     }
 
     public DirtActionType getAction(String name) {
+        lazyInit();
         DirtActionType dirtActionType = this.actionMap.get(name);
         if (dirtActionType == null) throw new RuntimeException("DirtActionType" + name + "不存在");
         return dirtActionType;
     }
 
     public DirtField getDirtField(String filedName) {
+        lazyInit();
         return this.dirtFieldMap.get(filedName);
     }
 

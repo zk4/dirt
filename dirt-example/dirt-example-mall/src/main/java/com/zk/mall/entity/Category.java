@@ -64,7 +64,7 @@ public class Category extends DirtBaseIdEntity {
     @NotNull
     private Integer level;
 
-    @DirtField(title = "图标地址" ,uiType = eUIType.avatar)
+    @DirtField(title = "图标地址" ,uiType = eUIType.imageUploader)
     private String icon;
 
     /**
