@@ -27,7 +27,7 @@ public class ControllerTest {
 
     @Test
     @Transactional
-    void controllerCreateTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    void controllerCreateTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException, IntrospectionException, InvocationTargetException {
         HashMap hashMap = new HashMap();
         hashMap.put("name", "刘正青");
         hashMap.put("nickname", "zk");
