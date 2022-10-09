@@ -423,7 +423,7 @@ public class DirtEntityType {
     }
 
     private List<DirtFieldType> fromParameter(Parameter parameter) {
-        lazyInit();
+
         DirtEntityType dirtEntity = this.dirtContext.getDirtEntity(parameter.getType().getName());
         if(dirtEntity == null){
             System.out.println("bug here");
