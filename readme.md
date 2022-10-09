@@ -1,8 +1,8 @@
-![Image by FlamingText.com](https://zk4bucket.oss-cn-beijing.aliyuncs.com/uPic/coollogo_com-6068193.png)
 
 
+![image-20221009133757493](https://zk4bucket.oss-cn-beijing.aliyuncs.com/uPic/image-20221009133757493.png)
 
-Dirt，通过 entity 生成企业级后端界面 schema。
+Dirt (Data In Reactive Table)，自动解析基于 entity  schema 生成企业级界面。
 
 
 
