@@ -10,23 +10,23 @@ import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Getter
 @Setter
-@Entity
+
 @DirtEntity("会员标签")
+@javax.persistence.Entity(name = "t_tag")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "t_tag")
+@Table(appliesTo = "t_tag",comment = "会员标签")
 @SQLDelete(sql = "UPDATE t_tag SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})

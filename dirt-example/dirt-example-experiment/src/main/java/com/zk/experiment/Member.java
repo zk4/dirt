@@ -17,7 +17,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.Validation;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Set;
@@ -237,6 +239,7 @@ public class Member extends DirtBaseIdEntity {
     @DirtEntity(visiable = false)
     static public class VerificationData {
         @DirtField(title = "权益模板 id")
+        @NotNull
         Long benefitId;
         @JsonIgnore
         Member member;
@@ -244,7 +247,16 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtAction(text = "核销")
     public void verification(@DirtArg("args") VerificationData args) {
+        Validation.buildDefaultValidatorFactory().getValidator().validate(args);
         args.setMember(this);
+        Boolean  found = false;
+        for (Benefit benefit : this.benefits) {
+            if(benefit.getId() == args.benefitId)
+                found = true;
+        }
+        if(!found){
+            throw new  RuntimeException("该会员无此权益");
+        }
         SpringUtil.getApplicationContext().publishEvent(args);
     }
 

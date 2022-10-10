@@ -58,6 +58,10 @@ public class Benefit extends DirtBaseIdEntity {
     Set<Member> members;
 
 
+    @DirtField(title = "次数限制")
+    Long maxCounts;
+
+
     @DirtAction(text = "详情")
     public void detail() {}
 

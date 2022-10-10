@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @ControllerAdvice
@@ -57,6 +58,12 @@ public class GlobalExceptionHandler   {
 		else if (e instanceof TransactionSystemException){
 			TransactionSystemException ex = (TransactionSystemException)e;
 			return Result.error(CodeMsg.SERVER_ERROR, Arrays.asList(ex.getRootCause().getLocalizedMessage()));
+
+		}
+		else if (e instanceof InvocationTargetException){
+			InvocationTargetException ex = (InvocationTargetException)e;
+
+			return Result.error(CodeMsg.SERVER_ERROR, ex.getTargetException().getLocalizedMessage());
 
 		}
 		else {
