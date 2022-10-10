@@ -20,20 +20,15 @@ public interface iPersistProxy  {
 
 	<T,ID>  T getOne(Class<T> clazz, ID id) ;
 
-
-
 	<ID>  void deleteById(Class clazz,ID id);
 
 	<ID>  void deleteByIds(Class clazz,List<ID> ids);
 
 	<T> Page<T> findAll(Class clazz,@Nullable Specification<T> spec, Pageable pageable);
 
-
 	<T> List<T> findAll(Class clazz,@Nullable Specification<T> spec);
 
-
 	<S extends T,T> S save(Class clazz,S entity);
-
 
     <T> void update(Class<?> rawType, T enhancedInstance, Map args) throws IntrospectionException, IllegalAccessException, InvocationTargetException;
 }

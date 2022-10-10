@@ -1,9 +1,6 @@
 package com.zk.experiment;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eUIType;
@@ -234,6 +231,23 @@ public class Member extends DirtBaseIdEntity {
         SpringUtil.getApplicationContext().publishEvent("hello");
         throw new RuntimeException("action error");
     }
+
+
+    @Data
+    @DirtEntity(visiable = false)
+    static public class VerificationData {
+        @DirtField(title = "权益模板 id")
+        Long benefitId;
+        @JsonIgnore
+        Member member;
+    }
+
+    @DirtAction(text = "核销")
+    public void verification(@DirtArg("args") VerificationData args) {
+        args.setMember(this);
+        SpringUtil.getApplicationContext().publishEvent(args);
+    }
+
 
 
 }
