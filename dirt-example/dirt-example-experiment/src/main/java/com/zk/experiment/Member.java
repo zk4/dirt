@@ -17,8 +17,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -240,17 +238,18 @@ public class Member extends DirtBaseIdEntity {
     @DirtEntity(visiable = false)
     static public class VerificationData {
         @DirtField(title = "权益模板 id")
-        //TODO: 不起作用，需要手工增加校验代码
         @NotNull
         Long benefitId;
         @JsonIgnore
         Member member;
     }
 
+
+
     @DirtAction(text = "核销")
     public void verification(@DirtArg("args") VerificationData args) {
 
-        System.out.println(validate);
+
         args.setMember(this);
         Boolean  found = false;
         for (Benefit benefit : this.benefits) {

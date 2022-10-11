@@ -4,13 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.annotation.DirtArg;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.groups.Default;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +24,21 @@ import java.util.stream.Collectors;
 public class ArgsUtil {
     public final static Object[] ZERO_OBJECT = new Object[]{};
 
+    public static <T> void validateEntity(T obj) {
+        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
+
+        Set<ConstraintViolation<T>> set = validator.validate(obj, Default.class);
+        if (!CollectionUtils.isEmpty(set)) {
+
+            Map<String, String> errorMsg = new HashMap<>();
+            for (ConstraintViolation<T> cv : set) {
+                errorMsg.put(cv.getPropertyPath().toString(), cv.getMessage());
+            }
+            throw new RuntimeException(errorMsg.toString());
+        }
+
+    }
     // convert {"a":1,"b":2} => [1,2] when function is someFunc(Object a,Object b){}
     public static Object[] mapToArray(ObjectMapper objectMapper, Parameter[] parameters, Map map) {
         if (parameters == null) {
@@ -37,7 +58,13 @@ public class ArgsUtil {
             }
             Object o = map.get(declaredAnnotation.value());
             args[i] = objectMapper.convertValue(o, type);
+
+            // JSR-303 validation check
+            validateEntity(args[i]);
         }
+
+
+
 
         return args;
     }
