@@ -100,9 +100,17 @@ export default (props) => {
           <Modal destroyOnClose={true} width={"80%"} height={"60%"} title={column.title} open={isModalOpen[columnKey]} onOk={e => handleOk(columnKey)} onCancel={e => handleCancel(columnKey)}>
             <DirtTable entityName={idOfEntity}
               rowSelection={{
-                getCheckboxProps: (record) => ({
-                  disabled: record.id === form.getFieldValue('id'),
-                }),
+                getCheckboxProps: (record) => {
+                  // let disabled = false
+                  // if (Array.isArray(vals)) {
+                  //   disabled = vals?.map(v => v.id).includes(record.id)
+                  // } else {
+                  //   disabled = record.id === vals?.id
+                  // }
+                  // return {
+                  //   disabled,
+                  // }
+                },
                 defaultSelectedRowKeys: vals ? Array.isArray(vals) ? vals.map(v => v.id) : [vals] : [],
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
