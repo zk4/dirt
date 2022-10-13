@@ -44,10 +44,6 @@ public class Member extends DirtBaseIdEntity {
     @Size(min = 2, max = 30)
     String name;
 
-    @DirtField(title = "真实姓名"    )
-    @NotEmpty
-    @Size(min = 2, max = 30)
-    String username;
 
 
     @DirtField(title = "会员昵称"    )
@@ -113,6 +109,10 @@ public class Member extends DirtBaseIdEntity {
 
     Set<Group> groups;
 
+    @DirtField(title = "用户 id")
+    @OneToOne
+    @JoinColumn(name="UserId")
+    User user;
 
     @ManyToOne
     @JoinColumn(name="enterpriseParentId")
@@ -167,6 +167,15 @@ public class Member extends DirtBaseIdEntity {
     Set<Benefit> benefits;
 
 
+    @DirtField(title = "卡数",dirtSubmit = {})
+    @Transient
+    Integer cardCounts;
+
+
+
+    public Integer getCardCounts(){
+        return  this.cards !=null ?this.cards.size():0;
+    }
 
     @DirtAction(text = "详情")
     public void detail() {}
