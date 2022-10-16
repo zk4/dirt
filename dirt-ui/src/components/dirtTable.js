@@ -218,6 +218,10 @@ export default function DirtTable(props) {
       // action
       const entries = Object.entries(action.argColumnsMap)
 
+      // action 是否显示
+      if (key in record && !record[key]) {
+        return
+      }
       if (entries.length == 0) {
         // 自定义 action 不带任何参数
         return <a key={key} onClick={() => {
@@ -240,8 +244,8 @@ export default function DirtTable(props) {
           })
         }
         } triggerCompoent={<a href="#!"> {text} </a>} />
-      }
 
+      }
     }
   }
 

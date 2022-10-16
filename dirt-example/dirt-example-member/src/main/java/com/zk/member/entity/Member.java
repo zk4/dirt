@@ -13,12 +13,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -162,12 +162,12 @@ public class Member extends DirtBaseIdEntity {
 
     }
 
-    @DirtAction(text = "带参",   confirm = true)
-    public void withArgs(WithArgsData args) {
 
+
+    @DirtAction(text = "带参", confirm = true)
+    public void withArgs(WithArgsData args) {
         this.name = args.name;
         this.gender2 = args.gender2;
-
     }
 
 

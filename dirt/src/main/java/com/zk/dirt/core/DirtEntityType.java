@@ -375,12 +375,12 @@ public class DirtEntityType {
             action.setValueType("option");
             action.setFixed("right");
 
-            //  每个中文字符给个10px，差不多了
+            //  每个中文字符给个9px，差不多了
             int counts = 0;
             for (String name : names) {
                 counts += name.length();
             }
-            action.setWidth(counts * 10 + names.size() * 5 + "px");
+            action.setWidth(counts * 9 + names.size()*2  + "px");
             action.setIndex(9999);
 
             action.setTitle("操作");

@@ -167,7 +167,7 @@ public class Member extends DirtBaseIdEntity {
     Set<Benefit> benefits;
 
 
-    @DirtField(title = "卡数",dirtSubmit = {})
+    @DirtField(title = "卡数",dirtSubmit = {},search = false)
     @Transient
     Integer cardCounts;
 
@@ -239,6 +239,14 @@ public class Member extends DirtBaseIdEntity {
         Long memberId;
 
 
+    }
+
+    @DirtActionFlag("withArgs")
+    @Transient
+    Boolean isWithArgs;
+
+    public Boolean getWithArgs() {
+        return this.name.length()<=2;
     }
 
     @DirtAction(text = "带参")

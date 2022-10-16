@@ -2,7 +2,6 @@ package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.core.eUIType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,28 +51,30 @@ public  class DirtBaseIdEntity implements Serializable {
 
 
     @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
-    @DirtField(title = "更新时间",
-            dirtSubmit = {},
-            uiType = eUIType.dateTime,
-            dirtSearch = @DirtSearch(
-                    title = "更新时间",
-                    valueType = eUIType.dateTimeRange
-            )
-    )
+    @JsonIgnore
+    //@DirtField(title = "更新时间",
+    //        dirtSubmit = {},
+    //        uiType = eUIType.dateTime,
+    //        dirtSearch = @DirtSearch(
+    //                title = "更新时间",
+    //                valueType = eUIType.dateTimeRange
+    //        )
+    //)
     protected LocalDateTime updatedTime;
 
 
     @Column(nullable = false,columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
     @OptimisticLock(excluded = true) // 不触发乐观锁
-    @DirtField(title = "创建时间",
-            dirtSubmit = {},
-
-            uiType = eUIType.dateTime,
-            dirtSearch = @DirtSearch(
-                    title = "创建时间",
-                    valueType = eUIType.dateTimeRange
-            )
-    )
+    @JsonIgnore
+    //@DirtField(title = "创建时间",
+    //        dirtSubmit = {},
+    //
+    //        uiType = eUIType.dateTime,
+    //        dirtSearch = @DirtSearch(
+    //                title = "创建时间",
+    //                valueType = eUIType.dateTimeRange
+    //        )
+    //)
     protected LocalDateTime createdTime;
 
 

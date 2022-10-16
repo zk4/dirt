@@ -16,4 +16,5 @@ public @interface DirtAction {
     String confirmMsg() default  "";
     // 是否需要确认操作
     boolean confirm() default  false;
+    Class ifShowClass() default  void.class;
 }
