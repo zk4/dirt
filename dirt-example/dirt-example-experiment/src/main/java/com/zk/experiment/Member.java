@@ -240,11 +240,9 @@ public class Member extends DirtBaseIdEntity {
 
 
     }
-
-
-    @Transient
-    Boolean isWithArgs;
-
+    // dynamic action
+    // treat method as field, getter function returning boolean decide if action name show
+    @JsonProperty
     public Boolean getWithArgs() {
         return this.name.length()<=2;
     }
