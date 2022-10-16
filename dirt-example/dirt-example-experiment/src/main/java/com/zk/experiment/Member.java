@@ -241,7 +241,7 @@ public class Member extends DirtBaseIdEntity {
 
     }
 
-    @DirtActionFlag("withArgs")
+
     @Transient
     Boolean isWithArgs;
 
