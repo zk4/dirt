@@ -31,7 +31,7 @@ export default function ({title, cls, id, name}) {
           else if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
             d.initialValue = <>
               {
-                data[dataIndex]?.map(c => {return customRender.readForm(title, cls2, id)})
+                data[dataIndex]?.map(c => {return customRender.readForm(title, cls2, c)})
               }
             </>
           } else {
