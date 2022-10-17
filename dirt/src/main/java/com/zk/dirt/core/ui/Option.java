@@ -1,6 +1,5 @@
 package com.zk.dirt.core.ui;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public class Option {
 	String label;
 	List<Option> children;
 	Boolean isLeaf;
-	Bool loading;
+	Boolean loading;
 
 	public Option(String value, String label) {
 		this.value = value;
