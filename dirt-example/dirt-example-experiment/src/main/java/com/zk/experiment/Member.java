@@ -265,7 +265,12 @@ public class Member extends DirtBaseIdEntity {
         Member member;
     }
 
+    @Transient
+    boolean isVerification;
 
+    public Boolean getVerification() {
+        return this.benefits.size()>0;
+    }
 
     @DirtAction(text = "核销")
     public void verification(@DirtArg("args") VerificationData args) {
