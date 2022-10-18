@@ -6,12 +6,12 @@ import {BetaSchemaForm, } from '@ant-design/pro-components';
 import network from '../logic/network'
 import Consts from "../consts/consts"
 import customRender from './customRender'
-import { isObj } from '../logic/util';
+import {isObj} from '../logic/util';
 
-export default function ({title, cls, id,name}) {
+export default function ({title, cls, id, name}) {
   let [formData, setFormData] = useState([])
   // 如果没有 name，则使用 id
-  if (name ==null) name = id
+  if (name == null) name = id
   const [show, setShow] = useState(false);
 
   useEffect(
@@ -20,7 +20,7 @@ export default function ({title, cls, id,name}) {
         let headers = await network.getTableHeadersAsync(cls)
         let data = await network.getDataAsync(cls, id)
         headers = headers.map(d => {
-          const {relation, idOfEntity: cls2, id, title,dataIndex} = d;
+          const {relation, idOfEntity: cls2, id, title, dataIndex} = d;
           if (relation === Consts.None) {
             d.initialValue = data[d.key];
           }
@@ -29,20 +29,15 @@ export default function ({title, cls, id,name}) {
             d.initialValue = customRender.readForm(title, cls2, data[dataIndex]?.id);
           }
           else if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
-            
-            // d.initialValue = <>
-            //   {
-            //     record[dataIndex]?.map(c => {return customRender.table(title, cls2, id)})
-            //   }
-            // </>
-            return <a>未实现</a>
-
+            d.initialValue = <>
+              {
+                data[dataIndex]?.map(c => {return customRender.readForm(title, cls2, c)})
+              }
+            </>
           } else {
             // why here ????
             debugger
           }
-
-          if(isObj(d.initialValue)) d.initialValue=0
 
           return d;
         }).sort((a, b) => a.index - b.index);

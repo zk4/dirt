@@ -30,7 +30,7 @@ public class MemberVerificationContext {
             Long aLong = verificationHistoryRepo.countAllByMember_IdAndBenefit_Id(arg.getMember().getId(),
                     arg.getBenefitId());
             if(aLong> benefit.getMaxCounts()){
-                throw new RuntimeException("超出次数");
+                throw new RuntimeException("权益超出次数，最多"+benefit.getMaxCounts()+"次!");
             }
             // 创建记录
             VerificationHistory verificationHistory = new VerificationHistory();

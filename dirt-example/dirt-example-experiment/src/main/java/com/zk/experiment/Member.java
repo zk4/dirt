@@ -167,7 +167,7 @@ public class Member extends DirtBaseIdEntity {
     Set<Benefit> benefits;
 
 
-    @DirtField(title = "卡数",dirtSubmit = {},search = false)
+    @DirtField(title = "卡数",dirtSubmit = {},search = false,sorter = false)
     @Transient
     Integer cardCounts;
 
@@ -240,18 +240,38 @@ public class Member extends DirtBaseIdEntity {
 
 
     }
-    // dynamic action
+    // dynamic action metaData
     // treat method as field, getter function returning boolean decide if action name show
     @JsonProperty
     public Boolean getWithArgs() {
+        return this.name.length()>2;
+    }
+
+    @DirtAction(text = "短名")
+    public void withArgs() {
+        this.name="无2";
+        SpringUtil.getApplicationContext().publishEvent("hello");
+
+    }
+
+    // dynamic action metaData
+    // treat method as field, getter function returning boolean decide if action name show
+    @JsonProperty
+    public Boolean getWithArgs2() {
         return this.name.length()<=2;
     }
 
-    @DirtAction(text = "带参")
-    public void withArgs(@DirtArg("args") WithArgsData args) {
-        this.name = args.name;
+    @DirtAction(text = "长名")
+    public void withArgs2() {
+        this.name="三个字2222";
         SpringUtil.getApplicationContext().publishEvent("hello");
-        throw new RuntimeException("action error");
+
+    }
+    @DirtAction(text = "带参")
+    public void withArgs3(@DirtArg("args") WithArgsData args) {
+        this.name=args.name;
+        SpringUtil.getApplicationContext().publishEvent("hello");
+
     }
 
 
