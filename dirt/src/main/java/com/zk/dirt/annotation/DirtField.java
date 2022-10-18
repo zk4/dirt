@@ -39,19 +39,22 @@ public @interface DirtField {
     // subTree　节点的　名字
     String subTreeName() default  "";
 
-
+    boolean metaData() default  false;
     // 表头排序
     int index() default 0;
     // 表头固定在左侧，相当于 excel 里的冻结
     String fixed() default  "";
 
+    // 超出是否省略
     boolean ellipsis() default  false;
 
+    // 是否可复制
     boolean copyable() default  false;
 
     // 排序函数，本地排序使用一个函数(参考 Array.sort 的 compareFunction)，需要服务端排序可设为 true
      boolean sorter() default  true;
 
+     // 以下两者任选一，不要同时选
     Class<? extends iEnumProvider>[] enumProvider() default {};
     Class<? extends iEnumText>[] enumListableType() default {};
 
