@@ -93,8 +93,8 @@ public class DirtEntityType {
                     MetaType metaType = getMetaType(field, dirtField);
 
                     // 如果 enable 为 false ，则不显示
-                    if(metaType!=null){
-                        return metaType.getEnable()!=null;
+                    if (metaType != null) {
+                        return metaType.getEnable() != null;
                     }
                     // 默认不过滤
                     return true;
@@ -106,16 +106,12 @@ public class DirtEntityType {
                     MetaType metaType = getMetaType(field, dirtField);
 
 
-                    DirtFieldType tableHeader = new DirtFieldType();
-                    if (metaType!=null) {
-                        tableHeader.setTitle(metaType.getTitle());
+                    DirtFieldType tableHeader = new DirtFieldType(metaType);
 
+                    if (dirtField.title().length() == 0) {
+                        tableHeader.setTitle(field.getName());
                     } else {
-                        if (dirtField.title().length() == 0) {
-                            tableHeader.setTitle(field.getName());
-                        } else {
-                            tableHeader.setTitle(dirtField.title());
-                        }
+                        tableHeader.setTitle(dirtField.title());
                     }
 
 
@@ -128,7 +124,9 @@ public class DirtEntityType {
                     tableHeader.setFixed(dirtField.fixed());
                     tableHeader.setEllipsis(dirtField.ellipsis());
                     tableHeader.setCopyable(dirtField.copyable());
+
                     tableHeader.setSearch(dirtField.search());
+
                     tableHeader.setOnFilter(dirtField.onFilter());
                     tableHeader.setFilters(dirtField.filters());
                     tableHeader.setHideInTable(dirtField.hideInTable());
@@ -398,7 +396,7 @@ public class DirtEntityType {
 
         if (this.actionMap.size() > 0) {
             ArrayList<String> names = new ArrayList<>(this.actionMap.keySet());
-            DirtFieldType action = new DirtFieldType();
+            DirtFieldType action = new DirtFieldType(null);
             action.setKey("option");
             action.setValueType("option");
             action.setFixed("right");

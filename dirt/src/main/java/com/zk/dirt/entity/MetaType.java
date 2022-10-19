@@ -45,12 +45,6 @@ public class MetaType extends DirtBaseIdEntity {
     Boolean enable;
 
     @DirtField
-    Boolean onFilter;
-    @DirtField
-    Boolean filters;
-    @DirtField
-    Boolean hideInTable;
-    @DirtField
     Boolean nullable;
     @DirtAction(text = "详情")
     public void detail() {

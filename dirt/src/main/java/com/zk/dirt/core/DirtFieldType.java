@@ -1,5 +1,6 @@
 package com.zk.dirt.core;
 
+import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 @Data
 public class DirtFieldType {
 
+    MetaType metaType;
     // 与 antd 中基本相同，但是支持通过传入一个方法
     String title;
 
@@ -112,10 +114,23 @@ public class DirtFieldType {
     String subTreeName;
 
 
-    // 在有 relation 时，onetomany 与 manytomany 按 column 排序就很尴尬。先禁了，有场景再说
+    //  构造时，传入 column 元数据，可以动态更改
+    public DirtFieldType(MetaType metaType) {
+        this.metaType = metaType;
+    }
+
+
+
     public Boolean getSearch() {
-        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany)
+        // 在有 relation 时，onetomany 与 manytomany 按 column 排序就很尴尬。先禁了，有场景再说
+        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany) {
             return false;
+        }
+        // 优先元数据
+        if (metaType != null) {
+            return metaType.getSearch();
+        }
+
         return search;
     }
 
@@ -138,4 +153,17 @@ public class DirtFieldType {
 
         return sorter;
     }
+
+    // meta
+
+    public String getTitle() {
+        if (metaType != null) {
+            return metaType.getTitle();
+
+        }
+        return title;
+    }
+
+
 }
+

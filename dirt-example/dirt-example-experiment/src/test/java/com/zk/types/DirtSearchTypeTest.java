@@ -10,7 +10,7 @@ public class DirtSearchTypeTest {
 
     @Test
     void name() {
-        DirtFieldType dirtFieldType = new DirtFieldType();
+        DirtFieldType dirtFieldType = new DirtFieldType(null);
         HashMap<String,String> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("hello", "hell");
         dirtFieldType.setValueEnum(objectObjectHashMap);
