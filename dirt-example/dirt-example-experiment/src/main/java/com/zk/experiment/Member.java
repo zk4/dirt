@@ -39,7 +39,7 @@ import java.util.Set;
 public class Member extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "真实姓名"    )
+    @DirtField(title = "真实姓名",metable = true)
     @NotEmpty
     @Size(min = 2, max = 30)
     String name;

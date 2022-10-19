@@ -2,6 +2,7 @@ package com.zk.dirt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.core.DirtContext;
+import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.util.ArgsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,12 @@ public class JPAPersistProxyImp implements iPersistProxy {
 
 	@Override
 	public <ID> Optional findByName(Class clazz, String name) {
-		return Optional.empty();
+
+		MetaType singleResult = entityManager.createQuery("SELECT * from metatype where name = ?1", MetaType.class)
+				.setParameter(1, name)
+				.getSingleResult();
+
+		return Optional.of(singleResult);
 	}
 
 	@Override

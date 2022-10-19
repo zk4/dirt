@@ -39,7 +39,8 @@ public @interface DirtField {
     // subTree　节点的　名字
     String subTreeName() default  "";
 
-    boolean metaData() default  false;
+    // 需要从元数据表读取字段描述
+    boolean metable() default  false;
     // 表头排序
     int index() default 0;
     // 表头固定在左侧，相当于 excel 里的冻结

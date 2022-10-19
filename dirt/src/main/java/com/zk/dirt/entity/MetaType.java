@@ -3,9 +3,11 @@ package com.zk.dirt.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.core.eUIType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -29,21 +31,24 @@ import javax.persistence.Table;
 @JsonIdentityInfo(scope = MetaType.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class MetaType extends DirtBaseIdEntity {
 
-    @DirtField
+    @DirtField(
+
+            uiType = eUIType.select, enumProvider = MetaTableProvider.class)
     String tableName;
     @DirtField
     String columnName;
     @DirtField
     String title;
     @DirtField
-    boolean search;
+    Boolean search;
     @DirtField
-    boolean onFilter;
+    Boolean onFilter;
     @DirtField
-    boolean filters;
+    Boolean filters;
     @DirtField
-    boolean hideInTable;
-
+    Boolean hideInTable;
+    @DirtField
+    Boolean nullable;
     @DirtAction(text = "详情")
     public void detail() {
     }

@@ -2,6 +2,7 @@ package com.zk.dirt.core;
 
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
+import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import com.zk.dirt.intef.iEnumProvider;
@@ -74,7 +75,7 @@ public class DirtEntityType {
             initIdOfEntityMap();
             initActionMap();
             initHeads();
-            inited = true;
+            //inited = true;
         }
     }
 
@@ -94,6 +95,18 @@ public class DirtEntityType {
                         tableHeader.setTitle(field.getName());
                     }else {
                         tableHeader.setTitle(dirtField.title());
+                    }
+
+                    if(dirtField.metable()){
+                        EntityManager em = applicationContext.getBean(EntityManager.class);
+
+
+                        MetaType singleResult = em
+                                .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
+                                .setParameter(1, field.getName())
+                                .getSingleResult();
+                         tableHeader.setTitle(singleResult.getTitle());
+
                     }
 
                     OneToMany oneToMany = field.getAnnotation(OneToMany.class);
@@ -162,11 +175,16 @@ public class DirtEntityType {
                             if (type.isAssignableFrom(LocalDateTime.class)) uiTypeStr = "dateTime";
                             else if (type.isAssignableFrom(LocalDate.class)) uiTypeStr = "date";
                             else if (type.isAssignableFrom(Long.class)) uiTypeStr = "digit";
+                            else if (type.isAssignableFrom(long.class)) uiTypeStr = "digit";
                             else if (type.isAssignableFrom(Integer.class)) uiTypeStr = "digit";
+                            else if (type.isAssignableFrom(int.class)) uiTypeStr = "digit";
                             else if (type.isAssignableFrom(Float.class)) uiTypeStr = "digit";
+                            else if (type.isAssignableFrom(float.class)) uiTypeStr = "digit";
                             else if (type.isAssignableFrom(Double.class)) uiTypeStr = "digit";
+                            else if (type.isAssignableFrom(double.class)) uiTypeStr = "digit";
                             else if (type.isAssignableFrom(BigDecimal.class)) uiTypeStr = "money";
                             else if (type.isAssignableFrom(Boolean.class)) uiTypeStr = "switch";
+                            else if (type.isAssignableFrom(boolean.class)) uiTypeStr = "switch";
 
                         }
                     }
