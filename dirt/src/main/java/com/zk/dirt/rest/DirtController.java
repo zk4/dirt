@@ -236,7 +236,7 @@ public class DirtController {
 
     @PostMapping("/dirt/getDirtFieldType")
     public DirtFieldType getDirtField(@RequestBody GetDirtFieldReq req ) {
-            return dirtContext.getDirtEntity(req.entityName).getFieldType(req.columnName,req.args);
+            return dirtContext.getDirtEntity(req.entityName).getFieldType(req.fieldName,req.args);
     }
     @Data
     @ApiModel("GetDirtFieldReq")
@@ -244,8 +244,8 @@ public class DirtController {
         @ApiModelProperty("实体名")
         String entityName;
 
-        @ApiModelProperty("列名")
-        String columnName;
+        @ApiModelProperty("field")
+        String fieldName;
 
         @ApiModelProperty("参数")
         Map args;

@@ -33,16 +33,17 @@ public class MetaType extends DirtBaseIdEntity {
 
 
 
-    @DirtField(uiType = eUIType.select, enumProvider = MetaTableProvider.class)
+    @DirtField(title = "实体全名",uiType = eUIType.select, enumProvider = MetaTableProvider.class)
     String tableName;
 
     @DirtField(
+            title = "column 名",
             uiType = eUIType.select,
             dirtDepends =@DirtDepends(onColumn = "tableName",dependsProvider = TableColumnsProvider.class)
     )
     String columnName;
 
-    @DirtField(title = "重命名",tooltip = "仅改变显示，不影响内部逻辑")
+    @DirtField(title = "column 重命名",tooltip = "仅改变显示，不影响内部逻辑")
     String title;
 
     @DirtField

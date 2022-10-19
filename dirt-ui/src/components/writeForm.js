@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {BetaSchemaForm} from '@ant-design/pro-components';
 import DirtTable from './dirtTable'
 import {Modal, Input, Button} from 'antd';
@@ -16,6 +16,8 @@ export default (props) => {
   // debugger
   // 有可能有多个 modal 需要保持状态，使用{}
   const [isModalOpen, setIsModalOpen] = useState({});
+  const [fieldName, setFieldName] = useState("");
+  
 
   const showModal = (name) => {
     setIsModalOpen(s => {return {...s, [name]: true}});
@@ -27,27 +29,32 @@ export default (props) => {
     setIsModalOpen(s => {return {...s, [name]: false}});
   };
 
-  //TODO: 组织创建表单的联动js 逻辑
-  let old = Object.assign({}, columns[columns.findIndex(c => c.key === 'columnName')])
-  columns[columns.findIndex(c => c.key === 'columnName')] = {
-    valueType: 'dependency',
-    name: ['tableName'],
-    columns:async (obj) => {
-      let type = obj.tableName
+  useEffect(()=>{
+    (async ()=>{
       let d = await network.getDirtFieldTypeAsync({
-        "args": {"tableName": "com.zk.dirt.entity.MetaType"},
-        "columnName": "tableName",
+        "args": {"tableName": "com.zk.experiment.Card"},
+        "fieldName": "columnName",
         "entityName": "com.zk.dirt.entity.MetaType"
       })
-      if (type) {
-        return [
-          d
-        ];
+      console.log(d)
+      //TODO: 组织创建表单的联动js 逻辑
+      let old = Object.assign({}, columns[columns.findIndex(c => c.key === 'columnName')])
+      columns[columns.findIndex(c => c.key === 'columnName')] = {
+        valueType: 'dependency',
+        name: ['tableName'],
+        columns: (obj) => {
+          let type = obj.tableName
+          setFieldName(type)
+          debugger
+          return [
+            d
+          ];
+          
+          // return [];
+        },
       }
-      return [old];
-      // return [];
-    },
-  }
+    })()
+  },[fieldName])
 
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
