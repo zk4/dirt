@@ -46,7 +46,7 @@ public class Member extends DirtBaseIdEntity {
 
 
 
-    @DirtField(title = "会员昵称"    )
+    @DirtField(title = "会员昵称" )
     @NotEmpty
     @Size(min = 2, max = 30)
     String nickname;
@@ -307,7 +307,4 @@ public class Member extends DirtBaseIdEntity {
         }
         SpringUtil.getApplicationContext().publishEvent(args);
     }
-
-
-
 }

@@ -36,6 +36,7 @@ public @interface DirtField {
     // 表头宽度, -1: auto
     eSubmitWidth width() default eSubmitWidth.MD;
 
+
     // subTree　节点的　名字
     String subTreeName() default  "";
 
@@ -58,6 +59,10 @@ public @interface DirtField {
      // 以下两者任选一，不要同时选
     Class<? extends iEnumProvider>[] enumProvider() default {};
     Class<? extends iEnumText>[] enumListableType() default {};
+
+
+    // 搜索表单相关
+    DirtDepends[] dirtDepends() default {};
 
     DirtHQLSource[] sourceProvider() default {};
 

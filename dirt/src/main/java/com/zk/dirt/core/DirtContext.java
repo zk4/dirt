@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ public class DirtContext {
     private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String, SimpleJpaRepository>();
     private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class, SimpleJpaRepository>();
     private final static Map<String, DirtViewType> nameEntityMap = new HashMap<String, DirtViewType>();
+    private final static Map<String, List<String>> nameColumns = new HashMap<String, List<String>>();
 
 
     public DirtContext() {
@@ -58,6 +60,7 @@ public class DirtContext {
                 if (nameDirtEntityMap.get(simpleName) != null) {
                     throw new RuntimeException("重复的 DirtEntity " + simpleName);
                 }
+
                 nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
                 nameClassMap.put(simpleName, classAnnotationClass);
 
@@ -75,12 +78,21 @@ public class DirtContext {
                     dirtViewType.setViewType(declaredAnnotation.viewType());
                     nameEntityMap.put(simpleName, dirtViewType);
                 }
+                // 表对应 columns
+                ArrayList<String> columns = new ArrayList<>();
+                Field[] declaredFields = classAnnotationClass.getDeclaredFields();
+                for (Field declaredField : declaredFields) {
+                    columns.add(declaredField.getName());
+                }
+                nameColumns.put(simpleName, columns);
             }
         }
         System.out.println(nameDirtEntityMap);
     }
 
-
+    public List<String>  getColumns(String className){
+        return nameColumns.get(className);
+    }
     public Class getClassByName(String name) {
         Class aClass = nameClassMap.get(name);
         ;

@@ -27,6 +27,24 @@ export default (props) => {
     setIsModalOpen(s => {return {...s, [name]: false}});
   };
 
+  columns.push ({
+    valueType: 'dependency',
+    name: ['tableName'],
+    columns: ( {tableName} ) => {
+      let type = tableName
+      if (type === 'com.zk.experiment.Card') {
+        return [
+          {
+            dataIndex: 'money',
+            title: '优惠金额',
+            width: 'm',
+            valueType: 'money',
+          },
+        ];
+      }
+      return [];
+    },
+  })
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 form

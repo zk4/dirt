@@ -31,21 +31,29 @@ import javax.persistence.Table;
 @JsonIdentityInfo(scope = MetaType.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class MetaType extends DirtBaseIdEntity {
 
-    @DirtField(
-            uiType = eUIType.select, enumProvider = MetaTableProvider.class)
+    @DirtField(uiType = eUIType.select, enumProvider = MetaTableProvider.class)
     String tableName;
+
     @DirtField
+    //        (
+    //        uiType = eUIType.select,
+    //        dirtDepends =@DirtDepends(dependsOnColumn = "tableName",dependsProvider = DependsProvider.class)
+    //)
     String columnName;
+
     @DirtField
     String title;
+
     @DirtField
     Boolean search;
 
     @DirtField
     Boolean enable;
+
     @DirtField
     // 在查询表单中不展示此项
     Boolean hideInSearch;
+
     @DirtField
     // 在 Table 中不展示此列
     Boolean hideInTable;

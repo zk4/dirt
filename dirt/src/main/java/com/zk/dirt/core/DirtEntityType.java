@@ -4,10 +4,12 @@ import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
+import com.zk.dirt.intef.iDependProvider;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.util.ExceptionUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
 import javax.persistence.*;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
  * 1. member field (states)
  * 2. acitons      (functions)
  */
+@Slf4j
 public class DirtEntityType {
 
     private Class<?> entityClass;
@@ -37,6 +40,10 @@ public class DirtEntityType {
     private List<DirtFieldType> heads = new ArrayList<>();
 
     private final Map<String, Class> idOfEntityMap = new HashMap<>();
+
+    private final Map<String, iDependProvider> dependProviderMap = new HashMap<>();
+
+
 
     ApplicationContext applicationContext;
 
@@ -57,7 +64,6 @@ public class DirtEntityType {
         if (type.getSuperclass() != null) {
             getAllFields(fields, type.getSuperclass());
         }
-
         return fields;
     }
 
@@ -87,6 +93,7 @@ public class DirtEntityType {
         // 实现类似 vue 里 computed 的效果
         this.heads = fields.stream()
                 .filter(field -> field.getDeclaredAnnotation(DirtField.class) != null)
+                // 不显示 metatype 禁用的数据
                 .filter(field -> {
                     DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
 
@@ -94,11 +101,28 @@ public class DirtEntityType {
 
                     // 如果 enable 为 false ，则不显示
                     if (metaType != null) {
-                        return metaType.getEnable();
+                        return metaType.getEnable()!=null? metaType.getEnable() : true;
                     }
                     // 为 null，则放过，使用默认 column 信息
                     return true;
                 })
+                // 不显示有 dependsOnColumn 没值的字段
+                // 同时记录请求获取方法
+                //.filter(field -> {
+                //    DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
+                //    DirtDepends[] dirtDepends = dirtField.dirtDepends();
+                //
+                //    // 维护方法列表  fieldName : iDependsProvider.class
+                //    if(dirtDepends.length>0){
+                //        DirtDepends dirtDepend = dirtDepends[0];
+                //
+                //        Class<? extends iDependProvider> aClass = dirtDepend.dependsProvider();
+                //        iDependProvider bean = applicationContext.getBean(aClass);
+                //        dependProviderMap.put(field.getName(),bean);
+                //
+                //    }
+                //    return dirtDepends.length==0;
+                //})
                 .map(field -> {
 
                     DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
@@ -237,7 +261,7 @@ public class DirtEntityType {
                                 }
 
                             } catch (Exception e) {
-                                System.err.println(e);
+                               e.printStackTrace();
                             }
                         }
                         DirtHQLSource[] dirtSources = dirtField.sourceProvider();
@@ -386,11 +410,14 @@ public class DirtEntityType {
         MetaType metaType = null;
         if (dirtField.metable()) {
             EntityManager em = applicationContext.getBean(EntityManager.class);
-
-            metaType = em
-                    .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
-                    .setParameter(1, field.getName())
-                    .getSingleResult();
+            try {
+                metaType = em
+                        .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
+                        .setParameter(1, field.getName())
+                        .getSingleResult();
+            }catch (Exception e ){
+                e.printStackTrace();
+            }
         }
         return metaType;
     }

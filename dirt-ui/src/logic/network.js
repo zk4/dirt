@@ -5,7 +5,7 @@ import {isObj} from './util'
 
 // respone拦截器
 
-axios.defaults.baseURL = 'http://127.0.0.1:8081/dirt/'
+axios.defaults.baseURL = 'http://192.168.99.17:8081/dirt/'
 
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
