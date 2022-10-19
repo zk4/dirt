@@ -34,6 +34,10 @@ public class DirtContext {
     public DirtContext() {
     }
 
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
 
     @PostConstruct
     public void init() throws ClassNotFoundException {

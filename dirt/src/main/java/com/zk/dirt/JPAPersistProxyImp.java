@@ -36,6 +36,11 @@ public class JPAPersistProxyImp implements iPersistProxy {
 	ObjectMapper objectMapper;
 
 	@Override
+	public <ID> Optional findByName(Class clazz, String name) {
+		return Optional.empty();
+	}
+
+	@Override
 	public <ID> Optional findById(Class clazz, ID id) {
 		SimpleJpaRepository jpaRepository = dirtContext.getRepoByType(clazz);
 		return jpaRepository.findById(id);

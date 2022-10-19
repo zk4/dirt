@@ -95,6 +95,7 @@ public class DirtEntityType {
                     }else {
                         tableHeader.setTitle(dirtField.title());
                     }
+
                     OneToMany oneToMany = field.getAnnotation(OneToMany.class);
                     ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
                     OneToOne oneToOne = field.getAnnotation(OneToOne.class);
