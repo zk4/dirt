@@ -62,7 +62,6 @@ public class DirtEntityType {
     }
 
 
-
     public List<DirtFieldType> getHeads() {
         lazyInit();
         return heads;
@@ -88,26 +87,37 @@ public class DirtEntityType {
         // 实现类似 vue 里 computed 的效果
         this.heads = fields.stream()
                 .filter(field -> field.getDeclaredAnnotation(DirtField.class) != null)
-                .map(field -> {
-                    DirtFieldType tableHeader = new DirtFieldType();
+                .filter(field -> {
                     DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
-                    if(dirtField.title().length()==0){
-                        tableHeader.setTitle(field.getName());
-                    }else {
-                        tableHeader.setTitle(dirtField.title());
+
+                    MetaType metaType = getMetaType(field, dirtField);
+
+                    // 如果 enable 为 false ，则不显示
+                    if(metaType!=null){
+                        return metaType.getEnable()!=null;
+                    }
+                    // 默认不过滤
+                    return true;
+                })
+                .map(field -> {
+
+                    DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
+
+                    MetaType metaType = getMetaType(field, dirtField);
+
+
+                    DirtFieldType tableHeader = new DirtFieldType();
+                    if (metaType!=null) {
+                        tableHeader.setTitle(metaType.getTitle());
+
+                    } else {
+                        if (dirtField.title().length() == 0) {
+                            tableHeader.setTitle(field.getName());
+                        } else {
+                            tableHeader.setTitle(dirtField.title());
+                        }
                     }
 
-                    if(dirtField.metable()){
-                        EntityManager em = applicationContext.getBean(EntityManager.class);
-
-
-                        MetaType singleResult = em
-                                .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
-                                .setParameter(1, field.getName())
-                                .getSingleResult();
-                         tableHeader.setTitle(singleResult.getTitle());
-
-                    }
 
                     OneToMany oneToMany = field.getAnnotation(OneToMany.class);
                     ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
@@ -126,7 +136,7 @@ public class DirtEntityType {
 
                     // 设置　subTree　name，支持每个 field　都不一样的复杂模型
                     String subTreeName = dirtField.subTreeName();
-                    if(subTreeName.length()>0){
+                    if (subTreeName.length() > 0) {
                         tableHeader.setSubTreeName(subTreeName);
                     }
 
@@ -137,14 +147,14 @@ public class DirtEntityType {
                         Class<? extends DirtBaseIdEntity> entityClass = classes[0];
                         String simpleName = entityClass.getName();
                         tableHeader.setIdOfEntity(simpleName);
-                    }else {
+                    } else {
                         //deduce Entity Type from Return Type if there is relations
 
 
-                        if(manyToOne!=null ||  oneToOne!=null){
+                        if (manyToOne != null || oneToOne != null) {
                             // 1 is from BaseEntity2
                             tableHeader.setIdOfEntity(field.getType().getName());
-                        }else if (manyToMany !=null || oneToMany!=null){
+                        } else if (manyToMany != null || oneToMany != null) {
                             // 2 is element container, like list<>  set<>,  maby map<?,?>
                             // TODO: parse Map
                             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
@@ -162,16 +172,15 @@ public class DirtEntityType {
                         }
 
 
-
                     }
                     String uiTypeStr = uiType.toString();
 
                     // set uiType  if value
-                    if (uiTypeStr!=null && uiTypeStr.equals("auto")) {
+                    if (uiTypeStr != null && uiTypeStr.equals("auto")) {
                         // 设置  uiType by rettype if uiType is not set
                         Class<?> type = fieldRetType;
                         // TODO: 如果 idOfEntity 不为 null，则不自动生成 uiType? 但好像也可以生成
-                        if (tableHeader.idOfEntity==null) {
+                        if (tableHeader.idOfEntity == null) {
                             if (type.isAssignableFrom(LocalDateTime.class)) uiTypeStr = "dateTime";
                             else if (type.isAssignableFrom(LocalDate.class)) uiTypeStr = "date";
                             else if (type.isAssignableFrom(Long.class)) uiTypeStr = "digit";
@@ -241,14 +250,14 @@ public class DirtEntityType {
                             List options = query.getResultList();
                             source = new LinkedHashMap();
                             for (Object option : options) {
-                                if(option instanceof  iDirtDictionaryEntryType){
+                                if (option instanceof iDirtDictionaryEntryType) {
                                     iDirtDictionaryEntryType option1 = (iDirtDictionaryEntryType) option;
                                     source.put(option1.getDictKey(),
                                             new DirtEnumValue(option1.getDictValue(),
                                                     option1.getDictKey(),
                                                     option1.getDictSort()
                                             ));
-                                }else {
+                                } else {
                                     Map option1 = (Map) option;
                                     // TODO: 不可这样写，需要与实现无关
                                     source.put(option1.get("dictKey"),
@@ -337,26 +346,26 @@ public class DirtEntityType {
 
                         //DirtEntityType dirtEntity = null;
                         //if (oneToMany != null || manyToMany != null) {
-                            //ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                            //Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-                            //if (actualTypeArguments.length == 1) {
-                                //Type actualTypeArgument = actualTypeArguments[0];
-                                //Class aClass = null;
-                                //try {
-                                //    aClass = Class.forName(actualTypeArgument.getTypeName());
-                                //} catch (ClassNotFoundException e) {
-                                //    e.printStackTrace();
-                                //}
+                        //ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                        //Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                        //if (actualTypeArguments.length == 1) {
+                        //Type actualTypeArgument = actualTypeArguments[0];
+                        //Class aClass = null;
+                        //try {
+                        //    aClass = Class.forName(actualTypeArgument.getTypeName());
+                        //} catch (ClassNotFoundException e) {
+                        //    e.printStackTrace();
+                        //}
 
-                                //DirtContext context = applicationContext.getBean(DirtContext.class);
-                                //dirtEntity = context.getDirtEntity(aClass.getName());
+                        //DirtContext context = applicationContext.getBean(DirtContext.class);
+                        //dirtEntity = context.getDirtEntity(aClass.getName());
 
-                            //}
+                        //}
                         //} else if (manyToOne != null || oneToOne != null) {
 
-                            //Class<?> ret = fieldRetType;
-                            //DirtContext context = applicationContext.getBean(DirtContext.class);
-                            //dirtEntity = context.getDirtEntity(ret.getName());
+                        //Class<?> ret = fieldRetType;
+                        //DirtContext context = applicationContext.getBean(DirtContext.class);
+                        //dirtEntity = context.getDirtEntity(ret.getName());
 
                         //}
                         //if (dirtEntity != null) {
@@ -399,7 +408,7 @@ public class DirtEntityType {
             for (String name : names) {
                 counts += name.length();
             }
-            action.setWidth(counts * 9 + names.size()*2  + "px");
+            action.setWidth(counts * 9 + names.size() * 2 + "px");
             action.setIndex(9999);
 
             action.setTitle("操作");
@@ -411,6 +420,19 @@ public class DirtEntityType {
         //  排序 header
         this.heads.sort(Comparator.comparingInt(DirtFieldType::getIndex));
 
+    }
+
+    private MetaType getMetaType(Field field, DirtField dirtField) {
+        MetaType metaType = null;
+        if (dirtField.metable()) {
+            EntityManager em = applicationContext.getBean(EntityManager.class);
+
+            metaType = em
+                    .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
+                    .setParameter(1, field.getName())
+                    .getSingleResult();
+        }
+        return metaType;
     }
 
     private void initActionMap() {
@@ -426,7 +448,7 @@ public class DirtEntityType {
 
                 Parameter[] parameters = declaredMethod.getParameters();
 
-                ExceptionUtils.conditionThrow(parameters.length<=1,"现在只支持一个参数，或没参数");
+                ExceptionUtils.conditionThrow(parameters.length <= 1, "现在只支持一个参数，或没参数");
 
                 if (parameters.length > 0) {
                     for (int i = 0; i < parameters.length; i++) {
@@ -444,7 +466,7 @@ public class DirtEntityType {
     private List<DirtFieldType> fromParameter(Parameter parameter) {
 
         DirtEntityType dirtEntity = this.dirtContext.getDirtEntity(parameter.getType().getName());
-        if(dirtEntity == null){
+        if (dirtEntity == null) {
             System.out.println("bug here");
         }
         return dirtEntity.getHeads();

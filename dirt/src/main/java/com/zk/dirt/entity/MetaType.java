@@ -32,7 +32,6 @@ import javax.persistence.Table;
 public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(
-
             uiType = eUIType.select, enumProvider = MetaTableProvider.class)
     String tableName;
     @DirtField
@@ -41,6 +40,10 @@ public class MetaType extends DirtBaseIdEntity {
     String title;
     @DirtField
     Boolean search;
+
+    @DirtField
+    Boolean enable;
+
     @DirtField
     Boolean onFilter;
     @DirtField
