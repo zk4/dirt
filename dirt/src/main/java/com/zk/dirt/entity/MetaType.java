@@ -38,7 +38,7 @@ public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(
             title = "column 名",
-            uiType = eUIType.select,
+            //uiType = eUIType.select,
             dirtDepends =@DirtDepends(onColumn = "tableName",dependsProvider = TableColumnsProvider.class)
     )
     String columnName;

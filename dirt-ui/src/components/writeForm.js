@@ -29,32 +29,32 @@ export default (props) => {
     setIsModalOpen(s => {return {...s, [name]: false}});
   };
 
-  useEffect(()=>{
-    (async ()=>{
-      let d = await network.getDirtFieldTypeAsync({
-        "args": {"tableName": "com.zk.experiment.Card"},
-        "fieldName": "columnName",
-        "entityName": "com.zk.dirt.entity.MetaType"
-      })
-      console.log(d)
-      //TODO: 组织创建表单的联动js 逻辑
-      let old = Object.assign({}, columns[columns.findIndex(c => c.key === 'columnName')])
-      columns[columns.findIndex(c => c.key === 'columnName')] = {
-        valueType: 'dependency',
-        name: ['tableName'],
-        columns: (obj) => {
-          let type = obj.tableName
-          setFieldName(type)
-          debugger
-          return [
-            d
-          ];
-          
-          // return [];
-        },
-      }
-    })()
-  },[fieldName])
+  // TODO: do not work 
+  // useEffect(()=>{
+  //   (async ()=>{
+  //     let d = await network.getDirtFieldTypeAsync({
+  //       "args": {"tableName": "com.zk.experiment.Card"},
+  //       "fieldName": "columnName",
+  //       "entityName": "com.zk.dirt.entity.MetaType"
+  //     })
+  //     //TODO: 组织创建表单的联动js 逻辑
+  //     let old = Object.assign({}, columns[columns.findIndex(c => c.key === 'columnName')])
+  //     columns[columns.findIndex(c => c.key === 'columnName')] = {
+  //       valueType: 'dependency',
+  //       name: ['tableName'],
+  //       columns: (obj) => {
+  //         let type = obj.tableName
+  //         setFieldName(type)
+  //         debugger
+  //         return [
+  //           d
+  //         ];
+  //
+  //         // return [];
+  //       },
+  //     }
+  //   })()
+  // },[fieldName])
 
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
