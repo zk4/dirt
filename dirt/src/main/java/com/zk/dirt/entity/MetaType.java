@@ -43,6 +43,15 @@ public class MetaType extends DirtBaseIdEntity {
 
     @DirtField
     Boolean enable;
+    @DirtField
+    // 在查询表单中不展示此项
+    Boolean hideInSearch;
+    @DirtField
+    // 在 Table 中不展示此列
+    Boolean hideInTable;
+    @DirtField
+    // 在 Form 中不展示此列
+    Boolean  hideInForm;
 
     @DirtField
     Boolean nullable;

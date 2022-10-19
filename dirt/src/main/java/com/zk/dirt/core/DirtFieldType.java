@@ -1,5 +1,6 @@
 package com.zk.dirt.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.util.Map;
 // https://ant.design/components/table-cn/#API
 @Data
 public class DirtFieldType {
-
+    @JsonIgnore
     MetaType metaType;
     // 与 antd 中基本相同，但是支持通过传入一个方法
     String title;
@@ -114,7 +115,7 @@ public class DirtFieldType {
     String subTreeName;
 
 
-    //  构造时，传入 column 元数据，可以动态更改
+    //  构造时，传入 column 元数据，可动态更改当前 schema 状态
     public DirtFieldType(MetaType metaType) {
         this.metaType = metaType;
     }
@@ -154,7 +155,7 @@ public class DirtFieldType {
         return sorter;
     }
 
-    // meta
+
 
     public String getTitle() {
         if (metaType != null) {
@@ -164,6 +165,19 @@ public class DirtFieldType {
         return title;
     }
 
+    public Boolean getHideInSearch() {
+        if (metaType != null) return metaType.getHideInSearch();
+        return hideInSearch;
+    }
 
+    public Boolean getHideInTable() {
+        if (metaType != null) return metaType.getHideInTable();
+        return hideInTable;
+    }
+
+    public Boolean getHideInForm() {
+        if (metaType != null) return metaType.getHideInForm();
+        return hideInForm;
+    }
 }
 

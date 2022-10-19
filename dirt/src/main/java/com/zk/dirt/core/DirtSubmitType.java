@@ -1,6 +1,7 @@
 package com.zk.dirt.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
 import lombok.Data;
 
@@ -12,11 +13,10 @@ import java.util.Map;
 @Data
 public class DirtSubmitType {
     @JsonIgnore
+    MetaType metaType;
+    @JsonIgnore
     DirtFieldType fieldType;
 
-    public DirtSubmitType(DirtFieldType fieldType) {
-        this.fieldType = fieldType;
-    }
 
     String width;
     Integer index;
@@ -49,6 +49,18 @@ public class DirtSubmitType {
 
 
     String subTreeName;
+
+
+
+    public DirtSubmitType(DirtFieldType fieldType, MetaType metaType) {
+        this.fieldType = fieldType;
+        this.metaType = metaType;
+    }
+
+    public String getTitle() {
+        if (metaType != null) return metaType.getTitle();
+         return title;
+    }
 
 
     public String getIdOfEntity() {

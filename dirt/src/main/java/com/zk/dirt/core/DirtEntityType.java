@@ -298,7 +298,7 @@ public class DirtEntityType {
                     DirtSubmit[] submitables = dirtField.dirtSubmit();
                     if (submitables.length != 0) {
                         DirtSubmit submitable = submitables[0];
-                        DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader);
+                        DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType);
                         tableHeader.setSubmitType(dirtSubmitType);
                         dirtSubmitType.setSubmitable(true);
                         try {
@@ -342,44 +342,6 @@ public class DirtEntityType {
                         if (initialValue != null)
                             dirtSubmitType.setInitialValue(initialValue);
 
-                        //DirtEntityType dirtEntity = null;
-                        //if (oneToMany != null || manyToMany != null) {
-                        //ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                        //Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-                        //if (actualTypeArguments.length == 1) {
-                        //Type actualTypeArgument = actualTypeArguments[0];
-                        //Class aClass = null;
-                        //try {
-                        //    aClass = Class.forName(actualTypeArgument.getTypeName());
-                        //} catch (ClassNotFoundException e) {
-                        //    e.printStackTrace();
-                        //}
-
-                        //DirtContext context = applicationContext.getBean(DirtContext.class);
-                        //dirtEntity = context.getDirtEntity(aClass.getName());
-
-                        //}
-                        //} else if (manyToOne != null || oneToOne != null) {
-
-                        //Class<?> ret = fieldRetType;
-                        //DirtContext context = applicationContext.getBean(DirtContext.class);
-                        //dirtEntity = context.getDirtEntity(ret.getName());
-
-                        //}
-                        //if (dirtEntity != null) {
-                        //    List<DirtFieldType> heads = dirtEntity.getHeads();
-                        //    ArrayList<Object> objects = new ArrayList<>();
-                        //
-                        //    HashMap<Object, Object> columns = new HashMap<>();
-                        //    columns.put("uiType", "group");
-                        //    columns.put("columns", heads.stream()
-                        //            .filter(dirtFieldType -> dirtFieldType.getSubmitType() != null)
-                        //            .map(DirtFieldType::getSubmitType).collect(Collectors.toList()));
-                        //    objects.add(columns);
-                        //
-                        //    dirtSubmitType.setColumns(objects);
-                        //
-                        //}
                         if (oneToMany != null)
                             tableHeader.setRelation(eDirtEntityRelation.OneToMany);
                         else if (oneToOne != null)
