@@ -1,10 +1,10 @@
 package com.zk.dirt.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.zk.dirt.DependsProvider;
 import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.annotation.DirtAction;
+import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
@@ -28,20 +28,19 @@ import javax.persistence.Table;
 @SQLDelete(sql = "UPDATE metatype SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = MetaType.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+//@JsonIdentityInfo(scope = MetaType.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(uiType = eUIType.select, enumProvider = MetaTableProvider.class)
     String tableName;
 
-    @DirtField
-    //        (
-    //        uiType = eUIType.select,
-    //        dirtDepends =@DirtDepends(dependsOnColumn = "tableName",dependsProvider = DependsProvider.class)
-    //)
+    @DirtField(
+            uiType = eUIType.select,
+            dirtDepends =@DirtDepends(dependsOnColumn = "tableName",dependsProvider = DependsProvider.class)
+    )
     String columnName;
 
-    @DirtField
+    @DirtField(title = "重命名",tooltip = "仅改变显示，不影响内部逻辑")
     String title;
 
     @DirtField

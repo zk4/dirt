@@ -117,6 +117,8 @@ export default function DirtTable(props) {
 
       // 形成 key 为键的 headers，方便一些取值，比如：在 searchForm 里生成 filter 参数时
       let maps = headers.reduce((a, c) => {a[c.key] = c; return a;}, columnKeyMap);
+
+
       setColumnKeyMap(maps)
 
       setColumns(headers)

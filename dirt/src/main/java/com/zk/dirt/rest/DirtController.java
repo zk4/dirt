@@ -229,5 +229,11 @@ public class DirtController {
         return dirtContext.getNameEntityMap();
     }
 
+    @GetMapping("/dirt/getDepends")
+    public Object getDepends(@RequestParam(name = "entityName") String entityName,@RequestParam(name = "depends") String depends) {
+
+    }
+
+
 
 }

@@ -27,7 +27,8 @@ export default (props) => {
     setIsModalOpen(s => {return {...s, [name]: false}});
   };
 
-  columns.push ({
+  //TODO: 组织创建表单的联动js 逻辑
+  columns[columns.findIndex(c =>c.key ==='columnName' )]= {
     valueType: 'dependency',
     name: ['tableName'],
     columns: ( {tableName} ) => {
@@ -44,7 +45,9 @@ export default (props) => {
       }
       return [];
     },
-  })
+  }
+
+  console.log(columns)
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 form
