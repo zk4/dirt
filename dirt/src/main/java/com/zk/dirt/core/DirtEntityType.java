@@ -94,9 +94,9 @@ public class DirtEntityType {
 
                     // 如果 enable 为 false ，则不显示
                     if (metaType != null) {
-                        return metaType.getEnable() != null;
+                        return metaType.getEnable();
                     }
-                    // 默认不过滤
+                    // 为 null，则放过，使用默认 column 信息
                     return true;
                 })
                 .map(field -> {
