@@ -57,10 +57,14 @@ public class DirtEntityType {
         this.entityClass = classAnnotationClass;
     }
 
-
+    /**
+     *  得到子类与所有父类的 field
+     * @param fields 返回值
+     * @param type 目标 class
+     * @return
+     */
     public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
         fields.addAll(Arrays.asList(type.getDeclaredFields()));
-
         if (type.getSuperclass() != null) {
             getAllFields(fields, type.getSuperclass());
         }
@@ -79,12 +83,13 @@ public class DirtEntityType {
             initDirtFieldMap();
             initIdOfEntityMap();
             initActionMap();
-            initHeads();
+            initSchema();
+            // TODO: 先不缓存，不然 metatype 不生效，回头再改成 lazy 形式
             //inited = true;
         }
     }
 
-    private void initHeads() {
+    private void initSchema() {
 
         List<Field> fields = new ArrayList<>();
         fields = getAllFields(fields, entityClass);
@@ -123,261 +128,7 @@ public class DirtEntityType {
                 //    }
                 //    return dirtDepends.length==0;
                 //})
-                .map(field -> {
-
-                    DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
-
-                    MetaType metaType = getMetaType(field, dirtField);
-
-
-                    DirtFieldType tableHeader = new DirtFieldType(metaType);
-
-                    if (dirtField.title().length() == 0) {
-                        tableHeader.setTitle(field.getName());
-                    } else {
-                        tableHeader.setTitle(dirtField.title());
-                    }
-
-
-                    OneToMany oneToMany = field.getAnnotation(OneToMany.class);
-                    ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
-                    OneToOne oneToOne = field.getAnnotation(OneToOne.class);
-                    ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
-
-                    tableHeader.setIndex(dirtField.index());
-                    tableHeader.setFixed(dirtField.fixed());
-                    tableHeader.setEllipsis(dirtField.ellipsis());
-                    tableHeader.setCopyable(dirtField.copyable());
-
-                    tableHeader.setSearch(dirtField.search());
-
-                    tableHeader.setOnFilter(dirtField.onFilter());
-                    tableHeader.setFilters(dirtField.filters());
-                    tableHeader.setHideInTable(dirtField.hideInTable());
-                    tableHeader.setSorter(dirtField.sorter());
-
-                    // 设置　subTree　name，支持每个 field　都不一样的复杂模型
-                    String subTreeName = dirtField.subTreeName();
-                    if (subTreeName.length() > 0) {
-                        tableHeader.setSubTreeName(subTreeName);
-                    }
-
-                    eUIType uiType = dirtField.uiType();
-                    Class<? extends DirtBaseIdEntity>[] classes = dirtField.idOfEntity();
-                    Class<?> fieldRetType = field.getType();
-                    if (classes.length > 0) {
-                        Class<? extends DirtBaseIdEntity> entityClass = classes[0];
-                        String simpleName = entityClass.getName();
-                        tableHeader.setIdOfEntity(simpleName);
-                    } else {
-                        //deduce Entity Type from Return Type if there is relations
-
-
-                        if (manyToOne != null || oneToOne != null) {
-                            // 1 is from BaseEntity2
-                            tableHeader.setIdOfEntity(field.getType().getName());
-                        } else if (manyToMany != null || oneToMany != null) {
-                            // 2 is element container, like list<>  set<>,  maby map<?,?>
-                            // TODO: parse Map
-                            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-                            if (actualTypeArguments.length == 1) {
-                                Type actualTypeArgument = actualTypeArguments[0];
-                                try {
-                                    Class aClass = Class.forName(actualTypeArgument.getTypeName());
-                                    tableHeader.setIdOfEntity(aClass.getName());
-                                } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-
-
-                    }
-                    String uiTypeStr = uiType.toString();
-
-                    // set uiType  if value
-                    if (uiTypeStr != null && uiTypeStr.equals("auto")) {
-                        // 设置  uiType by rettype if uiType is not set
-                        Class<?> type = fieldRetType;
-                        // TODO: 如果 idOfEntity 不为 null，则不自动生成 uiType? 但好像也可以生成
-                        if (tableHeader.idOfEntity == null) {
-                            if (type.isAssignableFrom(LocalDateTime.class)) uiTypeStr = "dateTime";
-                            else if (type.isAssignableFrom(LocalDate.class)) uiTypeStr = "date";
-                            else if (type.isAssignableFrom(Long.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(long.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(Integer.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(int.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(Float.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(float.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(Double.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(double.class)) uiTypeStr = "digit";
-                            else if (type.isAssignableFrom(BigDecimal.class)) uiTypeStr = "money";
-                            else if (type.isAssignableFrom(Boolean.class)) uiTypeStr = "switch";
-                            else if (type.isAssignableFrom(boolean.class)) uiTypeStr = "switch";
-
-                        }
-                    }
-                    tableHeader.setValueType(uiTypeStr);
-
-
-                    // 设置 valueEnum, initialValue
-                    Class<? extends iEnumProvider>[] providerClasses = dirtField
-                            .enumProvider();
-                    Map source = null;
-                    Object initialValue = null;
-
-                    if (providerClasses.length > 0) {
-                        Class<? extends iEnumProvider> providerClass = providerClasses[0];
-                        iEnumProvider enumProvider = applicationContext.getBean(providerClass);
-                        source = enumProvider.getSource();
-                        initialValue = enumProvider.initialValue();
-                    } else {
-                        // 如果没有提供 provider, 但又是枚举类型，且实现了 iDirtListable 接口，构造 source
-                        Class<? extends iEnumText> listableClass = null;
-
-                        boolean enumConstant = fieldRetType.isEnum();
-                        if (enumConstant) {
-                            Class enumType = fieldRetType;
-                            listableClass = enumType.asSubclass(iEnumText.class);
-                            // TODO： 位置调整一下，放上面一点
-                            tableHeader.setValueType("select");
-                        }
-                        Class<? extends iEnumText>[] classes1 = dirtField.enumListableType();
-                        if (classes1.length > 0) {
-                            listableClass = classes1[0];
-                        }
-                        if (listableClass != null) {
-
-                            try {
-                                iEnumText[] enumConstants = listableClass.getEnumConstants();
-                                source = new LinkedHashMap();
-                                for (iEnumText value : enumConstants) {
-                                    if (value.toString().equals("null")) {
-                                        System.out.println("");
-                                    }
-                                    source.put(value, new DirtEnumValue(value.getText(), value.toString(), ""));
-                                }
-
-                            } catch (Exception e) {
-                               e.printStackTrace();
-                            }
-                        }
-                        DirtHQLSource[] dirtSources = dirtField.sourceProvider();
-                        if (dirtSources.length > 0) {
-                            DirtHQLSource dirtSource = dirtSources[0];
-                            String hql = dirtSource.hql();
-                            Query query = applicationContext.getBean(EntityManager.class).createQuery(hql);
-                            List options = query.getResultList();
-                            source = new LinkedHashMap();
-                            for (Object option : options) {
-                                if (option instanceof iDirtDictionaryEntryType) {
-                                    iDirtDictionaryEntryType option1 = (iDirtDictionaryEntryType) option;
-                                    source.put(option1.getDictKey(),
-                                            new DirtEnumValue(option1.getDictValue(),
-                                                    option1.getDictKey(),
-                                                    option1.getDictSort()
-                                            ));
-                                } else {
-                                    Map option1 = (Map) option;
-                                    // TODO: 不可这样写，需要与实现无关
-                                    source.put(option1.get("dictKey"),
-                                            new DirtEnumValue(option1.get("dictValue"),
-                                                    option1.get("dictKey")
-                                            ));
-                                }
-                            }
-                        }
-                    }
-
-                    if (source != null)
-                        tableHeader.setValueEnum(source);
-
-
-                    if (initialValue != null)
-                        tableHeader.setInitialValue(initialValue);
-
-
-                    String name = field.getName();
-                    tableHeader.setKey(name);
-                    tableHeader.setDataIndex(name);
-
-                    String headerTooltip = dirtField.tooltip();
-                    tableHeader.setTooltip(headerTooltip);
-
-
-                    // dirt search -------------------------------------------
-                    DirtSearch[] dirtSearches = dirtField.dirtSearch();
-                    if (dirtSearches.length != 0) {
-                        DirtSearch dirtSearch = dirtSearches[0];
-                        DirtSearchType dirtSearchType = new DirtSearchType(tableHeader);
-                        tableHeader.setSearchType(dirtSearchType);
-
-                        dirtSearchType.setValueType(dirtSearch.valueType().toString());
-                        dirtSearchType.setOperator(dirtSearch.operator().toString());
-                    }
-
-                    //  dirt submit--------------------------------------------
-                    DirtSubmit[] submitables = dirtField.dirtSubmit();
-                    if (submitables.length != 0) {
-                        DirtSubmit submitable = submitables[0];
-                        DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType);
-                        tableHeader.setSubmitType(dirtSubmitType);
-                        dirtSubmitType.setSubmitable(true);
-                        try {
-                            ColProps colProps = submitable.colProps().newInstance();
-                            dirtSubmitType.setColProps(colProps);
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
-
-                        dirtSubmitType.setPlaceholder(submitable.placeholder());
-                        dirtSubmitType.setWidth(submitable.width().getValue());
-                        dirtSubmitType.setIndex(submitable.index());
-                        dirtSubmitType.setValueType(submitable.valueType().toString());
-                        HashMap formItemProps = new HashMap();
-
-                        // 兼容 JSR
-                        ArrayList<Map> rules = DirtRuleAnnotationConvertor.parseRules(field);
-                        if (rules != null && rules.size() > 0) {
-                            formItemProps.put("rules", rules);
-                            dirtSubmitType.setFormItemProps(formItemProps);
-                        }
-
-                        // 很重要，不然ProForm 提交时拿不到值
-                        assert name != null && name.length() > 0;
-                        dirtSubmitType.setKey(name);
-
-
-                        dirtSubmitType.setTooltip(headerTooltip);
-
-                        // WARNING. using dirtField title for submit label
-                        String submitlable = dirtField.title();
-                        if (submitlable.length() == 0) {
-                            submitlable = name;
-                        }
-                        dirtSubmitType.setTitle(submitlable);
-
-                        if (source != null)
-                            dirtSubmitType.setValueEnum(source);
-                        if (initialValue != null)
-                            dirtSubmitType.setInitialValue(initialValue);
-
-                        if (oneToMany != null)
-                            tableHeader.setRelation(eDirtEntityRelation.OneToMany);
-                        else if (oneToOne != null)
-                            tableHeader.setRelation(eDirtEntityRelation.OneToOne);
-                        else if (manyToOne != null)
-                            tableHeader.setRelation(eDirtEntityRelation.ManyToOne);
-                        else if (manyToMany != null)
-                            tableHeader.setRelation(eDirtEntityRelation.ManyToMany);
-
-                    }
-                    return tableHeader;
-                })
+                .map((Field field1) -> getFieldType(field1,null))
                 .collect(Collectors.toList());
 
         if (this.actionMap.size() > 0) {
@@ -404,6 +155,296 @@ public class DirtEntityType {
         //  排序 header
         this.heads.sort(Comparator.comparingInt(DirtFieldType::getIndex));
 
+    }
+
+    public DirtFieldType getFieldType(String fieldName, Map<String,Object> args) {
+
+        //TODO: duplicated code, optimize
+        List<Field> fields = new ArrayList<>();
+        fields = getAllFields(fields, entityClass);
+        for (Field field : fields) {
+            if(field.getName().equals(fieldName))
+                return getFieldType(field, args);
+        }
+        throw new RuntimeException("why here");
+    }
+        /**
+         *
+         * @param field  entity 的字段
+         * @param args   构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
+         * @return
+         */
+    public DirtFieldType getFieldType(Field field, Map<String,Object> args) {
+        DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
+
+        MetaType metaType = getMetaType(field, dirtField);
+
+        DirtFieldType tableHeader = new DirtFieldType(metaType);
+
+        if (dirtField.title().length() == 0) {
+            tableHeader.setTitle(field.getName());
+        } else {
+            tableHeader.setTitle(dirtField.title());
+        }
+
+
+        OneToMany oneToMany = field.getAnnotation(OneToMany.class);
+        ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
+        OneToOne oneToOne = field.getAnnotation(OneToOne.class);
+        ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
+
+        tableHeader.setIndex(dirtField.index());
+        tableHeader.setFixed(dirtField.fixed());
+        tableHeader.setEllipsis(dirtField.ellipsis());
+        tableHeader.setCopyable(dirtField.copyable());
+
+        tableHeader.setSearch(dirtField.search());
+
+        tableHeader.setOnFilter(dirtField.onFilter());
+        tableHeader.setFilters(dirtField.filters());
+        tableHeader.setHideInTable(dirtField.hideInTable());
+        tableHeader.setSorter(dirtField.sorter());
+
+        // 设置　subTree　name，支持每个 field　都不一样的复杂模型
+        String subTreeName = dirtField.subTreeName();
+        if (subTreeName.length() > 0) {
+            tableHeader.setSubTreeName(subTreeName);
+        }
+
+        eUIType uiType = dirtField.uiType();
+        Class<? extends DirtBaseIdEntity>[] classes = dirtField.idOfEntity();
+        Class<?> fieldRetType = field.getType();
+        if (classes.length > 0) {
+            Class<? extends DirtBaseIdEntity> entityClass = classes[0];
+            String simpleName = entityClass.getName();
+            tableHeader.setIdOfEntity(simpleName);
+        } else {
+            //deduce Entity Type from Return Type if there is relations
+
+
+            if (manyToOne != null || oneToOne != null) {
+                // 1 is from BaseEntity2
+                tableHeader.setIdOfEntity(field.getType().getName());
+            } else if (manyToMany != null || oneToMany != null) {
+                // 2 is element container, like list<>  set<>,  maby map<?,?>
+                // TODO: parse Map
+                ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                if (actualTypeArguments.length == 1) {
+                    Type actualTypeArgument = actualTypeArguments[0];
+                    try {
+                        Class aClass = Class.forName(actualTypeArgument.getTypeName());
+                        tableHeader.setIdOfEntity(aClass.getName());
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        String uiTypeStr = uiType.toString();
+
+        // set uiType  if value
+        if (uiTypeStr != null && uiTypeStr.equals("auto")) {
+            // 设置  uiType by rettype if uiType is not set
+            Class<?> type = fieldRetType;
+            // TODO: 如果 idOfEntity 不为 null，则不自动生成 uiType? 但好像也可以生成
+            if (tableHeader.idOfEntity == null) {
+                if (type.isAssignableFrom(LocalDateTime.class)) uiTypeStr = "dateTime";
+                else if (type.isAssignableFrom(LocalDate.class)) uiTypeStr = "date";
+                else if (type.isAssignableFrom(Long.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(long.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(Integer.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(int.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(Float.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(float.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(Double.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(double.class)) uiTypeStr = "digit";
+                else if (type.isAssignableFrom(BigDecimal.class)) uiTypeStr = "money";
+                else if (type.isAssignableFrom(Boolean.class)) uiTypeStr = "switch";
+                else if (type.isAssignableFrom(boolean.class)) uiTypeStr = "switch";
+
+            }
+        }
+        tableHeader.setValueType(uiTypeStr);
+
+        //-----------------------------------------
+        // 设置 valueEnum, initialValue
+        // 优先级：
+        // 1. 有参动态 provider，比如联动，需要依赖 args
+        // 2. 无参静态 provider
+        // 3. 枚举列表
+
+        Class<? extends iEnumProvider>[] providerClasses = dirtField
+                .enumProvider();
+
+        DirtDepends[] dirtDepends = dirtField.dirtDepends();
+
+        Map source = null;
+        Object initialValue = null;
+
+        // 1. 有参动态 provider，联动
+        if (dirtDepends.length>0 && args!=null && args.size()>0){
+            DirtDepends dependsAnnotation =  dirtDepends[0];
+            String onColumn = dependsAnnotation.onColumn();
+            if(!args.containsKey(onColumn)){
+                throw new RuntimeException("参数不够联动");
+            }
+            Class<? extends iDependProvider> aClass = dependsAnnotation.dependsProvider();
+            iDependProvider enumProvider = applicationContext.getBean(aClass);
+
+            source = enumProvider.getSource(args);
+            initialValue = enumProvider.initialValue();
+        }
+        // 2. 无参静态 provider
+        else if (providerClasses.length > 0) {
+            Class<? extends iEnumProvider> providerClass = providerClasses[0];
+            iEnumProvider enumProvider = applicationContext.getBean(providerClass);
+            source = enumProvider.getSource();
+            initialValue = enumProvider.initialValue();
+        } else {
+            // 如果没有提供 provider, 但又是枚举类型，且实现了 iDirtListable 接口，构造 source
+            Class<? extends iEnumText> listableClass = null;
+
+            boolean enumConstant = fieldRetType.isEnum();
+            if (enumConstant) {
+                Class enumType = fieldRetType;
+                listableClass = enumType.asSubclass(iEnumText.class);
+                // TODO： 位置调整一下，放上面一点
+                tableHeader.setValueType("select");
+            }
+            Class<? extends iEnumText>[] classes1 = dirtField.enumListableType();
+            if (classes1.length > 0) {
+                listableClass = classes1[0];
+            }
+            if (listableClass != null) {
+
+                try {
+                    iEnumText[] enumConstants = listableClass.getEnumConstants();
+                    source = new LinkedHashMap();
+                    for (iEnumText value : enumConstants) {
+                        if (value.toString().equals("null")) {
+                            System.out.println("");
+                        }
+                        source.put(value, new DirtEnumValue(value.getText(), value.toString(), ""));
+                    }
+
+                } catch (Exception e) {
+                   e.printStackTrace();
+                }
+            }
+            DirtHQLSource[] dirtSources = dirtField.sourceProvider();
+            if (dirtSources.length > 0) {
+                DirtHQLSource dirtSource = dirtSources[0];
+                String hql = dirtSource.hql();
+                Query query = applicationContext.getBean(EntityManager.class).createQuery(hql);
+                List options = query.getResultList();
+                source = new LinkedHashMap();
+                for (Object option : options) {
+                    if (option instanceof iDirtDictionaryEntryType) {
+                        iDirtDictionaryEntryType option1 = (iDirtDictionaryEntryType) option;
+                        source.put(option1.getDictKey(),
+                                new DirtEnumValue(option1.getDictValue(),
+                                        option1.getDictKey(),
+                                        option1.getDictSort()
+                                ));
+                    } else {
+                        Map option1 = (Map) option;
+                        // TODO: 不可这样写，需要与实现无关
+                        source.put(option1.get("dictKey"),
+                                new DirtEnumValue(option1.get("dictValue"),
+                                        option1.get("dictKey")
+                                ));
+                    }
+                }
+            }
+        }
+
+        if (source != null)
+            tableHeader.setValueEnum(source);
+
+
+        if (initialValue != null)
+            tableHeader.setInitialValue(initialValue);
+
+
+        String name = field.getName();
+        tableHeader.setKey(name);
+        tableHeader.setDataIndex(name);
+
+        String headerTooltip = dirtField.tooltip();
+        tableHeader.setTooltip(headerTooltip);
+
+
+        // dirt search -------------------------------------------
+        DirtSearch[] dirtSearches = dirtField.dirtSearch();
+        if (dirtSearches.length != 0) {
+            DirtSearch dirtSearch = dirtSearches[0];
+            DirtSearchType dirtSearchType = new DirtSearchType(tableHeader);
+            tableHeader.setSearchType(dirtSearchType);
+
+            dirtSearchType.setValueType(dirtSearch.valueType().toString());
+            dirtSearchType.setOperator(dirtSearch.operator().toString());
+        }
+
+        //  dirt submit--------------------------------------------
+        DirtSubmit[] submitables = dirtField.dirtSubmit();
+        if (submitables.length != 0) {
+            DirtSubmit submitable = submitables[0];
+            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType);
+            tableHeader.setSubmitType(dirtSubmitType);
+            dirtSubmitType.setSubmitable(true);
+            try {
+                ColProps colProps = submitable.colProps().newInstance();
+                dirtSubmitType.setColProps(colProps);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            dirtSubmitType.setPlaceholder(submitable.placeholder());
+            dirtSubmitType.setWidth(submitable.width().getValue());
+            dirtSubmitType.setIndex(submitable.index());
+            dirtSubmitType.setValueType(submitable.valueType().toString());
+            HashMap formItemProps = new HashMap();
+
+            // 兼容 JSR
+            ArrayList<Map> rules = DirtRuleAnnotationConvertor.parseRules(field);
+            if (rules != null && rules.size() > 0) {
+                formItemProps.put("rules", rules);
+                dirtSubmitType.setFormItemProps(formItemProps);
+            }
+
+            // 很重要，不然ProForm 提交时拿不到值
+            assert name != null && name.length() > 0;
+            dirtSubmitType.setKey(name);
+
+
+            dirtSubmitType.setTooltip(headerTooltip);
+
+            // WARNING. using dirtField title for submit label
+            String submitlable = dirtField.title();
+            if (submitlable.length() == 0) {
+                submitlable = name;
+            }
+            dirtSubmitType.setTitle(submitlable);
+
+            if (source != null)
+                dirtSubmitType.setValueEnum(source);
+            if (initialValue != null)
+                dirtSubmitType.setInitialValue(initialValue);
+
+            if (oneToMany != null)
+                tableHeader.setRelation(eDirtEntityRelation.OneToMany);
+            else if (oneToOne != null)
+                tableHeader.setRelation(eDirtEntityRelation.OneToOne);
+            else if (manyToOne != null)
+                tableHeader.setRelation(eDirtEntityRelation.ManyToOne);
+            else if (manyToMany != null)
+                tableHeader.setRelation(eDirtEntityRelation.ManyToMany);
+
+        }
+        return tableHeader;
     }
 
     private MetaType getMetaType(Field field, DirtField dirtField) {

@@ -1,7 +1,7 @@
 package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.DependsProvider;
+import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtDepends;
@@ -31,12 +31,14 @@ import javax.persistence.Table;
 //@JsonIdentityInfo(scope = MetaType.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class MetaType extends DirtBaseIdEntity {
 
+
+
     @DirtField(uiType = eUIType.select, enumProvider = MetaTableProvider.class)
     String tableName;
 
     @DirtField(
             uiType = eUIType.select,
-            dirtDepends =@DirtDepends(dependsOnColumn = "tableName",dependsProvider = DependsProvider.class)
+            dirtDepends =@DirtDepends(onColumn = "tableName",dependsProvider = TableColumnsProvider.class)
     )
     String columnName;
 

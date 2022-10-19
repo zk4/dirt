@@ -80,7 +80,6 @@ ManyToMany 多对多，关系任意，可重复
 1. [x] 自定义 action
 1. [x] 在一对多，多对多时，界面上增加区分创建与关联
 1. [x] 更新与创建关系时，只应该处理 id，不需要传递整个 entity
-1. [x] 完善 relation 的映射
 1. [x] 自动生成 以 id 为主导的关联代码，
     当前利用了 @JsonIdentityInfo，与 @JsonIdentityReference 两个注解。将 entity 转化成了 {id: xxx} 的形式。之所以用 IdObject， 是为了别名的扩展，
     如不显示 id，但要显示 name。但又觉得直接使用 id 也许会更方便，也可以统一 mbyatis 与 hibernate 的数据操作形式
@@ -100,6 +99,7 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] 在获取数据时，只获取需要显示的数据， 尤其是关联关系，只返回 id，或者 id list/set
 1. [ ] 抛出关键可 debug　的异常
 1. [ ] 元数据支持，一定程度上使 mysql 表字段带有动态功能。
+1. [ ] json filter 替代 DSL ，更结构化点
 ## 前端
 1. [x] 性能优化，如果 UI 未显示详情，不应该加载
 1. [x] 表格批量操作
@@ -113,7 +113,6 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] 梳理自动布局的标准
 1. [ ] 当前只支持一个参数名叫 args
 1. [ ] 通过 ws，与服务端在同一个状态机里处理事件 
-
 1. [ ] 动态生成 swagger，当前全是动态 api， 无法根据注解生成静态 swagger
 1. [ ] 根据 entity validate rule 将校验前置
 

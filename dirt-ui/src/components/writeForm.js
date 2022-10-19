@@ -28,26 +28,27 @@ export default (props) => {
   };
 
   //TODO: 组织创建表单的联动js 逻辑
-  columns[columns.findIndex(c =>c.key ==='columnName' )]= {
+  let old = Object.assign({}, columns[columns.findIndex(c => c.key === 'columnName')])
+  columns[columns.findIndex(c => c.key === 'columnName')] = {
     valueType: 'dependency',
     name: ['tableName'],
-    columns: ( {tableName} ) => {
-      let type = tableName
-      if (type === 'com.zk.experiment.Card') {
+    columns:async (obj) => {
+      let type = obj.tableName
+      let d = await network.getDirtFieldTypeAsync({
+        "args": {"tableName": "com.zk.dirt.entity.MetaType"},
+        "columnName": "tableName",
+        "entityName": "com.zk.dirt.entity.MetaType"
+      })
+      if (type) {
         return [
-          {
-            dataIndex: 'money',
-            title: '优惠金额',
-            width: 'm',
-            valueType: 'money',
-          },
+          d
         ];
       }
-      return [];
+      return [old];
+      // return [];
     },
   }
 
-  console.log(columns)
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 form

@@ -64,6 +64,12 @@ const actionAsync = async (postData, success_cb) => {
   success_cb && success_cb();
   return ret.data;
 }
+
+const getDirtFieldTypeAsync = async (postData, success_cb) => {
+  const ret = await axios.post(`getDirtFieldType`, postData)
+  success_cb && success_cb();
+  return ret.data;
+}
 const getFullDataslAsync = async (entityName, filter, success_cb) => {
   const ret = await axios.post(`getFullDatas?entityName=${entityName}`, {filter})
   success_cb && success_cb();
@@ -159,6 +165,7 @@ export default {
   createAsync,
   updateAsync,
   actionAsync,
+  getDirtFieldTypeAsync,
   searchFullAsync: getFullDataslAsync,
   searchAsync: getDatasAsync
 }

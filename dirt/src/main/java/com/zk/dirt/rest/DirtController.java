@@ -229,11 +229,25 @@ public class DirtController {
         return dirtContext.getNameEntityMap();
     }
 
-    @GetMapping("/dirt/getDepends")
-    public Object getDepends(@RequestParam(name = "entityName") String entityName,@RequestParam(name = "depends") String depends) {
+    //@GetMapping("/dirt/getDepends")
+    //public Object getDepends(@RequestParam(name = "entityName") String entityName,@RequestParam(name = "depends") String depends) {
+    //
+    //}
 
+    @PostMapping("/dirt/getDirtFieldType")
+    public DirtFieldType getDirtField(@RequestBody GetDirtFieldReq req ) {
+            return dirtContext.getDirtEntity(req.entityName).getFieldType(req.columnName,req.args);
     }
+    @Data
+    @ApiModel("GetDirtFieldReq")
+    static class GetDirtFieldReq {
+        @ApiModelProperty("实体名")
+        String entityName;
 
+        @ApiModelProperty("列名")
+        String columnName;
 
-
+        @ApiModelProperty("参数")
+        Map args;
+    }
 }

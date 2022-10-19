@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class DependsProvider implements iDependProvider<String, DirtEnumValue> {
+public class TableColumnsProvider implements iDependProvider<String, DirtEnumValue> {
 
     @Autowired
     EntityManager entityManager;
@@ -20,10 +20,10 @@ public class DependsProvider implements iDependProvider<String, DirtEnumValue> {
     @Autowired
     DirtContext dirtContext;
     @Override
-    public Map<String, DirtEnumValue> getSource(String name) {
+    public Map<String, DirtEnumValue> getSource(Map<String,Object> args) {
         HashMap source = new HashMap<Long, DirtEnumValue>();
-
-        List<String> columns = dirtContext.getColumns(name);
+        String  tableName = (String)args.get("tableName");
+        List<String> columns = dirtContext.getColumns(tableName);
 
         for (String column : columns) {
             source.put(column,
