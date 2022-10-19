@@ -16,8 +16,6 @@ import java.util.Optional;
  */
 public interface iPersistProxy  {
 
-	<ID> Optional findByName(Class clazz, String name);
-
 	<ID> Optional findById(Class clazz, ID id);
 
 	<T,ID>  T getOne(Class<T> clazz, ID id) ;
