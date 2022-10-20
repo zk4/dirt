@@ -12,7 +12,7 @@ axios.interceptors.response.use(function (res) {
   // 2xx 范围内的状态码都会触发该函数。
   // 对响应数据做点什么
   if (res.data.code === 0) {
-    // message.success('成功');
+    message.success('成功');
     return res.data;
   } else {
     const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;

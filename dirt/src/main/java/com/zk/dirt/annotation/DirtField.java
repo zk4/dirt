@@ -40,7 +40,9 @@ public @interface DirtField {
     // subTree　节点的　名字
     String subTreeName() default  "";
 
-    // 需要从元数据表读取字段描述
+    // 需要从元数据表读取字段描述，一是性能考虑，一是安全考虑
+    // 不是所有字段都不需要改 meta。
+    // 由开发者主动标识哪些可改。
     boolean metable() default  false;
     // 表头排序
     int index() default 0;
