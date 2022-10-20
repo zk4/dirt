@@ -28,11 +28,12 @@ UI schema 模型大部分用 antd 相关名词做定义。其他 UI 按照输出
 
 #### Action
 
-Action 应该仅针对 entity 的成员变量做处理。这就带来一个非常明显的好处。面向对象化。
-Action 的类型：
+Action 应该仅针对 entity 的成员变量做处理。这就带来一个非常明显的好处。数据一致性。有任何超出 entity 副作用。使用事件处理。
 
+>  在单体服务里，事件用同步事件。别给自己找麻烦。
 
 ### JPA 里关系概念
+
 OneToMany  一对多，不可重复
 ManyToOne  多对一，不可重复
 OneToOne   一对一，不可重复
@@ -60,9 +61,9 @@ ManyToMany 多对多，关系任意，可重复
 
 
 
-## 服务端 TODO
+## 服务端 Dirt 库 RoadMap
 
-[ ] 大架构图，描述核心架构
+### Version 0.0.1
 
 1. [x] 搜索
    1. [x] 过滤 基于 spring-filter 的过滤
@@ -77,20 +78,21 @@ ManyToMany 多对多，关系任意，可重复
    1. [x] 一对多支持,  可创建
 1. [x] 自定义 action
 1. [x] 在一对多，多对多时，界面上增加区分创建与关联
-1. [x] 更新与创建关系时，只应该处理 id，不需要传递整个 entity
-1. [ ] schema 标准化
+1. [x] 更新与创建关系时，只应该处理 id，不需要传递整个 entity，
+1. [x] 树状结构组织
+1. [ ] schema 标准化输出
 1. [ ] 业务事件驱动
+1. [ ] 完善的测试
+
+### Version 0.0.2
+
 1. [ ] 支持 JAVA 里其他映射类型，如 Map，Set，List
 1. [ ] 虚拟 entity 支持
 1. [ ] embeded 支持
 1. [ ] 输出表单联动 schema
-1. [ ] eFilterOperator 实现
+1. [ ] eFilterOperator 更全的实现
 1. [ ] action 动态返回显不显示的方案
-1. [ ] 树状结构组织
-1. [ ] 完善 search 字段的前端映射
-1. [ ] 完善 relation 的映射
-1. [ ] 当有 1 对多，多对1 ，1 对1 时，会生成唯一关系，是否要在 UI 层做明确表示
-1. [ ] 关系支持查询
+1. [ ] excel 导出
 
 ## 前端 T
 1. [x] 性能优化，如果 UI 未显示详情，不应该加载
@@ -108,11 +110,7 @@ ManyToMany 多对多，关系任意，可重复
 
 1. [ ] 动态生成 swagger，当前全是动态 api， 无法根据注解生成静态 swagger
 1. [ ] 根据 entity validate rule 将校验前置
-
-
-
-## 其他产品功能 TODO
-1. [ ] excel 导出
+1. [ ] 当有 1 对多，多对1 ，1 对1 时，会生成唯一关系，是否要在 UI 层做明确表示
 
 
 ## BUG
@@ -123,127 +121,12 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] action 提交表单时，丢失了 rules
 1. [x] objectMapper 不是 bug 的 bug， https://github.com/FasterXML/jackson-databind/issues/2868
        aInteger 会被当成 ainteger , （一个小写开头的camelcase）， 但是 anInteger 却可以正常解析。之所以这样，是因为要顾及 JavaBeans spec，比如 getUrl/setUrl => property name: url
-        
-
+   
    所以最好的解决办法，就是，别只以一个小写开头写 field property
-
+   
    
 
-根源跟踪：
-
-
-
-```java
- com.fasterxml.jackson.databind.introspect.POJOPropertiesCollector
- protected void collectAll(...){
-   ... 
-	_addFields(props);  //这一步没问题，构造了部分 props
-  _addMethods(props);  ///当 aInteger 时 这一步有问题
-   ...
-  }
-```
-
-aInteger 会解析出两个 props
-
-一个 prop的 property name 是 aInteger， 但没有 getter setter， 
-
-而另一个prop 的  property name  则为 ainteger ，且生成了 getter setter
-
-如下：
-
-```ini
-"aInteger" -> "[Property 'aInteger'; ctors: null, field(s): [field com.zk.dirt.util.ArgsUtilTest$CamelCaseData#aInteger][visible=false,ignore=false,explicitName=false], 
-getter(s): null, 
-setter(s): null]"
-```
-
-
-
-```ini
-"ainteger" -> "[Property 'ainteger'; ctors: null, field(s): null, 
-getter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#getAInteger(0 params)][visible=true,ignore=false,explicitName=false], 
-setter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#setAInteger(1 params)][visible=true,ignore=false,explicitName=false]]"
-```
-
-
-
- 而当 anInteger 时 props 只有一个值 
-
-```ini
-"anInteger" -> "[Property 'anInteger'; 
-ctors: null, 
-field(s): [field com.zk.dirt.util.ArgsUtilTest$CamelCaseData#anInteger][visible=false,ignore=false,explicitName=false], 
-getter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#getAnInteger(0 params)][visible=true,ignore=false,explicitName=false], 
-setter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#setAnInteger(1 params)][visible=true,ignore=false,explicitName=false]]"
-```
-
-
-
-而从 getter 推名字主要是以下方法
-
-```
-com.fasterxml.jackson.databind.util.BeanUtil
-implName = BeanUtil.okNameForRegularGetter(m, m.getName(), _stdBeanNaming);
-```
-
-
-
-在  okNameForRegularGetter 里有这样的注释，说明了为什么要这样处理一个小写字母开头的 field。
-
-```java
-// 17-Dec-2014, tatu: As per [databind#653], need to follow more
-//   closely Java Beans spec; specifically, if two first are upper-case,
-//   then no lower-casing should be done.
-if ((offset + 1) < end) {
-  if (Character.isUpperCase(basename.charAt(offset+1))) {
-    return basename.substring(offset);
-  }
-}
-```
-
-可以找到这个： https://github.com/fasterxml/jackson-databind/issues/653
-
-```ini
-JavaBeans spec:
-getUrl/setUrl => property name: url
-getURL/setURL => property name: URL
-
-Jackson:
-getUrl/setUrl => property name: url
-getURL/setURL => property name: url
-```
-
-而 [JavaBeans spec](https://download.oracle.com/otn-pub/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/beans.101.pdf?AuthParam=1662705279_f47591283f3d893b23340a328b484cf0) 的确如此这样规定。
-
-![image-20220909143521593](https://zk4bucket.oss-cn-beijing.aliyuncs.com/uPic/image-20220909143521593.png)
-
-
-
-做个简单测试：
-
-``` java
- @Test
-    void testGetterName() {
-        String ret = BeanUtil.okNameForRegularGetter(null, "getAInteger", true);
-        System.out.println(ret);  // AInteger
-         ret = BeanUtil.okNameForRegularGetter(null, "getAInteger", false);
-        System.out.println(ret);  // ainteger
-        ret = BeanUtil.okNameForRegularGetter(null, "getAnInteger", true);
-        System.out.println(ret);  // anInteger
-        ret = BeanUtil.okNameForRegularGetter(null, "getAnInteger", false);
-        System.out.println(ret);  // anInteger
-    }
-```
-
-
-
-
-
-
-
-
-
-## TIPS
+##  TIPS
 1. js object 与 json 不对称容易导致的 bug，比如： 从 java 返回 Map<Long,String>，序列化完就变成了 Map<String,String>，要特别注意。
        json 的 key 只能是字符串！且要有双引号，object 可以
 
