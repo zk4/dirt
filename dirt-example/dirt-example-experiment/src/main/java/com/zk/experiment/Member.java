@@ -191,6 +191,11 @@ public class Member extends DirtBaseIdEntity {
         this.nickname = RandomStringUtils.randomAlphabetic(13);
     }
 
+    @DirtAction(text = "haha",   confirm = true)
+    public void haha() {
+       this.phoneNumber ="xxxxx";
+    }
+
 
     @DirtField(title = "联合字段（名字-昵称)",dirtSubmit = {})
     @Transient

@@ -7,12 +7,34 @@ import {isObj} from './util'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8081/dirt/'
 
+function throttle(fn, delay) {
+  let last = 0 // 上次触发时间
+  return function (...args) {
+    const now = Date.now()
+    if (now - last > delay) {
+      last = now
+      fn.apply(this, args)
+    }
+  }
+}
+function debounce(fn, delay) {
+  let timer
+  return function (...args) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
+let suc=throttle( message.success ,5000)
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
   // 2xx 范围内的状态码都会触发该函数。
   // 对响应数据做点什么
   if (res.data.code === 0) {
-    message.success('成功');
+    suc('成功')
     return res.data;
   } else {
     const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;

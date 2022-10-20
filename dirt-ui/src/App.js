@@ -5,10 +5,7 @@ import Table from './components/dirtTable'
 import Tree from './components/tree'
 
 function App() {
-  // let [path] = useState(window.location.pathname.substr(1) || 'com.zk.experiment.Member')
   let [tables, setTables] = useState({})
-  // const [path, setPath] = useState(window.location.pathname.substr(1));
-  // const [name, setName] = useState('');
   const [view, setView] = useState(null);
   useEffect(() => {
     (async () => {

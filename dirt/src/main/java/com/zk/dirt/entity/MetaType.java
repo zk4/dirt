@@ -1,16 +1,13 @@
 package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.MetaTableProvider;
+import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.core.DirtContext;
-import com.zk.dirt.core.DirtEntityType;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.util.SpringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -86,16 +83,17 @@ public class MetaType extends DirtBaseIdEntity {
     @PrePersist
     @PreUpdate
     public void prePersist() {
-        DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
-        DirtEntityType dirtEntity = dirtContext.getDirtEntity(this.tableName);
-        DirtField dirtField = dirtEntity.getDirtField(this.columnName);
-        if(dirtField==null){
-            throw new RuntimeException("无此字段");
-        }
-        if (!dirtField.metable())
-            throw new RuntimeException("未在 DirtField 注解里开启 metable 属性。如果以前可以，可以由于版本更新去除了" +
-                    this.tableName + "." + this.columnName+
-                    "的 metable 属性，请联系开发人员");
+        // FIXME:  以下代码有环调用，再说吧。
+        //DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
+        //DirtEntityType dirtEntity = dirtContext.getDirtEntity(this.tableName);
+        //DirtField dirtField = dirtEntity.getDirtField(this.columnName);
+        //if(dirtField==null){
+        //    throw new RuntimeException("无此字段");
+        //}
+        //if (!dirtField.metable())
+        //    throw new RuntimeException("未在 DirtField 注解里开启 metable 属性。如果以前可以，可以由于版本更新去除了" +
+        //            this.tableName + "." + this.columnName+
+        //            "的 metable 属性，请联系开发人员");
 
     }
 
