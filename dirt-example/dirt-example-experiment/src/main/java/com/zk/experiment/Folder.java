@@ -22,7 +22,7 @@ public class Folder extends WindowFile {
     @DirtField
     private Integer fileCount;
 
-    @DirtField
+    @DirtField(metable = true)
     private String color;
 
 
