@@ -57,19 +57,6 @@ public class DirtEntityType {
         this.entityClass = classAnnotationClass;
     }
 
-    /**
-     *  得到子类与所有父类的 field
-     * @param fields 返回值
-     * @param type 目标 class
-     * @return
-     */
-    public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
-        fields.addAll(Arrays.asList(type.getDeclaredFields()));
-        if (type.getSuperclass() != null) {
-            getAllFields(fields, type.getSuperclass());
-        }
-        return fields;
-    }
 
 
     public List<DirtFieldType> getHeads() {
@@ -463,8 +450,8 @@ public class DirtEntityType {
         return metaType;
     }
 
-    private void initActionMap() {
-        for (Method declaredMethod : this.entityClass.getDeclaredMethods()) {
+    public static Map<String, DirtActionType>  getActionRecursively(Map<String, DirtActionType>  out,Class<?> clazz,DirtContext dirtContext){
+        for (Method declaredMethod : clazz.getDeclaredMethods()) {
             DirtAction actionAnnotation = declaredMethod.getAnnotation(DirtAction.class);
             if (actionAnnotation != null) {
                 // actionAnnotation 的参数只应该包含 primitive 类型
@@ -481,32 +468,61 @@ public class DirtEntityType {
                 if (parameters.length > 0) {
                     for (int i = 0; i < parameters.length; i++) {
                         Parameter parameter = parameters[i];
-                        List<DirtFieldType> dirtFieldTypes = this.fromParameter(parameter);
+                        DirtEntityType dirtEntity =  dirtContext.getDirtEntity(parameter.getType().getName());
+                        if (dirtEntity == null) {
+                            System.out.println("bug here");
+                        }
+
+
+                        List<DirtFieldType> dirtFieldTypes = dirtEntity.getHeads();
                         // FIXED: java 8 会保留 parameter 名字， java 11 会变成 arg0， arg 1
                         dirtActionType.getArgColumnsMap().put("args", dirtFieldTypes);
                     }
                 }
-                this.actionMap.put(declaredMethod.getName(), dirtActionType);
+                out.put(declaredMethod.getName(), dirtActionType);
             }
         }
+        if(clazz.getSuperclass()!=null)
+            getActionRecursively(out,clazz.getSuperclass(),dirtContext);
+        return out;
+    }
+    private void initActionMap() {
+        this.actionMap.clear();
+        getActionRecursively(this.actionMap, this.entityClass,dirtContext);
     }
 
-    private List<DirtFieldType> fromParameter(Parameter parameter) {
 
-        DirtEntityType dirtEntity = this.dirtContext.getDirtEntity(parameter.getType().getName());
-        if (dirtEntity == null) {
-            System.out.println("bug here");
+    /**
+     *  得到子类与所有父类的 field
+     * @param fields 返回值
+     * @param type 目标 class
+     * @return
+     */
+    public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
+        fields.addAll(Arrays.asList(type.getDeclaredFields()));
+        if (type.getSuperclass() != null) {
+            getAllFields(fields, type.getSuperclass());
         }
-        return dirtEntity.getHeads();
+        return fields;
     }
 
-    public void initDirtFieldMap() {
-        for (Field declaredField : this.entityClass.getDeclaredFields()) {
+    // 递归父类拿 DirtField
+    public static Map<String, DirtField> getFieldMapRecursively(Map<String, DirtField> out, Class<?> clazz){
+        for (Field declaredField : clazz.getDeclaredFields()) {
             DirtField dirtField = declaredField.getAnnotation(DirtField.class);
             if (dirtField != null) {
-                this.dirtFieldMap.put(declaredField.getName(), dirtField);
+                out.put(declaredField.getName(), dirtField);
             }
         }
+        if(clazz.getSuperclass()!=null)
+            getFieldMapRecursively(out,clazz.getSuperclass());
+
+        return out;
+
+    }
+    public void initDirtFieldMap() {
+        this.dirtFieldMap.clear();
+        getFieldMapRecursively(this.dirtFieldMap, this.entityClass);
     }
 
     public DirtActionType getAction(String name) {

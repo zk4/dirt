@@ -63,7 +63,7 @@ ManyToMany 多对多，关系任意，可重复
 
 ## 服务端 Dirt 库 RoadMap
 
-### Version 0.0.1
+### Version 0.1.0
 
 1. [x] 搜索
    1. [x] 过滤 基于 spring-filter 的过滤
@@ -80,11 +80,18 @@ ManyToMany 多对多，关系任意，可重复
 1. [x] 在一对多，多对多时，界面上增加区分创建与关联
 1. [x] 更新与创建关系时，只应该处理 id，不需要传递整个 entity，
 1. [x] 树状结构组织
+1. [x] 业务事件驱动 
 1. [ ] schema 标准化输出
-1. [ ] 业务事件驱动
+1. [ ] 内部接口调用接口结构化，而非DSL Filter, 
+1. [ ] 继承
+
+
+
+### Version 0.1.1
+
 1. [ ] 完善的测试
 
-### Version 0.0.2
+### Version 0.1.0
 
 1. [ ] 支持 JAVA 里其他映射类型，如 Map，Set，List
 1. [ ] 虚拟 entity 支持
@@ -95,12 +102,18 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] excel 导出
 
 ## 前端 T
+
+### Version 0.1.0 - react
+
 1. [x] 性能优化，如果 UI 未显示详情，不应该加载
 1. [x] 表格批量操作
 1. [x] 创建/修改表单自动处理多对一
 1. [x] 创建/修改表单自动处理一对多
 1. [x] 创建/修改表单自动处理一对一
 1. [x] 一对多时，可能是创建，也可能是关联
+
+### Version 0.1.0 - react
+
 1. [ ] 表单联动 schema
 1. [ ] 多种页面展现形式
 1. [ ] UI 无关，支持 mobile 与 pc ，响应式
@@ -111,7 +124,6 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] 动态生成 swagger，当前全是动态 api， 无法根据注解生成静态 swagger
 1. [ ] 根据 entity validate rule 将校验前置
 1. [ ] 当有 1 对多，多对1 ，1 对1 时，会生成唯一关系，是否要在 UI 层做明确表示
-
 
 ## BUG
 
@@ -124,13 +136,6 @@ ManyToMany 多对多，关系任意，可重复
    
    所以最好的解决办法，就是，别只以一个小写开头写 field property
    
-   
-
-##  TIPS
-1. js object 与 json 不对称容易导致的 bug，比如： 从 java 返回 Map<Long,String>，序列化完就变成了 Map<String,String>，要特别注意。
-       json 的 key 只能是字符串！且要有双引号，object 可以
-
-
 
 ## 参考
 
@@ -141,8 +146,6 @@ https://www.cnblogs.com/m78-seven/p/15399971.html
 ### spring ApplicationEvent 机制
 
 https://www.cnblogs.com/m78-seven/p/15417797.html
-
- 
 
 ### JPA RSQL version 2
 
