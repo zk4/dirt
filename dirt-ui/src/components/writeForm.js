@@ -58,7 +58,7 @@ export default (props) => {
 
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
-    // 自定义创建 form
+    // 自定义创建 formItem
     if (column.valueType === UIConsts.cascader) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         // debugger

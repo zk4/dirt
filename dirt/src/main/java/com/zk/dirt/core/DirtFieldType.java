@@ -131,37 +131,28 @@ public class DirtFieldType {
         if (metaType != null) {
             return metaType.getSearch();
         }
-
         return search;
     }
 
     public Boolean getFilters() {
-        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany)
-            return false;
+        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany) return false;
         return filters;
     }
 
     public Boolean getOnFilter() {
-        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany)
-            return false;
-
+        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany) return false;
         return onFilter;
     }
 
     public Boolean getSorter() {
-        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany)
-            return false;
-
+        if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany) return false;
         return sorter;
     }
 
 
 
     public String getTitle() {
-        if (metaType != null) {
-            return metaType.getTitle();
-
-        }
+        if (metaType != null) return metaType.getTitle();
         return title;
     }
 
