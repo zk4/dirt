@@ -286,6 +286,7 @@ public class Member extends DirtBaseIdEntity {
     }
 
     @Transient
+    @JsonIgnore
     boolean isVerification;
 
     public Boolean getVerification() {

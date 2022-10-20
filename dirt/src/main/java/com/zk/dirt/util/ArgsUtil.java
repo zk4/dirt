@@ -2,6 +2,7 @@ package com.zk.dirt.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.annotation.DirtArg;
+import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.CollectionUtils;
@@ -113,7 +114,9 @@ public class ArgsUtil {
 
         for (Field declaredField : rawType.getDeclaredFields()) {
             String fieldName = declaredField.getName();
-
+            //TODO:  这里需要用限制这样死的过滤么？
+            // 现在是为了解决如果增加了组合显示，需要声明一个 field 才能达到。如果将 DirtField 可以应用到函数上。这一段话是不是就可以省略
+            if(declaredField.getDeclaredAnnotation(DirtField.class)==null)continue;
             Method getter = new PropertyDescriptor(fieldName, rawType).getReadMethod();
 
             Object arg = getter.invoke(typedArgs);
