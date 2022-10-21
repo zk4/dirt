@@ -8,6 +8,7 @@ import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -35,6 +36,7 @@ public class MetaType extends DirtBaseIdEntity {
 
 
     @DirtField(title = "实体全名", uiType = eUIType.select, enumProvider = MetaTableProvider.class)
+    @ApiModelProperty(value = "实体全名")
     String tableName;
 
     @DirtField(
@@ -42,29 +44,23 @@ public class MetaType extends DirtBaseIdEntity {
             //uiType = eUIType.select,
             dirtDepends = @DirtDepends(onColumn = "tableName", dependsProvider = TableColumnsProvider.class)
     )
+    @ApiModelProperty(value = "列名")
     String columnName;
 
     @DirtField(title = "column 重命名", tooltip = "仅改变显示，不影响内部逻辑")
+    @ApiModelProperty(value = "列重命名")
     String title;
 
     @DirtField
+    @ApiModelProperty(value = "是否可搜索")
     Boolean search;
 
     @DirtField
+    @ApiModelProperty(value = "是否启用")
     Boolean enable;
 
     @DirtField
-    // 在查询表单中不展示此项
-            Boolean hideInSearch;
-
-    @DirtField
-    // 在 Table 中不展示此列
-            Boolean hideInTable;
-    @DirtField
-    // 在 Form 中不展示此列
-            Boolean hideInForm;
-
-    @DirtField
+    @ApiModelProperty(value = "是否可为空")
     Boolean nullable;
 
     @DirtAction(text = "详情")

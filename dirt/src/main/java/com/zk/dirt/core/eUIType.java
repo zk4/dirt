@@ -79,7 +79,7 @@ public enum eUIType {
     //颜色选择器
     color,
     //级联选择器
-    cascader, group, formList, slide;
+    cascader, group, formList, slide, option;
 
     @Override
     public String toString() {

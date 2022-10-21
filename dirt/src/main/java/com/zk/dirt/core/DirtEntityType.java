@@ -122,7 +122,7 @@ public class DirtEntityType {
             ArrayList<String> names = new ArrayList<>(this.actionMap.keySet());
             DirtFieldType action = new DirtFieldType(null);
             action.setKey("option");
-            action.setValueType("option");
+            action.setValueType(eUIType.option);
             action.setFixed("right");
 
             //  每个中文字符给个9px，差不多了
@@ -228,31 +228,31 @@ public class DirtEntityType {
                 }
             }
         }
-        String uiTypeStr = uiType.toString();
+
 
         // set uiType  if value
-        if (uiTypeStr != null && uiTypeStr.equals("auto")) {
+        if (  uiType == eUIType.auto) {
             // 设置  uiType by rettype if uiType is not set
             Class<?> type = fieldRetType;
             // TODO: 如果 idOfEntity 不为 null，则不自动生成 uiType? 但好像也可以生成
             if (tableHeader.idOfEntity == null) {
-                if (type.isAssignableFrom(LocalDateTime.class)) uiTypeStr = "dateTime";
-                else if (type.isAssignableFrom(LocalDate.class)) uiTypeStr = "date";
-                else if (type.isAssignableFrom(Long.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(long.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(Integer.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(int.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(Float.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(float.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(Double.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(double.class)) uiTypeStr = "digit";
-                else if (type.isAssignableFrom(BigDecimal.class)) uiTypeStr = "money";
-                else if (type.isAssignableFrom(Boolean.class)) uiTypeStr = "switch";
-                else if (type.isAssignableFrom(boolean.class)) uiTypeStr = "switch";
+                if (type.isAssignableFrom(LocalDateTime.class)) uiType = uiType.dateTime;
+                else if (type.isAssignableFrom(LocalDate.class)) uiType = uiType.date;
+                else if (type.isAssignableFrom(Long.class)) uiType = uiType.digit;
+                else if (type.isAssignableFrom(long.class)) uiType =  uiType.digit;
+                else if (type.isAssignableFrom(Integer.class)) uiType =  uiType.digit;
+                else if (type.isAssignableFrom(int.class)) uiType =  uiType.digit;
+                else if (type.isAssignableFrom(Float.class)) uiType =  uiType.digit;
+                else if (type.isAssignableFrom(float.class)) uiType =  uiType.digit;
+                else if (type.isAssignableFrom(Double.class)) uiType =  uiType.digit;
+                else if (type.isAssignableFrom(double.class)) uiType =  uiType.digit;
+                else if (type.isAssignableFrom(BigDecimal.class)) uiType =  uiType.money;
+                else if (type.isAssignableFrom(Boolean.class)) uiType = uiType.switching;
+                else if (type.isAssignableFrom(boolean.class)) uiType = uiType.switching;
 
             }
         }
-        tableHeader.setValueType(uiTypeStr);
+        tableHeader.setValueType(uiType);
 
         //-----------------------------------------
         // 设置 valueEnum, initialValue
@@ -297,7 +297,7 @@ public class DirtEntityType {
                 Class enumType = fieldRetType;
                 listableClass = enumType.asSubclass(iEnumText.class);
                 // TODO： 位置调整一下，放上面一点
-                tableHeader.setValueType("select");
+                tableHeader.setValueType(eUIType.select);
             }
             Class<? extends iEnumText>[] classes1 = dirtField.enumListableType();
             if (classes1.length > 0) {
@@ -369,7 +369,7 @@ public class DirtEntityType {
             DirtSearchType dirtSearchType = new DirtSearchType(tableHeader);
             tableHeader.setSearchType(dirtSearchType);
 
-            dirtSearchType.setValueType(dirtSearch.valueType().toString());
+            dirtSearchType.setValueType(dirtSearch.valueType());
             dirtSearchType.setOperator(dirtSearch.operator().toString());
         }
 
@@ -392,7 +392,7 @@ public class DirtEntityType {
             dirtSubmitType.setPlaceholder(submitable.placeholder());
             dirtSubmitType.setWidth(submitable.width().getValue());
             dirtSubmitType.setIndex(submitable.index());
-            dirtSubmitType.setValueType(submitable.valueType().toString());
+            dirtSubmitType.setValueType(submitable.valueType());
             HashMap formItemProps = new HashMap();
 
             // 兼容 JSR
