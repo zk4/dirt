@@ -9,18 +9,22 @@ axios.defaults.baseURL = 'http://127.0.0.1:8081/dirt/'
 
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
-  // 2xx 范围内的状态码都会触发该函数。
-  // 对响应数据做点什么
-  if (res.data.code === 0) {
-    // message.success('成功');
-    return res.data;
+  // compatiable with  wrapper response 
+  if (isObj(res) && 'data' in res && isObj(res.data) && 'code' in res.data) {
+    if (res.data.code === 0) {
+      // message.success('成功');
+      return res.data;
+    } else {
+      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
+      message.error(res.data.msg + ":" + reasson);
+      return Promise.reject(reasson);
+    }
+
   } else {
-    const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-    message.error(res.data.msg + ":" + reasson);
-    return Promise.reject(reasson);
+    return res;
   }
 }, function (error) {
-    message.error(error);
+  message.error(error);
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
   return Promise.reject(error);

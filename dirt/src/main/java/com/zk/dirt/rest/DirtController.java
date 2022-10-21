@@ -1,12 +1,10 @@
 package com.zk.dirt.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zk.config.rest.CodeMsg;
-import com.zk.config.rest.DoNotWrapperResult;
-import com.zk.config.rest.Result;
-import com.zk.config.rest.rsql.QueryFilter2;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
+import com.zk.dirt.conf.QueryFilter2;
 import com.zk.dirt.core.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iPersistProxy;
@@ -61,7 +59,7 @@ public class DirtController {
     @PostMapping("/dirt/action")
     @ApiOperation(value = "执行动作")
     @Transactional
-    public Result action(@RequestBody ActionReq req) throws IllegalAccessException, InvocationTargetException {
+    public void action(@RequestBody ActionReq req) throws IllegalAccessException, InvocationTargetException {
         String entityName = req.entityName;
         Long id = req.id;
         String actionName = req.actionName;
@@ -74,7 +72,6 @@ public class DirtController {
         Object[] argArrays = ArgsUtil.mapToArray(objectMapper, method.getParameters(), args);
         method.invoke(o2, argArrays);
         persistProxy.save(classByName, o2);
-        return Result.ok();
     }
 
     @Data
@@ -94,7 +91,7 @@ public class DirtController {
     @PostMapping("/dirt/create")
     @ApiOperation(value = "创建")
     @Transactional
-    public Result create(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException {
+    public void create(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {
@@ -107,13 +104,12 @@ public class DirtController {
         });
         DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
         persistProxy.update(entityClass, o2, body);
-        return Result.ok();
-    }
+        }
 
     @PostMapping("/dirt/update")
     @ApiOperation(value = "更新")
     @Transactional
-    public Result update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
+    public void update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
 
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
@@ -129,20 +125,18 @@ public class DirtController {
         DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
         Object one = persistProxy.getOne(entityClass, o2.getId());
         persistProxy.update(entityClass, one, body);
-        return Result.ok();
 
     }
 
     @PostMapping("/dirt/deleteById")
     @ApiOperation(value = "根据 id 删除")
     @Transactional
-    public Result deleteByid(@RequestBody DeleteByIdReq req) throws ClassNotFoundException {
+    public void deleteByid(@RequestBody DeleteByIdReq req) throws ClassNotFoundException {
         String entityName = req.entityName;
         Long id = req.id;
         Class<?> entityClass = Class.forName(entityName);
 
         persistProxy.deleteById(entityClass, id);
-        return Result.ok();
     }
 
     @Data
@@ -157,12 +151,12 @@ public class DirtController {
     @PostMapping("/dirt/deleteByIds")
     @ApiOperation(value = "根据 ids 批量删除")
     @Transactional
-    public Result deleteByids(@RequestBody DeleteByidsReq req) throws ClassNotFoundException {
+    public void deleteByids(@RequestBody DeleteByidsReq req) throws ClassNotFoundException {
         String entityName = req.entityName;
         Class<?> entityClass = Class.forName(entityName);
         List<Long> ids = req.ids;
         persistProxy.deleteByIds(entityClass, ids);
-        return Result.ok();
+
     }
 
     @Data
@@ -177,19 +171,17 @@ public class DirtController {
     @PostMapping("/dirt/getDatas")
     @ApiOperation(value = "获取分页数据")
     @Transactional(readOnly = true)
-    public Result page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+    public Page  page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
-        Page all = persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
-        return Result.success(all);
+        return  persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
     }
 
     @PostMapping("/dirt/getFullDatas")
     @ApiOperation(value = "获取全量数据")
     @Transactional(readOnly = true)
-    public Result fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+    public List fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
-        List<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec());
-        return Result.success(all);
+        return  persistProxy.findAll(entityClass, reqFilter.getSpec());
     }
 
 
@@ -197,24 +189,18 @@ public class DirtController {
     @ApiOperation(value = "获取单条数据")
     @Transactional(readOnly = true)
     @SneakyThrows
-    public Result getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) throws ClassNotFoundException {
+    public Object getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         Object one = persistProxy.findById(entityClass, id);
-        if (((Optional) one).isPresent()) {
-            return Result.success(((Optional) one).get());
-        } else {
-            return Result.error(CodeMsg.ENTITY_ID_NOT_EXIST_ERROR);
-        }
-
+        return ((Optional) one).get();
     }
 
     @GetMapping("/dirt/getEntitySchema")
     @ApiOperation(value = "获取标准 schema")
-    @DoNotWrapperResult
-    public Result getTableHeaders(@RequestParam(name = "entityName") String entityName) throws ClassNotFoundException {
+    public Object getTableHeaders(@RequestParam(name = "entityName") String entityName) throws ClassNotFoundException, JsonProcessingException {
         DirtEntityType bySimpleName = dirtContext.getDirtEntity(entityName);
         List<DirtFieldType> heads = bySimpleName.getHeads();
-        return Result.success(heads);
+        return objectMapper.writeValueAsString(heads);
     }
 
 
@@ -225,14 +211,10 @@ public class DirtController {
 
 
     @GetMapping("/dirt/getTableMaps")
+    @ApiOperation(value = "getTableMaps")
     public Map<String, DirtViewType> getTableMaps() {
         return dirtContext.getNameEntityMap();
     }
-
-    //@GetMapping("/dirt/getDepends")
-    //public Object getDepends(@RequestParam(name = "entityName") String entityName,@RequestParam(name = "depends") String depends) {
-    //
-    //}
 
     @PostMapping("/dirt/getDirtFieldType")
     public DirtFieldType getDirtField(@RequestBody GetDirtFieldReq req ) {

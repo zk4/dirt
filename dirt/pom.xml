@@ -14,10 +14,10 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>com.dirt</groupId>
-            <artifactId>dirt-common-core</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.dirt</groupId>-->
+            <!--<artifactId>dirt-common-core</artifactId>-->
+        <!--</dependency>-->
 
         <!--knife4j swagger -->
         <dependency>
