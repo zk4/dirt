@@ -1,5 +1,7 @@
 package com.zk.config.rest;
 
+import com.zk.config.rest.wrapper.CodeMsg;
+
 public class GlobalException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

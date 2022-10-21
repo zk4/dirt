@@ -1,7 +1,7 @@
 package com.zk;
 
 import com.google.common.collect.ImmutableMap;
-import com.zk.config.rest.Result;
+import com.zk.config.rest.wrapper.Result;
 import com.zk.dirt.rest.DirtController;
 import com.zk.experiment.Member;
 import org.junit.jupiter.api.Assertions;

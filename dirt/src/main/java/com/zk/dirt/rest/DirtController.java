@@ -1,10 +1,10 @@
 package com.zk.dirt.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zk.config.rest.CodeMsg;
-import com.zk.config.rest.DoNotWrapperResult;
-import com.zk.config.rest.Result;
-import com.zk.config.rest.rsql.QueryFilter2;
+import com.zk.config.rest.wrapper.CodeMsg;
+import com.zk.config.rest.wrapper.DoNotWrapperResult;
+import com.zk.config.rest.wrapper.Result;
+import com.zk.config.rest.rsql.QueryFilter;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.*;
@@ -177,7 +177,7 @@ public class DirtController {
     @PostMapping("/dirt/getDatas")
     @ApiOperation(value = "获取分页数据")
     @Transactional(readOnly = true)
-    public Result page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+    public Result page(@RequestBody QueryFilter reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         Page all = persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
         return Result.success(all);
@@ -186,7 +186,7 @@ public class DirtController {
     @PostMapping("/dirt/getFullDatas")
     @ApiOperation(value = "获取全量数据")
     @Transactional(readOnly = true)
-    public Result fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+    public Result fullData(@RequestBody QueryFilter reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         List<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec());
         return Result.success(all);

@@ -1,4 +1,4 @@
-package com.zk.dirt.core;
+package com.zk.dirt.rule;
 
 import lombok.Data;
 
