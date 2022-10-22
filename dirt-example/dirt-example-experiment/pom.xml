@@ -20,13 +20,18 @@
             <version>1.4.9</version>
             <scope>test</scope>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.dirt</groupId>-->
+            <!--<artifactId>spring-boot-starter-dirt</artifactId>-->
+            <!--<version>0.0.1.BETA</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.dirt</groupId>-->
+            <!--<artifactId>dirt-common-core</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.dirt</groupId>
             <artifactId>dirt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.dirt</groupId>
-            <artifactId>dirt-common-core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

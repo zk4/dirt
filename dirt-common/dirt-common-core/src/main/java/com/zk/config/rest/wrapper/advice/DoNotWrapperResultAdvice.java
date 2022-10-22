@@ -1,5 +1,6 @@
-package com.zk.config.rest;
+package com.zk.config.rest.wrapper.advice;
 
+import com.zk.config.rest.wrapper.Result;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

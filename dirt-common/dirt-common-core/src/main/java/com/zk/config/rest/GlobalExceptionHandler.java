@@ -1,5 +1,7 @@
 package com.zk.config.rest;
 
+import com.zk.config.rest.wrapper.CodeMsg;
+import com.zk.config.rest.wrapper.Result;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.BindException;

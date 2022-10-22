@@ -2,7 +2,7 @@ package com.zk.dirt.core;
 
 
 import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtScanPacakge;
+import com.zk.dirt.annotation.DirtScanPackage;
 import com.zk.dirt.util.PackageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -45,7 +45,7 @@ public class DirtContext {
     public void init() throws ClassNotFoundException {
         String mainClassName = PackageUtil.getMainClassName();
         Class<?> aClass = Class.forName(mainClassName);
-        DirtScanPacakge scanPackageAnno = (DirtScanPacakge) aClass.getDeclaredAnnotation(DirtScanPacakge.class);
+        DirtScanPackage scanPackageAnno = (DirtScanPackage) aClass.getDeclaredAnnotation(DirtScanPackage.class);
         // default is "com.zk"
         String[] scanPackages = new String[]{"com.zk"};
         if (scanPackageAnno != null) {

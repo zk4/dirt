@@ -2,7 +2,7 @@ package com.zk;
 
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.zk.dirt.annotation.DirtScanPacakge;
+import com.zk.dirt.annotation.DirtScanPackage;
 import com.zk.dirt.util.SpringUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +14,7 @@ import static com.zk.utils.StartUtils.logApplicationStartup;
 
 @SpringBootApplication
 @EnableAsync
-@DirtScanPacakge({"com.zk.mall.entity"})
+@DirtScanPackage({"com.zk.mall.entity"})
 public class MallApplication {
 
 

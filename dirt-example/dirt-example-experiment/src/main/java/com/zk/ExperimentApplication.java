@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import static com.zk.utils.StartUtils.logApplicationStartup;
+
 
 //@SpringBootApplication
 //@EnableAsync
@@ -31,7 +31,7 @@ public class ExperimentApplication {
         SpringApplication app = new SpringApplication(ExperimentApplication.class);
         ConfigurableApplicationContext run = app.run(args);
         SpringUtil.setApplicationContext(run);
-        logApplicationStartup(run);
+
     }
 
 

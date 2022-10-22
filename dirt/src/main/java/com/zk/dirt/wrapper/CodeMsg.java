@@ -1,4 +1,4 @@
-package com.zk.config.rest;
+package com.zk.dirt.wrapper;
 
 public class CodeMsg {
 

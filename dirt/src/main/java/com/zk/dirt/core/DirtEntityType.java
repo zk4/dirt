@@ -8,6 +8,7 @@ import com.zk.dirt.intef.iDependProvider;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iEnumText;
+import com.zk.dirt.rule.DirtRuleAnnotationConvertor;
 import com.zk.dirt.util.ExceptionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;

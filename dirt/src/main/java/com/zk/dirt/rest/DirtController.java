@@ -10,6 +10,7 @@ import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
 import com.zk.dirt.util.ArgsUtil;
+import com.zk.dirt.wrapper.Result;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -171,9 +172,11 @@ public class DirtController {
     @PostMapping("/dirt/getDatas")
     @ApiOperation(value = "获取分页数据")
     @Transactional(readOnly = true)
-    public Page  page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+    public Result page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
-        return  persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
+        Page<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
+        return Result.success(all);
+
     }
 
     @PostMapping("/dirt/getFullDatas")
@@ -200,7 +203,7 @@ public class DirtController {
     public Object getTableHeaders(@RequestParam(name = "entityName") String entityName) throws ClassNotFoundException, JsonProcessingException {
         DirtEntityType bySimpleName = dirtContext.getDirtEntity(entityName);
         List<DirtFieldType> heads = bySimpleName.getHeads();
-        return objectMapper.writeValueAsString(heads);
+        return heads;
     }
 
 
