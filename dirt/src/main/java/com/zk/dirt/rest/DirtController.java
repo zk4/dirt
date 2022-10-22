@@ -19,6 +19,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +50,7 @@ public class DirtController {
 
 
     @PostMapping("/dirt/upload")
+    @ApiOperation(value = "上传文件")
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         if (resourceUploader == null) {
             throw new RuntimeException("没实现 iResourceUploader, 无法上传");
@@ -57,10 +59,10 @@ public class DirtController {
     }
 
 
-    @PostMapping("/dirt/action")
+    @PostMapping(value = "/dirt/action", produces = MediaType.APPLICATION_JSON_VALUE )
     @ApiOperation(value = "执行动作")
     @Transactional
-    public void action(@RequestBody ActionReq req) throws IllegalAccessException, InvocationTargetException {
+    public String action(@RequestBody ActionReq req) throws IllegalAccessException, InvocationTargetException, JsonProcessingException {
         String entityName = req.entityName;
         Long id = req.id;
         String actionName = req.actionName;
@@ -73,6 +75,7 @@ public class DirtController {
         Object[] argArrays = ArgsUtil.mapToArray(objectMapper, method.getParameters(), args);
         method.invoke(o2, argArrays);
         persistProxy.save(classByName, o2);
+        return objectMapper.writeValueAsString(Result.ok());
     }
 
     @Data
@@ -89,10 +92,10 @@ public class DirtController {
     }
 
 
-    @PostMapping("/dirt/create")
-    @ApiOperation(value = "创建")
+    @PostMapping(value = "/dirt/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "创建数据")
     @Transactional
-    public void create(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException {
+    public String create(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {
@@ -105,12 +108,13 @@ public class DirtController {
         });
         DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
         persistProxy.update(entityClass, o2, body);
+        return objectMapper.writeValueAsString(Result.ok());
         }
 
-    @PostMapping("/dirt/update")
-    @ApiOperation(value = "更新")
+    @PostMapping(value =  "/dirt/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "更新数据")
     @Transactional
-    public void update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
+    public String update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
 
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
@@ -126,18 +130,19 @@ public class DirtController {
         DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
         Object one = persistProxy.getOne(entityClass, o2.getId());
         persistProxy.update(entityClass, one, body);
-
+        return objectMapper.writeValueAsString(Result.ok());
     }
 
-    @PostMapping("/dirt/deleteById")
+    @PostMapping(value = "/dirt/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据 id 删除")
     @Transactional
-    public void deleteByid(@RequestBody DeleteByIdReq req) throws ClassNotFoundException {
+    public String deleteByid(@RequestBody DeleteByIdReq req) throws ClassNotFoundException, JsonProcessingException {
         String entityName = req.entityName;
         Long id = req.id;
         Class<?> entityClass = Class.forName(entityName);
 
         persistProxy.deleteById(entityClass, id);
+        return objectMapper.writeValueAsString(Result.ok());
     }
 
     @Data
@@ -149,14 +154,16 @@ public class DirtController {
         Long id;
     }
 
-    @PostMapping("/dirt/deleteByIds")
+    @PostMapping(value = "/dirt/deleteByIds", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据 ids 批量删除")
     @Transactional
-    public void deleteByids(@RequestBody DeleteByidsReq req) throws ClassNotFoundException {
+    public String deleteByids(@RequestBody DeleteByidsReq req) throws ClassNotFoundException, JsonProcessingException {
         String entityName = req.entityName;
         Class<?> entityClass = Class.forName(entityName);
         List<Long> ids = req.ids;
         persistProxy.deleteByIds(entityClass, ids);
+
+        return objectMapper.writeValueAsString(Result.ok());
 
     }
 
@@ -169,59 +176,75 @@ public class DirtController {
         List<Long> ids;
     }
 
-    @PostMapping("/dirt/getDatas")
+    @PostMapping(value = "/dirt/getDatas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取分页数据")
     @Transactional(readOnly = true)
-    public Result page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+    public String page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
         Class<?> entityClass = Class.forName(entityName);
         Page<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
-        return Result.success(all);
-
+        Result success = Result.success(all);
+        return objectMapper.writeValueAsString(success);
     }
 
-    @PostMapping("/dirt/getFullDatas")
+    @PostMapping(value = "/dirt/getFullDatas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取全量数据")
     @Transactional(readOnly = true)
-    public List fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException {
+    public String fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
         Class<?> entityClass = Class.forName(entityName);
-        return  persistProxy.findAll(entityClass, reqFilter.getSpec());
+        List<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec());
+        Result<List<Object>> success = Result.success(all);
+        return objectMapper.writeValueAsString(success);
+
     }
 
 
-    @GetMapping("/dirt/getData")
+    @GetMapping(value = "/dirt/getData", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取单条数据")
     @Transactional(readOnly = true)
     @SneakyThrows
-    public Object getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) throws ClassNotFoundException {
+    public String getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id)  {
         Class<?> entityClass = Class.forName(entityName);
         Object one = persistProxy.findById(entityClass, id);
-        return ((Optional) one).get();
+        Object o = ((Optional) one).get();
+        Result<Object> success = Result.success(o);
+        return objectMapper.writeValueAsString(success);
+
     }
 
-    @GetMapping("/dirt/getEntitySchema")
+    @GetMapping(value = "/dirt/getEntitySchema", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取标准 schema")
-    public Object getTableHeaders(@RequestParam(name = "entityName") String entityName) throws ClassNotFoundException, JsonProcessingException {
+    public String getTableHeaders(@RequestParam(name = "entityName") String entityName) throws  JsonProcessingException {
         DirtEntityType bySimpleName = dirtContext.getDirtEntity(entityName);
         List<DirtFieldType> heads = bySimpleName.getHeads();
-        return heads;
+        Result<List<DirtFieldType>> success = Result.success(heads);
+        return objectMapper.writeValueAsString(success);
+
     }
 
 
-    @GetMapping("/dirt/getTablesNames")
-    public Set<String> getTablesNames() {
-        return dirtContext.getAllEntityNames();
+    @GetMapping(value = "/dirt/getTablesNames", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取表名")
+    public String getTablesNames() throws JsonProcessingException {
+        Set<String> allEntityNames = dirtContext.getAllEntityNames();
+        Result<Set<String>> success = Result.success(allEntityNames);
+        return objectMapper.writeValueAsString(success);
     }
 
 
-    @GetMapping("/dirt/getTableMaps")
-    @ApiOperation(value = "getTableMaps")
-    public Map<String, DirtViewType> getTableMaps() {
-        return dirtContext.getNameEntityMap();
+    @GetMapping(value = "/dirt/getTableMaps", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取所有表信息")
+    public String getTableMaps() throws JsonProcessingException {
+        Map<String, DirtViewType> nameEntityMap = dirtContext.getNameEntityMap();
+        Result<Map<String, DirtViewType>> success = Result.success(nameEntityMap);
+        return objectMapper.writeValueAsString(success);
     }
 
-    @PostMapping("/dirt/getDirtFieldType")
-    public DirtFieldType getDirtField(@RequestBody GetDirtFieldReq req ) {
-            return dirtContext.getDirtEntity(req.entityName).getFieldType(req.fieldName,req.args);
+    @PostMapping(value = "/dirt/getDirtFieldType", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取 DirtFieldType")
+    public String getDirtField(@RequestBody GetDirtFieldReq req ) throws JsonProcessingException {
+        DirtFieldType fieldType = dirtContext.getDirtEntity(req.entityName).getFieldType(req.fieldName, req.args);
+        Result<DirtFieldType> success = Result.success(fieldType);
+        return objectMapper.writeValueAsString(success);
     }
     @Data
     @ApiModel("GetDirtFieldReq")
