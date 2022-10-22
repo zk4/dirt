@@ -22,7 +22,8 @@
         </dependency>
         <dependency>
             <groupId>com.dirt</groupId>
-            <artifactId>dirt</artifactId>
+            <artifactId>spring-boot-starter-dirt</artifactId>
+            <version>0.0.1.BETA</version>
         </dependency>
         <dependency>
             <groupId>com.dirt</groupId>
