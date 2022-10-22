@@ -153,7 +153,12 @@ public class ArgsUtil {
             setter.invoke(enhancedInstance, arg);
         }
     }
-
+    public static <T> void updateEntityRecursively(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager, ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
+        updateEntity(rawType,enhancedInstance,args,entityManager,objectMapper);
+        if(rawType.getSuperclass()!=null){
+            updateEntity(rawType.getSuperclass(),enhancedInstance,args,entityManager,objectMapper);
+        }
+    }
 
     // https://gist.github.com/bmchild/2343316
     @SuppressWarnings("rawtypes")

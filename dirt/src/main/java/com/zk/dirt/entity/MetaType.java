@@ -1,13 +1,14 @@
 package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.MetaTableProvider;
+import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,6 +17,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Getter
@@ -32,39 +35,34 @@ import javax.persistence.Table;
 public class MetaType extends DirtBaseIdEntity {
 
 
-
-    @DirtField(title = "实体全名",uiType = eUIType.select, enumProvider = MetaTableProvider.class)
+    @DirtField(title = "实体全名", uiType = eUIType.select, enumProvider = MetaTableProvider.class)
+    @ApiModelProperty(value = "实体全名")
     String tableName;
 
     @DirtField(
             title = "column 名",
             //uiType = eUIType.select,
-            dirtDepends =@DirtDepends(onColumn = "tableName",dependsProvider = TableColumnsProvider.class)
+            dirtDepends = @DirtDepends(onColumn = "tableName", dependsProvider = TableColumnsProvider.class)
     )
+    @ApiModelProperty(value = "列名")
     String columnName;
 
-    @DirtField(title = "column 重命名",tooltip = "仅改变显示，不影响内部逻辑")
+    @DirtField(title = "column 重命名", tooltip = "仅改变显示，不影响内部逻辑")
+    @ApiModelProperty(value = "列重命名")
     String title;
 
     @DirtField
+    @ApiModelProperty(value = "是否可搜索")
     Boolean search;
 
     @DirtField
+    @ApiModelProperty(value = "是否启用")
     Boolean enable;
 
     @DirtField
-    // 在查询表单中不展示此项
-    Boolean hideInSearch;
-
-    @DirtField
-    // 在 Table 中不展示此列
-    Boolean hideInTable;
-    @DirtField
-    // 在 Form 中不展示此列
-    Boolean  hideInForm;
-
-    @DirtField
+    @ApiModelProperty(value = "是否可为空")
     Boolean nullable;
+
     @DirtAction(text = "详情")
     public void detail() {
     }
@@ -77,5 +75,22 @@ public class MetaType extends DirtBaseIdEntity {
     public void edit() {
     }
 
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        // FIXME:  以下代码有环调用，再说吧。
+        //DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
+        //DirtEntityType dirtEntity = dirtContext.getDirtEntity(this.tableName);
+        //DirtField dirtField = dirtEntity.getDirtField(this.columnName);
+        //if(dirtField==null){
+        //    throw new RuntimeException("无此字段");
+        //}
+        //if (!dirtField.metable())
+        //    throw new RuntimeException("未在 DirtField 注解里开启 metable 属性。如果以前可以，可以由于版本更新去除了" +
+        //            this.tableName + "." + this.columnName+
+        //            "的 metable 属性，请联系开发人员");
+
+    }
 
 }

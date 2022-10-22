@@ -66,7 +66,6 @@ public class Menu extends DirtBaseIdEntity {
     Set<Menu> children;
 
     public Set<Menu> getChildren() {
-        if(children.size()==0)return null;
         return children;
     }
 

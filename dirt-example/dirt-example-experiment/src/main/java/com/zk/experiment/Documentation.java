@@ -1,32 +1,23 @@
 package com.zk.experiment;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 @Getter
 @Setter
 @Entity
+@DirtEntity("文档")
 @DynamicUpdate
 @DynamicInsert
-@DirtEntity("子文档")
-@Table(name = "documentation")
-public class Documentation extends DirtBaseIdEntity {
-
-
-    @OneToOne
-    @DirtField
-    @JoinColumn(name="fileId")
-    WindowFile windowFile;
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+public class Documentation extends WindowFile {
 
     @DirtField
     public Integer size;

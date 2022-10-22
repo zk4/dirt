@@ -3,6 +3,7 @@ package com.zk.dirt.core;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Map;
@@ -17,40 +18,46 @@ public class DirtSubmitType {
     @JsonIgnore
     DirtFieldType fieldType;
 
-
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     String width;
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     Integer index;
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     String key;
+    @ApiModelProperty(value = "占位符")
     String placeholder;
+    @ApiModelProperty(value = "是否可提交")
     Boolean submitable=false;
-    // String key;	//React.key	确定这个列的唯一值,一般用于 dataIndex 重复的情况
-    // dataIndex;	//React.key | React.key[]	与实体映射的 key，数组会被转化 [a,b] => Entity.a.b
-    String valueType;	//ProFieldValueType	数据的渲渲染方式，我们自带了一部分，你也可以自定义 uiType
-    String title;//	ReactNode |(props,type,dom)=> ReactNode	标题的内容，在 form 中是 label
-    String tooltip;//	string	会在 title 旁边展示一个 icon，鼠标浮动之后展示
-    Map valueEnum;//	(Entity)=> ValueEnum | ValueEnum	支持 object 和 Map，Map 是支持其他基础类型作为 key
-    //Map fieldProps;//	(form,config)=>fieldProps| fieldProps	传给渲染的组件的 props，自定义的时候也会传递
-    Map formItemProps;//	(form,config)=>formItemProps | formItemProps	传递给 Form.Item 的配置
-    //Map proFieldProps;//	proFieldProps	设置到 ProField 上面的 props，内部属性
-    //Boolean hideInDescriptions;//	boolean	在 descriptions 中隐藏
-    //Boolean hideInForm;//	boolean	在 Form 中隐藏
-    //Boolean hideInTable;//	boolean	在 Table 中隐藏
-    //Boolean hideInSearch;//	boolean	在 Table 的查询表格中隐藏
-    //columns;//	ProFormColumnsType[] | (values) => ProFormColumnsType[]	嵌套子项，uiType 为 dependency 时，请使用(values) => ProFormColumnsType[]其他情况使用 ProFormColumnsType[]
-    ColProps colProps = new ColProps();//	ColProps	在开启 grid 模式时传递给 Col
-    //Map rowProps;//	RowProps	开启栅格化模式时传递给 Row
 
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
+    eUIType valueType;
+
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
+    String title;
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
+    String tooltip;
+
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
+    Map valueEnum;
+
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
+    Map formItemProps;
+
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
+    ColProps colProps = new ColProps();
+
+    @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     Object initialValue;
 
+    @ApiModelProperty(value = "是否必填")
     Boolean required;
 
     // OneToMany 的定义
+    @ApiModelProperty(value = "嵌套定义")
     Object columns;
 
-
+    @ApiModelProperty(value = "子节点名称")
     String subTreeName;
-
-
 
     public DirtSubmitType(DirtFieldType fieldType, MetaType metaType) {
         this.fieldType = fieldType;
@@ -78,7 +85,7 @@ public class DirtSubmitType {
         return tooltip;
     }
 
-    public String getValueType() {
+    public eUIType getValueType() {
         if (this.valueType == null && this.fieldType != null) {
             return this.fieldType.valueType;
         }
