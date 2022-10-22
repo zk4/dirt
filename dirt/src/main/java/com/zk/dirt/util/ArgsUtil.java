@@ -40,6 +40,7 @@ public class ArgsUtil {
         }
 
     }
+
     // convert {"a":1,"b":2} => [1,2] when function is someFunc(Object a,Object b){}
     public static Object[] mapToArray(ObjectMapper objectMapper, Parameter[] parameters, Map map) {
         if (parameters == null) {
@@ -54,7 +55,7 @@ public class ArgsUtil {
             Class<?> type = parameter.getType();
             // getName 拿不到真实的值，已经被 JVM 改掉
             DirtArg declaredAnnotation = parameter.getDeclaredAnnotation(DirtArg.class);
-            if(declaredAnnotation==null){
+            if (declaredAnnotation == null) {
                 throw new RuntimeException("必须用@DirtArg 声明由　@DirtAction 注解的函数参数，否则无法绑定参数");
             }
             Object o = map.get(declaredAnnotation.value());
@@ -63,10 +64,6 @@ public class ArgsUtil {
             // JSR-303 validation check
             validateEntity(args[i]);
         }
-
-
-
-
         return args;
     }
 
@@ -113,13 +110,17 @@ public class ArgsUtil {
         Object typedArgs = objectMapper.convertValue(args, rawType);
 
         for (Field declaredField : rawType.getDeclaredFields()) {
+
             String fieldName = declaredField.getName();
+
             //TODO:  这里需要用限制这样死的过滤么？
             // 现在是为了解决如果增加了组合显示，需要声明一个 field 才能达到。如果将 DirtField 可以应用到函数上。这一段话是不是就可以省略
-            if(declaredField.getDeclaredAnnotation(DirtField.class)==null)continue;
-            Method getter = new PropertyDescriptor(fieldName, rawType).getReadMethod();
+            if (declaredField.getDeclaredAnnotation(DirtField.class) == null) continue;
 
+
+            Method getter = new PropertyDescriptor(fieldName, rawType).getReadMethod();
             Object arg = getter.invoke(typedArgs);
+
             if (arg == null) continue;
 
             if (declaredField.isAnnotationPresent(OneToMany.class) || declaredField.isAnnotationPresent(ManyToMany.class)) {
@@ -153,10 +154,11 @@ public class ArgsUtil {
             setter.invoke(enhancedInstance, arg);
         }
     }
+
     public static <T> void updateEntityRecursively(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager, ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
-        updateEntity(rawType,enhancedInstance,args,entityManager,objectMapper);
-        if(rawType.getSuperclass()!=null){
-            updateEntity(rawType.getSuperclass(),enhancedInstance,args,entityManager,objectMapper);
+        updateEntity(rawType, enhancedInstance, args, entityManager, objectMapper);
+        if (rawType.getSuperclass() != null) {
+            updateEntity(rawType.getSuperclass(), enhancedInstance, args, entityManager, objectMapper);
         }
     }
 
