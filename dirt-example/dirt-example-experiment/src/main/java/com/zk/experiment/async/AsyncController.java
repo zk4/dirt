@@ -1,4 +1,4 @@
-package com.zk.dirt.rest.async;
+package com.zk.experiment.async;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
@@ -25,7 +25,7 @@ public class AsyncController {
     //private   ExampleService exampleService;
 
     @Autowired
-    private  AsyncService asyncService;
+    private AsyncService asyncService;
 
 
     private Long sleepSecs = 1l;
