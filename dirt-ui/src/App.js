@@ -6,31 +6,33 @@ import Tree from './components/tree'
 
 function App() {
   let [tables, setTables] = useState({})
-  const [view, setView] = useState(null);
+  const pathname= window.location.pathname.substr(1);
+  const [title, setTitle] = useState(null);
+  const [viewType, setViewType] = useState('Table');
+  
+  
+  
+  
   useEffect(() => {
     (async () => {
       let data = await axios.get(`getTableMaps`)
       setTables(data.data);
-      setView(Object.entries(data.data)[0][1]);
+      setTitle(data.data[pathname].text)
     })()
   }, [])
   return (
-    view && <div >
-
+     <div >
       {
         Object.keys(tables).length > 0 && Object.entries(tables).map(([t, v]) => {
           return <a key={t} href="#!" onClick={e => {
-            setView(v)
-            // setPath(v.className)
-            // setName(v.text)
-            // window.location.pathname=v.className
+            window.location.pathname = v.className;
           }}>{v.text} |</a>
         })
       }
-      <h1>{view.text}</h1>
+      <h1>{title}</h1>
       <hr style={{marginBottom: '25px'}} />
-      {view.viewType === 'Table' && (< Table entityName={view.className} />)}
-      {view.viewType === 'Tree' && (< Table entityName={view.className} />)}
+      {viewType === 'Table' && (< Table entityName={pathname} />)}
+      {viewType === 'Tree' && (< Table entityName={pathname} />)}
     </div>
   );
 }
