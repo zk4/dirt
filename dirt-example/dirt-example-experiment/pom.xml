@@ -7,17 +7,13 @@
     <parent>
         <groupId>com.zk</groupId>
         <artifactId>dirt-example</artifactId>
-        <version>${revision}</version>
+        <version>0.0.1.BETA</version>
     </parent>
     <artifactId>dirt-example-experiment</artifactId>
 
 
     <dependencies>
-        <dependency>
-            <groupId>com.zk</groupId>
-            <artifactId>dirt</artifactId>
-            <version>${revision}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.mashape.unirest</groupId>
             <artifactId>unirest-java</artifactId>
@@ -35,8 +31,7 @@
         <!--</dependency>-->
         <dependency>
             <groupId>com.zk</groupId>
-            <artifactId>spring-boot-starter-dirt</artifactId>
-            <version>0.0.1.BETA</version>
+            <artifactId>dirt</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

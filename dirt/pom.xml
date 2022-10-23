@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.zk</groupId>
         <artifactId>dirt-parent</artifactId>
-        <version>${revision}</version>
+        <version>0.0.1.BETA</version>
     </parent>
     <artifactId>dirt</artifactId>
 
