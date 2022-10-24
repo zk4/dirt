@@ -255,14 +255,14 @@ public class DirtEntityType {
                 else if (type.isAssignableFrom(boolean.class)) uiType = eUIType.switching;
             }
 
-            // 判断是否为枚举
-            boolean enumConstant = fieldRetType.isEnum();
-            if (enumConstant) {
-                tableHeader.setValueType(eUIType.select.toString());
-            }
+
         }
         tableHeader.setValueType(uiType.toString());
-
+        // 判断是否为枚举
+        boolean enumConstant = fieldRetType.isEnum();
+        if (enumConstant) {
+            tableHeader.setValueType(eUIType.select.toString());
+        }
         //-----------------------------------------
         // 设置 valueEnum, initialValue
         // 优先级：
@@ -301,7 +301,6 @@ public class DirtEntityType {
             // 如果没有提供 provider, 但又是枚举类型，且实现了 iDirtListable 接口，构造 source
             Class<? extends iEnumText> listableClass = null;
 
-            boolean enumConstant = fieldRetType.isEnum();
             if (enumConstant) {
                 Class enumType = fieldRetType;
                 listableClass = enumType.asSubclass(iEnumText.class);

@@ -6,7 +6,7 @@
 
     <groupId>com.zk</groupId>
     <artifactId>dirt-parent</artifactId>
-    <version>0.0.1.BETA</version>
+    <version>0.0.2.BETA</version>
 
 
     <name>dirt-parent</name>
@@ -72,12 +72,12 @@
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>dirt</artifactId>
-                <version>${dirt.version}</version>
+                <version>0.0.2.BETA</version>
             </dependency>
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>dirt-common-core</artifactId>
-                <version>${dirt.version}</version>
+                <version>0.0.2.BETA</version>
             </dependency>
 
             <dependency>
