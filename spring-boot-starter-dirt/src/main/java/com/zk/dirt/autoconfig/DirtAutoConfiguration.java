@@ -57,26 +57,6 @@ public class DirtAutoConfiguration {
     )
     public class DirtEnhanceAutoConfiguration{
 
-
-        /**
-         * Register Primary Bean with ServiceModelToSwagger2Mapper to Support i18n
-         * @param knife4jProperties Knife4j properties
-         * @param messageSource i18n MessageSource
-         * @param modelMapper  modelMapper
-         * @param parameterMapper parameterMapper
-         * @param securityMapper securityMapper
-         * @param licenseMapper licenseMapper
-         * @param vendorExtensionsMapper vendorExtensionsMapper
-         * @return ServiceModelToSwagger2Mapper
-         */
-        //@Bean
-        //@ConditionalOnBean(value = MessageSource.class)
-        //@Qualifier("ServiceModelToSwagger2Mapper")
-        //@Primary
-        //public Knife4jI18nServiceModelToSwagger2MapperImpl knife4jI18nServiceModelToSwagger2Mapper(Knife4jProperties knife4jProperties, MessageSource messageSource, ModelMapper modelMapper, ParameterMapper parameterMapper, SecurityMapper securityMapper, LicenseMapper licenseMapper, VendorExtensionsMapper vendorExtensionsMapper){
-        //    Locale locale= Locale.forLanguageTag(knife4jProperties.getSetting().getLanguage().getValue());
-        //    return new Knife4jI18nServiceModelToSwagger2MapperImpl(messageSource,locale,modelMapper,parameterMapper,securityMapper,licenseMapper,vendorExtensionsMapper);
-        //}
     }
 
     /**
@@ -87,43 +67,18 @@ public class DirtAutoConfiguration {
     @Bean("dirtCorsFilter")
     @ConditionalOnMissingBean(CorsFilter.class)
     @ConditionalOnProperty(name = "dirt.cors",havingValue = "true")
-    public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
         logger.info("init CorsFilter...");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration corsConfiguration=new CorsConfiguration();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setMaxAge(10000L);
         //匹配所有API
-        source.registerCorsConfiguration("/**",corsConfiguration);
-        CorsFilter corsFilter=new CorsFilter(source);
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        CorsFilter corsFilter = new CorsFilter(source);
         return corsFilter;
     }
-
-    //
-    ///**
-    // * Auto register enhance Bean to process Knife4j function
-    // * @param knife4jProperties enhance properties
-    // * @return openapi-extension
-    // */
-    //@Bean(initMethod = "start")
-    //@ConditionalOnMissingBean(OpenApiExtensionResolver.class)
-    //@ConditionalOnProperty(name = "knife4j.enable",havingValue = "true")
-    //public OpenApiExtensionResolver markdownResolver(Knife4jProperties knife4jProperties){
-    //    Knife4jSetting setting=knife4jProperties.getSetting();
-    //    if (setting==null){
-    //        setting=new Knife4jSetting();
-    //    }
-    //    OpenApiExtendSetting extendSetting=new OpenApiExtendSetting();
-    //    BeanUtils.copyProperties(setting,extendSetting);
-    //    extendSetting.setLanguage(setting.getLanguage().getValue());
-    //    return new OpenApiExtensionResolver(extendSetting, knife4jProperties.getDocuments());
-    //}
-
-
-
-
-
 }

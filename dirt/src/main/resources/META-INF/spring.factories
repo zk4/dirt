@@ -1,8 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
-  com.zk.dirt.core.DirtContext,\
-  com.zk.dirt.aop.DirtActionAspect, \
-  com.zk.dirt.JPAPersistProxyImp, \
-  com.zk.dirt.MetaTableProvider, \
-  com.zk.dirt.TableColumnsProvider, \
-  com.zk.dirt.rest.DirtController, \
-  com.zk.dirt.entity.MetaType
