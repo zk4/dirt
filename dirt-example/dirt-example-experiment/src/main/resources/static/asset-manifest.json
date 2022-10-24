@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c4a95e6f.chunk.css",
+    "main.js": "/static/js/main.6789376d.chunk.js",
+    "main.js.map": "/static/js/main.6789376d.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+    "static/css/2.3b74a6ec.chunk.css": "/static/css/2.3b74a6ec.chunk.css",
+    "static/js/2.27b2545e.chunk.js": "/static/js/2.27b2545e.chunk.js",
+    "static/js/2.27b2545e.chunk.js.map": "/static/js/2.27b2545e.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.7a072bcfa8cddaf27d26cfb328a8bed9.js": "/precache-manifest.7a072bcfa8cddaf27d26cfb328a8bed9.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.3b74a6ec.chunk.css.map": "/static/css/2.3b74a6ec.chunk.css.map",
+    "static/css/main.c4a95e6f.chunk.css.map": "/static/css/main.c4a95e6f.chunk.css.map",
+    "static/media/BasicLayout.less": "/static/media/BasicLayout.26b90515.less",
+    "static/media/GridContent.less": "/static/media/GridContent.c618cf69.less",
+    "static/media/Header.less": "/static/media/Header.535af2e7.less",
+    "static/media/ThemeColor.less": "/static/media/ThemeColor.8dcf6a73.less",
+    "static/media/default.less": "/static/media/default.898a765c.less",
+    "static/media/index.less": "/static/media/index.ff7816fc.less"
+  }
+}

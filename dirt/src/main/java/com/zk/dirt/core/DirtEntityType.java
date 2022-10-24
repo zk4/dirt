@@ -235,22 +235,30 @@ public class DirtEntityType {
         if (  uiType == eUIType.auto) {
             // 设置  uiType by rettype if uiType is not set
             Class<?> type = fieldRetType;
+
+
+            // 自动修改类型
             // TODO: 如果 idOfEntity 不为 null，则不自动生成 uiType? 但好像也可以生成
             if (tableHeader.idOfEntity == null) {
-                if (type.isAssignableFrom(LocalDateTime.class)) uiType = uiType.dateTime;
-                else if (type.isAssignableFrom(LocalDate.class)) uiType = uiType.date;
-                else if (type.isAssignableFrom(Long.class)) uiType = uiType.digit;
-                else if (type.isAssignableFrom(long.class)) uiType =  uiType.digit;
-                else if (type.isAssignableFrom(Integer.class)) uiType =  uiType.digit;
-                else if (type.isAssignableFrom(int.class)) uiType =  uiType.digit;
-                else if (type.isAssignableFrom(Float.class)) uiType =  uiType.digit;
-                else if (type.isAssignableFrom(float.class)) uiType =  uiType.digit;
-                else if (type.isAssignableFrom(Double.class)) uiType =  uiType.digit;
-                else if (type.isAssignableFrom(double.class)) uiType =  uiType.digit;
-                else if (type.isAssignableFrom(BigDecimal.class)) uiType =  uiType.money;
-                else if (type.isAssignableFrom(Boolean.class)) uiType = uiType.switching;
-                else if (type.isAssignableFrom(boolean.class)) uiType = uiType.switching;
+                if (type.isAssignableFrom(LocalDateTime.class)) uiType = eUIType.dateTime;
+                else if (type.isAssignableFrom(LocalDate.class)) uiType = eUIType.date;
+                else if (type.isAssignableFrom(Long.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(long.class)) uiType =  eUIType.digit;
+                else if (type.isAssignableFrom(Integer.class)) uiType =  eUIType.digit;
+                else if (type.isAssignableFrom(int.class)) uiType =  eUIType.digit;
+                else if (type.isAssignableFrom(Float.class)) uiType =  eUIType.digit;
+                else if (type.isAssignableFrom(float.class)) uiType =  eUIType.digit;
+                else if (type.isAssignableFrom(Double.class)) uiType =  eUIType.digit;
+                else if (type.isAssignableFrom(double.class)) uiType =  eUIType.digit;
+                else if (type.isAssignableFrom(BigDecimal.class)) uiType =  eUIType.money;
+                else if (type.isAssignableFrom(Boolean.class)) uiType = eUIType.switching;
+                else if (type.isAssignableFrom(boolean.class)) uiType = eUIType.switching;
+            }
 
+            // 判断是否为枚举
+            boolean enumConstant = fieldRetType.isEnum();
+            if (enumConstant) {
+                tableHeader.setValueType(eUIType.select);
             }
         }
         tableHeader.setValueType(uiType);
@@ -297,8 +305,7 @@ public class DirtEntityType {
             if (enumConstant) {
                 Class enumType = fieldRetType;
                 listableClass = enumType.asSubclass(iEnumText.class);
-                // TODO： 位置调整一下，放上面一点
-                tableHeader.setValueType(eUIType.select);
+
             }
             Class<? extends iEnumText>[] classes1 = dirtField.enumListableType();
             if (classes1.length > 0) {
