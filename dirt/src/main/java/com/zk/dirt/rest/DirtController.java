@@ -7,6 +7,7 @@ import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.conf.QueryFilter2;
 import com.zk.dirt.core.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
+import com.zk.dirt.entity.iID;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
 import com.zk.dirt.util.ArgsUtil;
@@ -106,7 +107,7 @@ public class DirtController {
                 throw new RuntimeException(k + "字段不支持创建");
             }
         });
-        DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
+        iID o2 = objectMapper.convertValue(body, entityClass);
         persistProxy.update(entityClass, o2, body);
         return objectMapper.writeValueAsString(Result.ok());
         }

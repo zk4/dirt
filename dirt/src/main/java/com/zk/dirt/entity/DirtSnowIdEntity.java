@@ -2,6 +2,7 @@ package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.conf.Snowflake;
 import com.zk.dirt.core.eUIType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 // The dynamic update allows you to set just the columns that were modified in the associated entity. （包含设了 null) , 子类如果需要也要加
 @DynamicUpdate
 @MappedSuperclass
-public  class DirtBaseIdEntity implements Serializable, iID {
+public  class DirtSnowIdEntity implements Serializable, iID {
 
     private static final long serialVersionUID = 2359852974346431431L;
     
@@ -31,7 +32,7 @@ public  class DirtBaseIdEntity implements Serializable, iID {
     @Access(AccessType.PROPERTY)
 
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     @DirtField(title = "id",index = -999999, uiType = eUIType.digit,fixed = "left",dirtSubmit = {})
     protected Long id;
 
@@ -52,29 +53,13 @@ public  class DirtBaseIdEntity implements Serializable, iID {
 
     @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
     @JsonIgnore
-    //@DirtField(title = "更新时间",
-    //        dirtSubmit = {},
-    //        uiType = eUIType.dateTime,
-    //        dirtSearch = @DirtSearch(
-    //                title = "更新时间",
-    //                valueType = eUIType.dateTimeRange
-    //        )
-    //)
     protected LocalDateTime updatedTime;
 
 
     @Column(nullable = false,columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
     @OptimisticLock(excluded = true) // 不触发乐观锁
     @JsonIgnore
-    //@DirtField(title = "创建时间",
-    //        dirtSubmit = {},
-    //
-    //        uiType = eUIType.dateTime,
-    //        dirtSearch = @DirtSearch(
-    //                title = "创建时间",
-    //                valueType = eUIType.dateTimeRange
-    //        )
-    //)
+
     protected LocalDateTime createdTime;
 
 
@@ -101,9 +86,13 @@ public  class DirtBaseIdEntity implements Serializable, iID {
     //@PreRemove - 在EntityManager中标记要删除的实体时
     //@PostRemove- 从数据库中删除实体（在commit或期间flush）
 
+    static Snowflake snowflake = new Snowflake();
 
     @PrePersist
     public void onCreate() {
+        if(this.id==null){
+            this.id = snowflake.nextId();
+        }
         if(this.createdTime==null){
             this.createdTime = LocalDateTime.now();
         }
@@ -130,11 +119,11 @@ public  class DirtBaseIdEntity implements Serializable, iID {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DirtBaseIdEntity)) {
+        if (!(o instanceof DirtSnowIdEntity)) {
             return false;
         }
 
-        DirtBaseIdEntity that = (DirtBaseIdEntity) o;
+        DirtSnowIdEntity that = (DirtSnowIdEntity) o;
 
         return getId() != null && getId().equals(that.getId());
     }

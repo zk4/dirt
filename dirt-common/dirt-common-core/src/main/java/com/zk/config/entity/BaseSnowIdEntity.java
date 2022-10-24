@@ -60,7 +60,6 @@ public class BaseSnowIdEntity implements Serializable {
         if(this.id==null){
             this.id = snowflake.nextId();
         }
-
     }
 
     @Override
