@@ -30,10 +30,8 @@ public  class DirtSnowIdEntity implements Serializable, iID {
     @Id
     // https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela/32223785#32223785
     @Access(AccessType.PROPERTY)
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
     @Column(name = "id", nullable = false)
-    @DirtField(title = "id",index = -999999, uiType = eUIType.digit,fixed = "left",dirtSubmit = {})
+    @DirtField(title = "id",index = -999999, uiType = eUIType.text,fixed = "left",dirtSubmit = {})
     protected Long id;
 
     @Data
