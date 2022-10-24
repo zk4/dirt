@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
-import com.zk.dirt.conf.QueryFilter2;
+import com.zk.dirt.conf.DirtQueryFilter;
 import com.zk.dirt.core.*;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.entity.iID;
@@ -180,7 +180,7 @@ public class DirtController {
     @PostMapping(value = "/dirt/getDatas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取分页数据")
     @Transactional(readOnly = true)
-    public String page(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
+    public String page(@RequestBody DirtQueryFilter reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
         Class<?> entityClass = Class.forName(entityName);
         Page<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
         Result success = Result.success(all);
@@ -190,7 +190,7 @@ public class DirtController {
     @PostMapping(value = "/dirt/getFullDatas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取全量数据")
     @Transactional(readOnly = true)
-    public String fullData(@RequestBody QueryFilter2 reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
+    public String fullData(@RequestBody DirtQueryFilter reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
         Class<?> entityClass = Class.forName(entityName);
         List<Object> all = persistProxy.findAll(entityClass, reqFilter.getSpec());
         Result<List<Object>> success = Result.success(all);

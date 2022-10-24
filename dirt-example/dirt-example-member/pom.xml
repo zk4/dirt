@@ -21,6 +21,10 @@
             <groupId>com.zk</groupId>
             <artifactId>dirt-common-core</artifactId>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.zk</groupId>-->
+            <!--<artifactId>dirt-common-core</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>

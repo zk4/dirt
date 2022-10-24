@@ -2,7 +2,7 @@ package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.conf.Snowflake;
+import com.zk.dirt.conf.DirtSnowflake;
 import com.zk.dirt.core.eUIType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -84,7 +84,7 @@ public  class DirtSnowIdEntity implements Serializable, iID {
     //@PreRemove - 在EntityManager中标记要删除的实体时
     //@PostRemove- 从数据库中删除实体（在commit或期间flush）
 
-    static Snowflake snowflake = new Snowflake();
+    static DirtSnowflake snowflake = new DirtSnowflake();
 
     @PrePersist
     public void onCreate() {

@@ -1,4 +1,4 @@
-package com.zk.experiment;
+package com.zk.experiment.entity;
 
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtField;

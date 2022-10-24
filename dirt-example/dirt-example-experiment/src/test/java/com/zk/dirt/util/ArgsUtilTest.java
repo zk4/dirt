@@ -3,7 +3,7 @@ package com.zk.dirt.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.BeanUtil;
-import com.zk.experiment.Member;
+import com.zk.experiment.entity.Member;
 import lombok.Data;
 import lombok.ToString;
 import org.junit.jupiter.api.Assertions;

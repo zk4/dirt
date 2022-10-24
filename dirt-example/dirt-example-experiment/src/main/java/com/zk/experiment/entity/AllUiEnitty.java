@@ -1,12 +1,12 @@
-package com.zk.experiment;
+package com.zk.experiment.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,37 +15,29 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @Setter
 @Entity
-@DirtEntity("会员组")
+@DirtEntity("UI解析")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "mms_group")
-@SQLDelete(sql = "UPDATE mms_group SET deleted = true WHERE id=?  and version=? ")
+@Table(name = "t_all_ui")
+@SQLDelete(sql = "UPDATE t_all_ui SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Group.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
-public class Group extends DirtBaseIdEntity {
+@JsonIdentityInfo(scope = AllUiEnitty.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+public class AllUiEnitty extends DirtBaseIdEntity {
 
 
+    @DirtField(uiType = eUIType.richtext)
+    String rich;
 
-    @DirtField(title = "会员集合")
-    @ManyToMany
-    // 允许双向更新
-    @JoinTable(name="mms_group_member_rel",
-            joinColumns={@JoinColumn(name="groupId")},
-            inverseJoinColumns={@JoinColumn(name="memberId")})
-    @JsonIdentityReference(alwaysAsId = true)
-    Set<Member> members;
 
-    @DirtField(title = "群主")
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    Member owner;
+    @DirtField(uiType = eUIType.imageUploader)
+    String imageUplaoders;
 
 
     @DirtAction(text = "详情")
@@ -56,7 +48,6 @@ public class Group extends DirtBaseIdEntity {
 
     @DirtAction(text = "编辑")
     public void edit() {}
-
 
 
 }

@@ -1,8 +1,8 @@
 package com.zk.events;
 
-import com.zk.experiment.Benefit;
-import com.zk.experiment.Member;
-import com.zk.experiment.VerificationHistory;
+import com.zk.experiment.entity.Benefit;
+import com.zk.experiment.entity.Member;
+import com.zk.experiment.entity.VerificationHistory;
 import com.zk.experiment.jpa.BenefitRepo;
 import com.zk.experiment.jpa.VerificationHistoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;

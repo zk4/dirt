@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import static com.zk.utils.StartUtils.logApplicationStartup;
 
 
 @SpringBootApplication
@@ -22,7 +21,7 @@ public class MallApplication {
         SpringApplication app = new SpringApplication(MallApplication.class);
         ConfigurableApplicationContext run = app.run(args);
         SpringUtil.setApplicationContext(run);
-         logApplicationStartup(run);
+
         DruidDataSource bean = run.getBean(DruidDataSource.class);
         String dburl = (bean.getUrl());
 

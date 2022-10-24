@@ -1,4 +1,4 @@
-package com.zk.experiment;
+package com.zk.experiment.entity;
 
 import com.fasterxml.jackson.annotation.*;
 import com.zk.dirt.annotation.*;
@@ -7,6 +7,7 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.util.SpringUtil;
+import com.zk.mall.entity.Menu;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +45,10 @@ public class Member extends DirtBaseIdEntity {
     @Size(min = 2, max = 30)
     String name;
 
-
+    @DirtField(title =  "目录级",subTreeName = "subMenus", uiType = eUIType.text,dirtSearch = @DirtSearch(valueType = eUIType.cascader))
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private Menu menu;
 
     @DirtField(title = "会员昵称" )
     @NotEmpty

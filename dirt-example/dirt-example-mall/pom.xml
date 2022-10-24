@@ -13,13 +13,25 @@
 
 
     <dependencies>
+
         <dependency>
-            <groupId>com.zk</groupId>
-            <artifactId>dirt</artifactId>
+            <groupId>com.mashape.unirest</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>1.4.9</version>
+            <scope>test</scope>
         </dependency>
+        <!--<dependency>-->
+        <!--<groupId>com.zk</groupId>-->
+        <!--<artifactId>spring-boot-starter-dirt</artifactId>-->
+        <!--<version>0.0.1.BETA</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>com.zk</groupId>-->
+        <!--<artifactId>dirt-common-core</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.zk</groupId>
-            <artifactId>dirt-common-core</artifactId>
+            <artifactId>spring-boot-starter-dirt</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

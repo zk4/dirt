@@ -1,6 +1,7 @@
 package com.zk;
 
 
+import com.zk.dirt.annotation.DirtScanPackage;
 import com.zk.dirt.util.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +27,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @Slf4j
 @EnableAsync
+@DirtScanPackage({"com.zk.mall.entity","com.zk.experiment.entity"})
 public class ExperimentApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ExperimentApplication.class);

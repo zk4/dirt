@@ -1,12 +1,10 @@
-package com.zk.experiment;
+package com.zk.mall.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.core.eDirtViewType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,33 +19,50 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 @Setter
 @Entity
-@DirtEntity("目录")
+@DirtEntity(value = "目录",viewType = eDirtViewType.Tree)
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "t_menu")
-@SQLDelete(sql = "UPDATE t_menu SET deleted = true WHERE id=?  and version=? ")
+@SQLDelete(sql = "UPDATE t_menu SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Menu.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idNameObj")
 public class Menu extends DirtBaseIdEntity {
+
     @Data
     @AllArgsConstructor
     public static class IdNameObj {
         Long id;
         String name;
+        Boolean isLeaf;
     }
 
     @Transient
     IdNameObj idNameObj;
 
     public IdNameObj getIdNameObj() {
-        return new  IdNameObj(this.id,this.name);
+        return new  IdNameObj(this.id,this.name,this.isLeaf);
     }
+
+
+    Boolean isLeaf;
+
+    @PreUpdate
+    @PrePersist
+    public void preUpdateAndPersist(){
+        if(this.subMenus!=null
+                && this.subMenus.size()>0)
+            isLeaf = false;
+        else
+            isLeaf = true;
+    }
+
+
+
 
     @DirtField(title = "目录名" )
     @NotEmpty
@@ -56,26 +71,33 @@ public class Menu extends DirtBaseIdEntity {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name="parentId")
     Menu parent;
 
     @DirtField(title = "子目录")
     @OneToMany
-    @JoinColumn(name = "parentId")
-    //@JsonIdentityReference(alwaysAsId = true)
-    Set<Menu> children;
+    @JoinColumn(name = "parent")
+    @JsonIdentityReference(alwaysAsId = true)
+    Set<Menu> subMenus;
 
-    public Set<Menu> getChildren() {
-        return children;
-    }
+    //@Data
+    //@AllArgsConstructor
+    //public static class IdNameObj {
+    //    Long id;
+    //    String name;
+    //}
+    //
+    //
+    //@Transient
+    //public IdNameObj idNameObj;
+    //
+    //IdNameObj getIdNameObj(){
+    //    return  new IdNameObj(id, name);
+    //}
+    //
 
-    @Transient
-    Long key;
-    static AtomicLong integer=new AtomicLong(1);
-    public Long getKey() {
-        return integer.incrementAndGet();
-    }
 
+
+    ////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
     public void detail() {}
 

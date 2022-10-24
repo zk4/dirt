@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
-public class CustomCorsConfig {
+public class DirtCustomCorsConfig {
 
 
     @Bean

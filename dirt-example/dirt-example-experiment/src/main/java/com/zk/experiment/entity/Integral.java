@@ -1,4 +1,4 @@
-package com.zk.experiment;
+package com.zk.experiment.entity;
 
 import com.fasterxml.jackson.annotation.*;
 import com.zk.dirt.annotation.*;

@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Configuration
-public class ObjectMapperConfig {
+public class DirtObjectMapperConfig {
 
     /** 默认日期时间格式 */
     public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";

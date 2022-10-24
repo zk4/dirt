@@ -1,10 +1,9 @@
-package com.zk.experiment;
+package com.zk.mall.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
@@ -16,36 +15,48 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Getter
 @Setter
 @Entity
-@DirtEntity("核销历史")
+@DirtEntity("属性分组")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "mms_verification_history")
-@SQLDelete(sql = "UPDATE mms_verification_history SET deleted = true WHERE id=?  and version=? ")
+@Table(name = "mall_attr_group")
+@SQLDelete(sql = "UPDATE mall_attr_group SET deleted = true WHERE id=?   and version=? ")
 @Where(clause = "deleted=false")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = VerificationHistory.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
-public class VerificationHistory extends DirtBaseIdEntity {
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
+@JsonIdentityInfo(scope = AttrGroup.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+public class AttrGroup extends DirtBaseIdEntity {
 
-    @DirtField(title = "用户")
+    /**
+     * 组名
+     */
+    @DirtField(title = "组名")
+    private String name;
+    /**
+     * 排序
+     */
+    @DirtField(title = "排序")
+    private Integer sort;
+    /**
+     * 描述
+     */
+    @DirtField(title = "描述")
+    private String descript;
+    /**
+     * 组图标
+     */
+    @DirtField(title = "组图标")
+    private String icon;
+
+    @DirtField(title = "所属分类")
     @ManyToOne
-    @JoinColumn(name = "memberId")
     @JsonIdentityReference(alwaysAsId = true)
-    Member member;
+    private Category category;
 
-    @DirtField(title = "权益")
-    @ManyToOne
-    @JoinColumn(name = "benefitId")
-    @JsonIdentityReference(alwaysAsId = true)
-    Benefit benefit;
 
-    @DirtAction(text = "详情")
-    public void detail() {}
 
 }

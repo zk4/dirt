@@ -1,6 +1,6 @@
 package com.zk.experiment.jpa;
 
-import com.zk.experiment.VerificationHistory;
+import com.zk.experiment.entity.VerificationHistory;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

@@ -1,4 +1,4 @@
-package com.zk.experiment;
+package com.zk.experiment.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.annotation.DirtEntity;
@@ -13,13 +13,18 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @Entity
-@DirtEntity("文档")
+@DirtEntity("文件夹")
 @DynamicUpdate
 @DynamicInsert
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class Documentation extends WindowFile {
+public class Folder extends WindowFile {
 
     @DirtField
-    public Integer size;
+    private Integer fileCount;
+
+    @DirtField(metable = true)
+    private String color;
+
+
     //省略get set
 }

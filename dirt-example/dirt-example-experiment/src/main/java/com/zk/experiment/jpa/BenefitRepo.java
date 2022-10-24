@@ -1,6 +1,6 @@
 package com.zk.experiment.jpa;
 
-import com.zk.experiment.Benefit;
+import com.zk.experiment.entity.Benefit;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

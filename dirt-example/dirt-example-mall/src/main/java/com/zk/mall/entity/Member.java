@@ -11,7 +11,6 @@ import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iEnumText;
-import com.zk.utils.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -25,6 +24,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -152,6 +152,6 @@ public class Member extends DirtBaseIdEntity {
 
     @DirtAction(text = "刷新 token")
     public void genToken() {
-        this.accessToken= UUID.fastUUID().toString();
+        this.accessToken= UUID.randomUUID().toString();
     }
 }

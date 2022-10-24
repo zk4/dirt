@@ -10,13 +10,13 @@ import org.springframework.data.jpa.domain.Specification;
  * 将 url 的 filter 转化为 hibernate 的 specification
  */
 @Data
-public class QueryFilter2 {
+public class DirtQueryFilter {
 	@ApiModelProperty(value = "过滤字段，详见: https://github.com/turkraft/spring-filter",example ="" )
 	private String filter;
 
-	public QueryFilter2() {}
+	public DirtQueryFilter() {}
 
-	public QueryFilter2(String filter) {
+	public DirtQueryFilter(String filter) {
 		this.filter = filter;
 	}
 
