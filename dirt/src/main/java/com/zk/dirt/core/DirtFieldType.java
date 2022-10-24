@@ -37,7 +37,7 @@ public class DirtFieldType {
     Map valueEnum;
 
     @ApiModelProperty(value = "前端据此选择不同的组件进行渲染")
-    eUIType valueType;
+    String valueType;
 
     @ApiModelProperty(value = "查询表单中的权重，权重大排序靠前")
     Integer order;

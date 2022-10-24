@@ -30,7 +30,7 @@ public class DirtSubmitType {
     Boolean submitable=false;
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
-    eUIType valueType;
+    String valueType;
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     String title;
@@ -85,7 +85,7 @@ public class DirtSubmitType {
         return tooltip;
     }
 
-    public eUIType getValueType() {
+    public String getValueType() {
         if (this.valueType == null && this.fieldType != null) {
             return this.fieldType.valueType;
         }

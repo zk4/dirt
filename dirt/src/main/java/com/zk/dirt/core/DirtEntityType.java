@@ -123,7 +123,7 @@ public class DirtEntityType {
             ArrayList<String> names = new ArrayList<>(this.actionMap.keySet());
             DirtFieldType action = new DirtFieldType(null);
             action.setKey("option");
-            action.setValueType(eUIType.option);
+            action.setValueType(eUIType.option.toString());
             action.setFixed("right");
 
             //  每个中文字符给个9px，差不多了
@@ -258,10 +258,10 @@ public class DirtEntityType {
             // 判断是否为枚举
             boolean enumConstant = fieldRetType.isEnum();
             if (enumConstant) {
-                tableHeader.setValueType(eUIType.select);
+                tableHeader.setValueType(eUIType.select.toString());
             }
         }
-        tableHeader.setValueType(uiType);
+        tableHeader.setValueType(uiType.toString());
 
         //-----------------------------------------
         // 设置 valueEnum, initialValue
@@ -377,7 +377,7 @@ public class DirtEntityType {
             DirtSearchType dirtSearchType = new DirtSearchType(tableHeader);
             tableHeader.setSearchType(dirtSearchType);
 
-            dirtSearchType.setValueType(dirtSearch.valueType());
+            dirtSearchType.setValueType(dirtSearch.valueType().toString());
             dirtSearchType.setOperator(dirtSearch.operator().toString());
         }
 
@@ -400,7 +400,7 @@ public class DirtEntityType {
             dirtSubmitType.setPlaceholder(submitable.placeholder());
             dirtSubmitType.setWidth(submitable.width().getValue());
             dirtSubmitType.setIndex(submitable.index());
-            dirtSubmitType.setValueType(submitable.valueType());
+            dirtSubmitType.setValueType(submitable.valueType().toString());
             HashMap formItemProps = new HashMap();
 
             // 兼容 JSR
