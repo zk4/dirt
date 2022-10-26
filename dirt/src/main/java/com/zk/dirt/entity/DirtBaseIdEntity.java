@@ -52,29 +52,12 @@ public  class DirtBaseIdEntity implements Serializable, iID {
 
     @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
     @JsonIgnore
-    //@DirtField(title = "更新时间",
-    //        dirtSubmit = {},
-    //        uiType = eUIType.dateTime,
-    //        dirtSearch = @DirtSearch(
-    //                title = "更新时间",
-    //                valueType = eUIType.dateTimeRange
-    //        )
-    //)
     protected LocalDateTime updatedTime;
 
 
     @Column(nullable = false,columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
     @OptimisticLock(excluded = true) // 不触发乐观锁
     @JsonIgnore
-    //@DirtField(title = "创建时间",
-    //        dirtSubmit = {},
-    //
-    //        uiType = eUIType.dateTime,
-    //        dirtSearch = @DirtSearch(
-    //                title = "创建时间",
-    //                valueType = eUIType.dateTimeRange
-    //        )
-    //)
     protected LocalDateTime createdTime;
 
 

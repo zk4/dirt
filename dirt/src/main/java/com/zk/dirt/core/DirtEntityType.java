@@ -445,15 +445,17 @@ public class DirtEntityType {
         MetaType metaType = null;
         if (dirtField.metable()) {
             EntityManager em = applicationContext.getBean(EntityManager.class);
-            try {
-                metaType = em
-                        .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
-                        .setParameter(1, field.getName())
-                        .getSingleResult();
-            }catch (Exception e ){
-                e.printStackTrace();
+
+            List<MetaType> resultList = em
+                    .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
+                    .setParameter(1, field.getName())
+                    .getResultList();
+            if(resultList== null || resultList.size()==0){
+                return null;
             }
+
         }
+
         return metaType;
     }
 

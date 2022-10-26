@@ -11,6 +11,9 @@
     </parent>
     <artifactId>spring-boot-starter-dirt</artifactId>
 
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
 
     <dependencies>
 

@@ -22,9 +22,39 @@
     </modules>
     <packaging>pom</packaging>
 
+
+    <repositories>
+        <repository>
+            <id>zkty-center-public</id>
+            <name>Public Repositories</name>
+            <url>https://nexus.spacenx.cn/repository/center-public/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>zkty-center-public</id>
+            <name>Public Repositories</name>
+            <url>https://nexus.spacenx.cn/repository/center-public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <distributionManagement>
+        <repository>
+            <id>zkty-center-releases</id>
+            <name>zkty Center Releases</name>
+            <url>https://nexus.spacenx.cn/repository/center-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>zkty-center-snapshots</id>
+            <name>zkty Center Snapshots</name>
+            <url>https://nexus.spacenx.cn/repository/center-snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <dirt.version>0.0.1.BETA</dirt.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -290,16 +320,16 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>public</id>
-            <name>aliyun nexus</name>
-            <url>https://maven.aliyun.com/repository/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>public</id>-->
+            <!--<name>aliyun nexus</name>-->
+            <!--<url>https://maven.aliyun.com/repository/public</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
     <!--<pluginRepositories>-->
         <!--<pluginRepository>-->

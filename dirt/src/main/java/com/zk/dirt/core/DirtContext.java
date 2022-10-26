@@ -4,6 +4,7 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtScanPackage;
 import com.zk.dirt.util.PackageUtil;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -46,10 +47,13 @@ public class DirtContext {
         String mainClassName = PackageUtil.getMainClassName();
         Class<?> aClass = Class.forName(mainClassName);
         DirtScanPackage scanPackageAnno = (DirtScanPackage) aClass.getDeclaredAnnotation(DirtScanPackage.class);
-        // default is "com.zk"
-        String[] scanPackages = new String[]{"com.zk"};
+
+        // default is "com.zk.dirt.entity"
+        String[] scanPackages = new String[]{"com.zk.dirt.entity"};
+
+        // merge scan packages if found
         if (scanPackageAnno != null) {
-            scanPackages = scanPackageAnno.value();
+            scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackageAnno.value());
         }
         System.out.println("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining()));
 

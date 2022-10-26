@@ -13,7 +13,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
@@ -49,15 +48,15 @@ public class DirtAutoConfiguration {
     }
 
 
-    @ComponentScan(
-            basePackages = {
-                    "com.zk.dirt.entity",
-                    "com.zk.dirt.core"
-            }
-    )
-    public class DirtEnhanceAutoConfiguration{
-
-    }
+    //@ComponentScan(
+    //        basePackages = {
+    //                "com.zk.dirt.entity",
+    //
+    //        }
+    //)
+    //public class DirtEnhanceAutoConfiguration{
+    //
+    //}
 
     /**
      * Configuration CorsFilter
