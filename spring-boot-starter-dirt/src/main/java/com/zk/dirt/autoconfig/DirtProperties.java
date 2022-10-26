@@ -12,6 +12,6 @@ public class DirtProperties {
     /**
      * Whether to enable Dirt enhanced mode
      */
-    private boolean enable=false;
+    private boolean enable= true;
 
 }
