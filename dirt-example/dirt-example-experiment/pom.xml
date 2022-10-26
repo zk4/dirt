@@ -62,9 +62,8 @@
 
         <!--<dependency>-->
             <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-ehcache</artifactId>-->
+            <!--<artifactId>hibernate-jpamodelgen</artifactId>-->
         <!--</dependency>-->
-
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
