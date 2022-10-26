@@ -55,7 +55,7 @@ public class DirtContext {
         if (scanPackageAnno != null) {
             scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackageAnno.value());
         }
-        System.out.println("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining()));
+        System.out.println("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
 
         for (String packagePath : scanPackages) {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
