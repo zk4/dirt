@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface DirtScanPackage {
+public @interface DirtScan {
 
 	// DirtEntity scan path
 	String[] value() default {"com.zk"};

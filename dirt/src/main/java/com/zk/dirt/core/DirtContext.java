@@ -2,7 +2,7 @@ package com.zk.dirt.core;
 
 
 import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtScanPackage;
+import com.zk.dirt.annotation.DirtScan;
 import com.zk.dirt.util.PackageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
@@ -48,7 +48,7 @@ public class DirtContext {
     public void init() throws ClassNotFoundException {
         String mainClassName = PackageUtil.getMainClassName();
         Class<?> aClass = Class.forName(mainClassName);
-        DirtScanPackage scanPackageAnno = (DirtScanPackage) aClass.getDeclaredAnnotation(DirtScanPackage.class);
+        DirtScan scanPackageAnno = (DirtScan) aClass.getDeclaredAnnotation(DirtScan.class);
 
         // default is "com.zk.dirt.entity"
         String[] scanPackages = new String[]{"com.zk.dirt.entity"};
