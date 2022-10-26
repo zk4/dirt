@@ -4,6 +4,7 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtScanPackage;
 import com.zk.dirt.util.PackageUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class DirtContext {
 
     @Autowired
@@ -55,7 +57,7 @@ public class DirtContext {
         if (scanPackageAnno != null) {
             scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackageAnno.value());
         }
-        System.out.println("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
+        log.debug("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
 
         for (String packagePath : scanPackages) {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
@@ -91,7 +93,7 @@ public class DirtContext {
                 nameColumns.put(simpleName, columns);
             }
         }
-        System.out.println(nameDirtEntityMap);
+       log.debug(nameDirtEntityMap.toString());
     }
 
     public List<String>  getColumns(String className){
@@ -109,7 +111,7 @@ public class DirtContext {
     public DirtEntityType getDirtEntity(String name) {
         DirtEntityType dirtEntity = nameDirtEntityMap.get(name);
         if (dirtEntity == null) {
-            System.out.println(nameDirtEntityMap);
+            log.debug(nameDirtEntityMap.toString());
             throw new RuntimeException("不存在 " + name);
         }
         return dirtEntity;
