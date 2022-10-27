@@ -22,7 +22,7 @@ import javax.persistence.*;
 @DirtEntity(value = "学生老师关系")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "t_TeacherStudent")
+@Table(name = "t_TeacherStudent",uniqueConstraints = @UniqueConstraint(columnNames = {"teacher", "student"}))
 @SQLDelete(sql = "UPDATE t_TeacherStudent SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
