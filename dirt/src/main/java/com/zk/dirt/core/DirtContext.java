@@ -50,14 +50,13 @@ public class DirtContext {
         Class<?> aClass = Class.forName(mainClassName);
         DirtScan scanPackageAnno = (DirtScan) aClass.getDeclaredAnnotation(DirtScan.class);
 
-        // default is "com.zk.dirt.entity"
         String[] scanPackages = new String[]{"com.zk.dirt.entity"};
 
         // merge scan packages if found
         if (scanPackageAnno != null) {
             scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackageAnno.value());
         }
-        log.debug("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
+        log.info("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
 
         for (String packagePath : scanPackages) {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
@@ -93,7 +92,7 @@ public class DirtContext {
                 nameColumns.put(simpleName, columns);
             }
         }
-       log.debug(nameDirtEntityMap.toString());
+       log.info(nameDirtEntityMap.toString());
     }
 
     public List<String>  getColumns(String className){
@@ -111,7 +110,7 @@ public class DirtContext {
     public DirtEntityType getDirtEntity(String name) {
         DirtEntityType dirtEntity = nameDirtEntityMap.get(name);
         if (dirtEntity == null) {
-            log.debug(nameDirtEntityMap.toString());
+            log.info(nameDirtEntityMap.toString());
             throw new RuntimeException("不存在 " + name);
         }
         return dirtEntity;
