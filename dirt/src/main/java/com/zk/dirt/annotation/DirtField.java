@@ -21,7 +21,7 @@ public @interface DirtField {
     // 表头宽度, -1: auto
     eSubmitWidth width() default eSubmitWidth.MD;
 
-    // subTree　节点的　名字
+    // subTree　节点的　名字, 这个一般配合 cascade uitype  使用.
     String subTreeName() default  "";
 
     // 需要从元数据表读取字段描述，一是性能考虑，一是安全考虑

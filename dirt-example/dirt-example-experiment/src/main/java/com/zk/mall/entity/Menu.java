@@ -62,8 +62,6 @@ public class Menu extends DirtBaseIdEntity {
     }
 
 
-
-
     @DirtField(title = "目录名" )
     @NotEmpty
     @Size(max = 30)
@@ -79,23 +77,6 @@ public class Menu extends DirtBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     Set<Menu> subMenus;
 
-    //@Data
-    //@AllArgsConstructor
-    //public static class IdNameObj {
-    //    Long id;
-    //    String name;
-    //}
-    //
-    //
-    //@Transient
-    //public IdNameObj idNameObj;
-    //
-    //IdNameObj getIdNameObj(){
-    //    return  new IdNameObj(id, name);
-    //}
-    //
-
-
 
     ////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
@@ -106,6 +87,5 @@ public class Menu extends DirtBaseIdEntity {
 
     @DirtAction(text = "编辑")
     public void edit() {}
-
 
 }
