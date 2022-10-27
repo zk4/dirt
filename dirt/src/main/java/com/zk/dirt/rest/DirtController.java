@@ -89,14 +89,14 @@ public class DirtController {
         @ApiModelProperty(value = "id", required = true)
         Long id;
         @ApiModelProperty("参数")
-        HashMap args;
+        Map args;
     }
 
 
     @PostMapping(value = "/dirt/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "创建数据")
     @Transactional
-    public String create(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
+    public String create(@RequestParam(name = "entityName") String entityName, @RequestBody Map body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {
@@ -115,7 +115,7 @@ public class DirtController {
     @PostMapping(value =  "/dirt/update", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新数据")
     @Transactional
-    public String update(@RequestParam(name = "entityName") String entityName, @RequestBody HashMap body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
+    public String update(@RequestParam(name = "entityName") String entityName, @RequestBody Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
 
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
@@ -128,7 +128,7 @@ public class DirtController {
             }
         });
 
-        DirtBaseIdEntity o2 = objectMapper.convertValue(body, entityClass);
+        iID o2 = objectMapper.convertValue(body, entityClass);
         Object one = persistProxy.getOne(entityClass, o2.getId());
         persistProxy.update(entityClass, one, body);
         return objectMapper.writeValueAsString(Result.ok());
