@@ -1,8 +1,8 @@
 package com.zk.dirt.core;
 
 import com.zk.dirt.annotation.*;
-import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.entity.MetaType;
+import com.zk.dirt.entity.iID;
 import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.iDependProvider;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
@@ -200,10 +200,10 @@ public class DirtEntityType {
         }
 
         eUIType uiType = dirtField.uiType();
-        Class<? extends DirtBaseIdEntity>[] classes = dirtField.idOfEntity();
+        Class<? extends iID>[] classes = dirtField.idOfEntity();
         Class<?> fieldRetType = field.getType();
         if (classes.length > 0) {
-            Class<? extends DirtBaseIdEntity> entityClass = classes[0];
+            Class<? extends iID> entityClass = classes[0];
             String simpleName = entityClass.getName();
             tableHeader.setIdOfEntity(simpleName);
         } else {
@@ -552,9 +552,9 @@ public class DirtEntityType {
 
     private void initIdOfEntityMap() {
         this.dirtFieldMap.forEach((s, dirtField) -> {
-            Class<? extends DirtBaseIdEntity>[] classes = dirtField.idOfEntity();
+            Class<? extends iID>[] classes = dirtField.idOfEntity();
             if (classes.length > 0) {
-                Class<? extends DirtBaseIdEntity> aClass = classes[0];
+                Class<? extends iID> aClass = classes[0];
                 this.idOfEntityMap.put(s, aClass);
             }
         });

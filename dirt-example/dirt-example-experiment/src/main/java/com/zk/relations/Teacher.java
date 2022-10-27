@@ -27,7 +27,6 @@ import java.util.Set;
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Teacher.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
-
 public class Teacher extends DirtBaseIdEntity {
 
 

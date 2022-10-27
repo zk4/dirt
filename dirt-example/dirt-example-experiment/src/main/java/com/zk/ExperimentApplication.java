@@ -28,6 +28,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Slf4j
 @EnableAsync
 @DirtScan({"com.zk.relations"})
+//@EntityScan({"com.zk.dirt.entity","com.zk.relations","com.zk.experiment.jpa"})
+
 public class ExperimentApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ExperimentApplication.class);
