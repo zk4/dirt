@@ -38,7 +38,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-#        dialect: com.zk.config.repo.MySQL5DialectNoFK
+        dialect: com.zk.dirt.repo.MySQL5DialectNoFK
     show-sql: true
     hibernate:
       ddl-auto: update

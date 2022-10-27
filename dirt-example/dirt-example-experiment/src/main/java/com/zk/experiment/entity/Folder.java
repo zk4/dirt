@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 
 @Getter
 @Setter
-@Entity
+@Entity(name="Folder")
 @DirtEntity("文件夹")
 @DynamicUpdate
 @DynamicInsert

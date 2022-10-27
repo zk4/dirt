@@ -1,16 +1,20 @@
 package com.zk.experiment.entity;
 
 import com.zk.dirt.annotation.DirtAction;
+import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.InheritanceType;
 
-@MappedSuperclass
 @Getter
 @Setter
+@Entity(name = "WindowFile")
+@DirtEntity("基表")
+@javax.persistence.Inheritance(strategy = InheritanceType.JOINED)
 public class WindowFile  extends DirtBaseIdEntity {
 
     @DirtField

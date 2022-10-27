@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "Documentation")
 @DirtEntity("文档")
 @DynamicUpdate
 @DynamicInsert
@@ -21,5 +21,5 @@ public class Documentation extends WindowFile {
 
     @DirtField
     public Integer size;
-    //省略get set
+
 }
