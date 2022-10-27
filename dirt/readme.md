@@ -88,8 +88,9 @@ ManyToMany 多对多，关系任意，可重复
 1. [x] 支持带循环结构关系显示 name，参看　IdNameObj，依赖　@JsonIdentityInfo，与 @JsonIdentityReference。
     　　　　如果不带循环，直接返回 name 即可。　　　　　
 1. [ ] 支持 Map 映射
-1. [ ] schema 标准化
-1. [ ] 业务事件驱动
+1. [x] schema 标准化
+1. [x] 业务事件驱动
+1. [x] UI 能匹配JPA 里的 entity 继承 
 1. [ ] thrift ？
 1. [ ] 虚拟 entity 支持
 1. [ ] embeded 支持
@@ -98,7 +99,7 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] action 动态返回显不显示的方案
 1. [ ] 在获取数据时，只获取需要显示的数据， 尤其是关联关系，只返回 id，或者 id list/set
 1. [ ] 抛出关键可 debug　的异常
-1. [ ] 元数据支持，一定程度上使 mysql 表字段带有动态功能。
+1. [x] 元数据支持，一定程度上使 mysql 表字段带有动态功能。
 1. [ ] json filter 替代 DSL ，更结构化点
 ## 前端
 1. [x] 性能优化，如果 UI 未显示详情，不应该加载
