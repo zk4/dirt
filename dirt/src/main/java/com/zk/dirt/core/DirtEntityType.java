@@ -452,6 +452,8 @@ public class DirtEntityType {
                     .getResultList();
             if(resultList== null || resultList.size()==0){
                 return null;
+            }else {
+                metaType =  resultList.get(0);
             }
 
         }
