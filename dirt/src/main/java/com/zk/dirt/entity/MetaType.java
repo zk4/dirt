@@ -3,10 +3,7 @@ package com.zk.dirt.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.TableColumnsProvider;
-import com.zk.dirt.annotation.DirtAction;
-import com.zk.dirt.annotation.DirtDepends;
-import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eUIType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -41,10 +38,10 @@ public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(
             title = "column 名",
-            //uiType = eUIType.select,
+            uiType = eUIType.select,
             dirtDepends = @DirtDepends(onColumn = "tableName", dependsProvider = TableColumnsProvider.class)
     )
-    @ApiModelProperty(value = "列名")
+
     String columnName;
 
     @DirtField(title = "column 重命名", tooltip = "仅改变显示，不影响内部逻辑")
