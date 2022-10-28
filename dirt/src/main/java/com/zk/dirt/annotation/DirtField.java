@@ -2,7 +2,7 @@ package com.zk.dirt.annotation;
 
 import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.entity.DirtBaseIdEntity;
+import com.zk.dirt.entity.iID;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.dirt.intef.iEnumProvider;
 import com.zk.dirt.intef.iEnumText;
