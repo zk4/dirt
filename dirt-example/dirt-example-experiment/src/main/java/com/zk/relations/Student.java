@@ -30,10 +30,10 @@ import java.util.Set;
 
  public class Student extends DirtBaseIdEntity {
 
-     @DirtField(title = "名字")
+     @DirtField(title = "名字",metable = true)
      private String name;
 
-    @DirtField(title = "关系表")
+    @DirtField(title = "关系表",metable = true)
     @OneToMany
      // 允许只生成两张表的情况下，双向更新
      @JoinColumn(name = "student")

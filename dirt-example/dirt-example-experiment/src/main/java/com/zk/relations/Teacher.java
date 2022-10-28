@@ -30,10 +30,10 @@ import java.util.Set;
 public class Teacher extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "名字")
+    @DirtField(title = "名字",metable = true)
     private String name;
 
-    @DirtField(title = "年龄")
+    @DirtField(title = "年龄",metable = true)
     private int age;
 
     @DirtField(title = "关系表")

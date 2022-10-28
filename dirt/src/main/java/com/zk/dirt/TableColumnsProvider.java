@@ -23,6 +23,7 @@ public class TableColumnsProvider implements iDependProvider<String, DirtEnumVal
     public Map<String, DirtEnumValue> getSource(Map<String,Object> args) {
         HashMap source = new HashMap<Long, DirtEnumValue>();
         String  tableName = (String)args.get("tableName");
+        //TODO: 仅获取 metaable = true
         List<String> columns = dirtContext.getColumns(tableName);
 
         for (String column : columns) {

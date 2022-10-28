@@ -32,7 +32,7 @@ public  class DirtBaseTableIdEntity implements Serializable, iID {
 
     @GeneratedValue(strategy = GenerationType.TABLE) // 自增
     @Column(name = "id")
-    @DirtField(title = "id",index = -999999, uiType = eUIType.text,fixed = "left",dirtSubmit = {})
+    @DirtField(title = "id",index = -999999, uiType = eUIType.text,fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
     protected Long id;
 
     @Data

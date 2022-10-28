@@ -182,7 +182,7 @@ public class DirtEntityType {
         ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
 
         tableHeader.setIndex(dirtField.index());
-        tableHeader.setFixed(dirtField.fixed());
+        tableHeader.setFixed(dirtField.fixed().getText());
         tableHeader.setEllipsis(dirtField.ellipsis());
         tableHeader.setCopyable(dirtField.copyable());
 

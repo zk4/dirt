@@ -11,5 +11,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 public @interface DirtArg {
+    // 绑定参数名用，跟参数写一样就行，JVM 在 runtime 会对参数改名。 需要手绑
     String value();
 }
