@@ -6,7 +6,6 @@ import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.conf.DirtQueryFilter;
 import com.zk.dirt.core.*;
-import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
@@ -29,7 +28,10 @@ import javax.persistence.EntityManager;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 public class DirtController {
@@ -97,7 +99,7 @@ public class DirtController {
     @ApiOperation(value = "创建数据")
     @Transactional
     public String create(@RequestParam(name = "entityName") String entityName, @RequestBody Map body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
-        Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
+        Class<? extends iID> entityClass = (Class<? extends iID>) Class.forName(entityName);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {
             if ("id".equals(k)) return;
@@ -116,7 +118,7 @@ public class DirtController {
     @ApiOperation(value = "更新数据")
     @Transactional
     public String update(@RequestParam(name = "entityName") String entityName, @RequestBody Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
-        Class<? extends DirtBaseIdEntity> entityClass = (Class<? extends DirtBaseIdEntity>) Class.forName(entityName);
+        Class<? extends iID> entityClass = (Class<? extends iID>) Class.forName(entityName);
 
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {

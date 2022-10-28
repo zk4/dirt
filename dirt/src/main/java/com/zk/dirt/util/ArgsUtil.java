@@ -3,7 +3,7 @@ package com.zk.dirt.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.annotation.DirtArg;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.entity.DirtBaseIdEntity;
+import com.zk.dirt.entity.iID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.CollectionUtils;
 
@@ -136,13 +136,13 @@ public class ArgsUtil {
                 // 根据 id 获取 entity reference
                 arg = idObjs.stream()
                         .map(idObj -> {
-                            return entityManager.getReference(innerType, ((DirtBaseIdEntity) idObj).getId());
+                            return entityManager.getReference(innerType, ((iID) idObj).getId());
                         })
                         .collect(isSet ? Collectors.toSet() : Collectors.toList());
 
             } else if (declaredField.isAnnotationPresent(ManyToOne.class) || declaredField.isAnnotationPresent(OneToOne.class)) {
                 Class<?> type = declaredField.getType();
-                arg = entityManager.getReference(type, ((DirtBaseIdEntity) arg).getId());
+                arg = entityManager.getReference(type, ((iID) arg).getId());
             } else {
                 // primitive field
 

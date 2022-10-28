@@ -80,5 +80,5 @@ public @interface DirtField {
     String tooltip() default  "";
 
     // 为兼容 mybatis，如果只有 id ，说明 id 所关系的实体
-    Class<? extends DirtBaseIdEntity>[] idOfEntity() default {};
+    Class<? extends iID>[] idOfEntity() default {};
 }
