@@ -15,9 +15,16 @@ axios.interceptors.response.use(function (res) {
       // message.success('成功');
       return res.data;
     } else {
-      const reasson = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      message.error(res.data.msg + ":" + reasson);
-      return Promise.reject(reasson);
+      let  reason  = ""
+      if('data' in res.data)
+      {
+        reason = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
+      }else if('message' in res.data)
+      {
+        reason = res.data.message
+      }
+      message.error(res.data.msg + ":" + reason);
+      return Promise.reject(reason);
     }
 
   } else {
