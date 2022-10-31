@@ -3,7 +3,6 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
-import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.iDependProvider;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import com.zk.dirt.intef.iEnumProvider;
@@ -384,49 +383,10 @@ public class DirtEntityType {
         DirtSubmit[] submitables = dirtField.dirtSubmit();
         if (submitables.length != 0) {
             DirtSubmit submitable = submitables[0];
-            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType);
-            tableHeader.setSubmitType(dirtSubmitType);
-            dirtSubmitType.setSubmitable(true);
-            try {
-                ColProps colProps = submitable.colProps().newInstance();
-                dirtSubmitType.setColProps(colProps);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            dirtSubmitType.setPlaceholder(submitable.placeholder());
-            dirtSubmitType.setWidth(submitable.width().getValue());
-            dirtSubmitType.setIndex(submitable.index());
-            dirtSubmitType.setValueType(submitable.valueType().toString());
-            HashMap formItemProps = new HashMap();
-
-            // 兼容部分 JSR 303
             ArrayList<Map> rules = DirtRuleAnnotationConvertor.parseRules(field);
-            if (rules != null && rules.size() > 0) {
-                formItemProps.put("rules", rules);
-                dirtSubmitType.setFormItemProps(formItemProps);
-            }
+            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType,submitable,rules );
+            tableHeader.setSubmitType(dirtSubmitType);
 
-            // 很重要，不然ProForm 提交时拿不到值
-            assert name != null && name.length() > 0;
-            dirtSubmitType.setKey(name);
-
-
-            dirtSubmitType.setTooltip(headerTooltip);
-
-            // WARNING. using dirtField title for submit label
-            String submitlable = dirtField.title();
-            if (submitlable.length() == 0) {
-                submitlable = name;
-            }
-            dirtSubmitType.setTitle(submitlable);
-
-            if (source != null)
-                dirtSubmitType.setValueEnum(source);
-            if (initialValue != null)
-                dirtSubmitType.setInitialValue(initialValue);
 
             if (oneToMany != null)
                 tableHeader.setRelation(eDirtEntityRelation.OneToMany);
