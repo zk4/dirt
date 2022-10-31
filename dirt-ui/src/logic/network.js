@@ -23,7 +23,7 @@ axios.interceptors.response.use(function (res) {
       {
         reason = res.data.message
       }
-      message.error(res.data.msg + ":" + reason);
+      message.error(reason);
       return Promise.reject(reason);
     }
 
