@@ -29,12 +29,12 @@ import javax.persistence.*;
 @JsonIdentityInfo(scope = TeacherStudent.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class TeacherStudent extends DirtBaseIdEntity {
 
-    @DirtField(title = "老师 id")
+    @DirtField(title = "老师 id",metable = true)
     @ManyToOne
     @JoinColumn(name="teacher")
     private Teacher teacher;
 
-    @DirtField(title = "学生 id")
+    @DirtField(title = "学生 id",metable = true)
     @ManyToOne
     @JoinColumn(name="student")
     private Student student;

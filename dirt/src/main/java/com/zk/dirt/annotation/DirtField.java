@@ -28,10 +28,27 @@ public @interface DirtField {
     // 不是所有字段都不需要改 meta。
     // 由开发者主动标识哪些可改。
     boolean metable() default  false;
+
     // 表头排序
     int index() default 0;
+
+    enum eFixedType implements  iEnumText<String> {
+        NONE(""),
+        LEFT("left"),
+        RIGHT("right");
+
+        eFixedType(String txt) {
+            this.txt = txt;
+        }
+
+        String txt;
+        @Override
+        public String getText() {
+            return txt;
+        }
+    }
     // 表头固定在左侧，相当于 excel 里的冻结
-    String fixed() default  "";
+    eFixedType fixed() default  eFixedType.NONE;
 
     // 超出是否省略
     boolean ellipsis() default  false;
@@ -81,4 +98,8 @@ public @interface DirtField {
 
     // 为兼容 mybatis，如果只有 id ，说明 id 所关系的实体
     Class<? extends iID>[] idOfEntity() default {};
+
+    // @Dprecated，使用 provider 类，
+    // 原因： 1 注解的返回值限制较多，2. 有可能返回数组，3 要与下拉匹配
+    // int initialValue() default 0;
 }
