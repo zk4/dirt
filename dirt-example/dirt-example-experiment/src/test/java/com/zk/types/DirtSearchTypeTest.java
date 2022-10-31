@@ -14,7 +14,7 @@ public class DirtSearchTypeTest {
         HashMap<String,String> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("hello", "hell");
         dirtFieldType.setValueEnum(objectObjectHashMap);
-        DirtSearchType dirtSearchType = new DirtSearchType(dirtFieldType);
+        DirtSearchType dirtSearchType = new DirtSearchType(dirtFieldType,null);
         System.out.println(dirtSearchType.getValueEnum());
     }
 }

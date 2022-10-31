@@ -372,11 +372,8 @@ public class DirtEntityType {
         DirtSearch[] dirtSearches = dirtField.dirtSearch();
         if (dirtSearches.length != 0) {
             DirtSearch dirtSearch = dirtSearches[0];
-            DirtSearchType dirtSearchType = new DirtSearchType(tableHeader);
+            DirtSearchType dirtSearchType = new DirtSearchType(tableHeader,dirtSearch);
             tableHeader.setSearchType(dirtSearchType);
-
-            dirtSearchType.setValueType(dirtSearch.valueType().toString());
-            dirtSearchType.setOperator(dirtSearch.operator().toString());
         }
 
         //  dirt submit--------------------------------------------
