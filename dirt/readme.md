@@ -64,8 +64,6 @@ ManyToMany 多对多，关系任意，可重复
 
 ## 服务端 TODO
 
-[ ] 大架构图，描述核心架构
-
 1. [x] 搜索
    1. [x] 过滤 基于 spring-filter 的过滤
    1. [x] 分页
@@ -115,7 +113,7 @@ ManyToMany 多对多，关系任意，可重复
 1. [ ] 通过 ws，与服务端在同一个状态机里处理事件 
 1. [ ] 动态生成 swagger，当前全是动态 api， 无法根据注解生成静态 swagger
 1. [ ] 根据 entity validate rule 将校验前置
-
+1. [ ] 省略掉 DirtField DirtEntity ，直接通过 meta 表配置出 schema
 
 
 ## 其他产品功能 TODO
