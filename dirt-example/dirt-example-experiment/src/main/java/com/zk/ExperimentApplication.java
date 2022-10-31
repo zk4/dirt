@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @Slf4j
 @EnableAsync
-@DirtScan({"com.zk.relations"})
+@DirtScan({"com.zk.inheritance"})
 //@EntityScan({"com.zk.dirt.entity","com.zk.relations","com.zk.experiment.jpa"})
 
 public class ExperimentApplication {
