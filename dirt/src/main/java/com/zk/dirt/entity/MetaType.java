@@ -53,8 +53,8 @@ public class MetaType extends DirtBaseIdEntity {
     @DirtField(title = "是否启用")
     Boolean enable;
 
-    @DirtField(title = "是否可为空")
-    Boolean nullable;
+    @DirtField(title = "是否必须存在")
+    Boolean mandate;
 
     @DirtAction(text = "详情")
     public void detail() {

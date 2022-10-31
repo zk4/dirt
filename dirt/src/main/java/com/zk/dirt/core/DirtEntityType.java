@@ -402,7 +402,7 @@ public class DirtEntityType {
             dirtSubmitType.setValueType(submitable.valueType().toString());
             HashMap formItemProps = new HashMap();
 
-            // 兼容 JSR
+            // 兼容部分 JSR 303
             ArrayList<Map> rules = DirtRuleAnnotationConvertor.parseRules(field);
             if (rules != null && rules.size() > 0) {
                 formItemProps.put("rules", rules);
