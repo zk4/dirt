@@ -62,7 +62,7 @@ public class JPAPersistProxyImp implements iPersistProxy {
 				.map(aLong -> entityManager.getReference(clazz, aLong));
 		List<?> entities = objectStream
 				.collect(Collectors.toList());
-		jpaRepository.deleteAll(entities);
+		jpaRepository.deleteInBatch(entities);
 
 	}
 

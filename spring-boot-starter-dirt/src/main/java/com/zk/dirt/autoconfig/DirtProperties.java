@@ -14,4 +14,9 @@ public class DirtProperties {
      */
     private boolean enable= false;
 
+    /**
+     * Will use @Entity as if it annotated with @DirtEntity
+     * Will use table column as @DirtField
+     */
+    private boolean smartEntity= false;
 }
