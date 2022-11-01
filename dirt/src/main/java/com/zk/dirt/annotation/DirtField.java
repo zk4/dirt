@@ -51,7 +51,7 @@ public @interface DirtField {
     eFixedType fixed() default  eFixedType.NONE;
 
     // 超出是否省略
-    boolean ellipsis() default  false;
+    boolean ellipsis() default  true;
 
     // 是否可复制
     boolean copyable() default  false;
