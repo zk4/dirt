@@ -34,7 +34,7 @@ import javax.persistence.Table;
 public class MetaType extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "实体全名", uiType = eUIType.select, enumProvider = MetaTableProvider.class)
+    @DirtField(title = "实体全名", uiType = eUIType.select, dataSource = MetaTableProvider.class)
     String tableName;
 
     @DirtField(

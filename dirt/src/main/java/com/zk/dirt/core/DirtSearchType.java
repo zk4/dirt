@@ -33,14 +33,13 @@ public class DirtSearchType {
             return this.fieldType.title;
         }
         return title;
-
     }
+
     public String getValueType() {
         if (this.valueType == null && this.fieldType != null) {
             return this.fieldType.valueType;
         }
         return valueType;
-
     }
 
     public Map getValueEnum() {

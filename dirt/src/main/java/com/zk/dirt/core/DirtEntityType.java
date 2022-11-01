@@ -4,10 +4,7 @@ import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.experiment.ColProps;
-import com.zk.dirt.intef.iDependProvider;
-import com.zk.dirt.intef.iDirtDictionaryEntryType;
-import com.zk.dirt.intef.iEnumProvider;
-import com.zk.dirt.intef.iEnumText;
+import com.zk.dirt.intef.*;
 import com.zk.dirt.rule.DirtRuleAnnotationConvertor;
 import com.zk.dirt.util.ExceptionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +42,6 @@ public class DirtEntityType {
     private final Map<String, iDependProvider> dependProviderMap = new HashMap<>();
 
 
-
     ApplicationContext applicationContext;
 
     DirtContext dirtContext;
@@ -57,7 +53,6 @@ public class DirtEntityType {
         this.applicationContext = applicationContext;
         this.entityClass = classAnnotationClass;
     }
-
 
 
     public List<DirtFieldType> getHeads() {
@@ -94,7 +89,7 @@ public class DirtEntityType {
 
                     // 如果 enable 为 false ，则不显示
                     if (metaType != null) {
-                        return metaType.getEnable()!=null? metaType.getEnable() : true;
+                        return metaType.getEnable() != null ? metaType.getEnable() : true;
                     }
                     // 为 null，则放过，使用默认 column 信息
                     return true;
@@ -116,7 +111,7 @@ public class DirtEntityType {
                 //    }
                 //    return dirtDepends.length==0;
                 //})
-                .map((Field field1) -> getFieldType(field1,null))
+                .map((Field field1) -> getFieldType(field1, null))
                 .collect(Collectors.toList());
 
         if (this.actionMap.size() > 0) {
@@ -145,24 +140,24 @@ public class DirtEntityType {
 
     }
 
-    public DirtFieldType getFieldType(String fieldName, Map<String,Object> args) {
+    public DirtFieldType getFieldType(String fieldName, Map<String, Object> args) {
 
         //TODO: duplicated code, optimize
         List<Field> fields = new ArrayList<>();
         fields = getAllFields(fields, entityClass);
         for (Field field : fields) {
-            if(field.getName().equals(fieldName))
+            if (field.getName().equals(fieldName))
                 return getFieldType(field, args);
         }
         throw new RuntimeException("why here");
     }
-        /**
-         *
-         * @param field  entity 的字段
-         * @param args   构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
-         * @return
-         */
-    public DirtFieldType getFieldType(Field field, Map<String,Object> args) {
+
+    /**
+     * @param field entity 的字段
+     * @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
+     * @return
+     */
+    public DirtFieldType getFieldType(Field field, Map<String, Object> args) {
         DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
 
         MetaType metaType = getMetaType(field, dirtField);
@@ -232,7 +227,7 @@ public class DirtEntityType {
 
 
         // set uiType  if value
-        if (  uiType == eUIType.auto) {
+        if (uiType == eUIType.auto) {
             // 设置  uiType by rettype if uiType is not set
             Class<?> type = fieldRetType;
 
@@ -243,14 +238,14 @@ public class DirtEntityType {
                 if (type.isAssignableFrom(LocalDateTime.class)) uiType = eUIType.dateTime;
                 else if (type.isAssignableFrom(LocalDate.class)) uiType = eUIType.date;
                 else if (type.isAssignableFrom(Long.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(long.class)) uiType =  eUIType.digit;
-                else if (type.isAssignableFrom(Integer.class)) uiType =  eUIType.digit;
-                else if (type.isAssignableFrom(int.class)) uiType =  eUIType.digit;
-                else if (type.isAssignableFrom(Float.class)) uiType =  eUIType.digit;
-                else if (type.isAssignableFrom(float.class)) uiType =  eUIType.digit;
-                else if (type.isAssignableFrom(Double.class)) uiType =  eUIType.digit;
-                else if (type.isAssignableFrom(double.class)) uiType =  eUIType.digit;
-                else if (type.isAssignableFrom(BigDecimal.class)) uiType =  eUIType.money;
+                else if (type.isAssignableFrom(long.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(Integer.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(int.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(Float.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(float.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(Double.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(double.class)) uiType = eUIType.digit;
+                else if (type.isAssignableFrom(BigDecimal.class)) uiType = eUIType.money;
                 else if (type.isAssignableFrom(Boolean.class)) uiType = eUIType.switching;
                 else if (type.isAssignableFrom(boolean.class)) uiType = eUIType.switching;
             }
@@ -270,19 +265,16 @@ public class DirtEntityType {
         // 2. 无参静态 provider
         // 3. 枚举列表
 
-        Class<? extends iEnumProvider>[] providerClasses = dirtField
-                .enumProvider();
-
+        Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
         DirtDepends[] dirtDepends = dirtField.dirtDepends();
-
-        Map source = null;
+        Map source = new HashMap();
         Object initialValue = null;
 
         // 1. 有参动态 provider，联动
-        if (dirtDepends.length>0 && args!=null && args.size()>0){
-            DirtDepends dependsAnnotation =  dirtDepends[0];
+        if (dirtDepends.length > 0 && args != null && args.size() > 0) {
+            DirtDepends dependsAnnotation = dirtDepends[0];
             String onColumn = dependsAnnotation.onColumn();
-            if(!args.containsKey(onColumn)){
+            if (!args.containsKey(onColumn)) {
                 throw new RuntimeException("参数不够联动");
             }
             Class<? extends iDependProvider> aClass = dependsAnnotation.dependsProvider();
@@ -291,41 +283,41 @@ public class DirtEntityType {
             source = enumProvider.getSource(args);
             initialValue = enumProvider.initialValue();
         }
-        // 2. 无参静态 provider
-        else if (providerClasses.length > 0) {
-            Class<? extends iEnumProvider> providerClass = providerClasses[0];
-            iEnumProvider enumProvider = applicationContext.getBean(providerClass);
-            source = enumProvider.getSource();
-            initialValue = enumProvider.initialValue();
+        // 2. 无参静态 datasource
+        else if (dataSource.length > 0) {
+            Class<? extends iDataSource> ds = dataSource[0];
+            if (iEnumProvider.class.isAssignableFrom(ds)) {
+                iEnumProvider enumProvider = (iEnumProvider) applicationContext.getBean(ds);
+                source = enumProvider.getSource();
+                initialValue = enumProvider.initialValue();
+            }
         } else {
             // 如果没有提供 provider, 但又是枚举类型，且实现了 iDirtListable 接口，构造 source
-            Class<? extends iEnumText> listableClass = null;
-
             if (enumConstant) {
-                Class enumType = fieldRetType;
-                listableClass = enumType.asSubclass(iEnumText.class);
+                boolean assignableFrom = iEnumText.class.isAssignableFrom(fieldRetType);
+                //source = new LinkedHashMap();
+                if (assignableFrom) {
+                    Class<? extends iEnumText>  enumTextClass = fieldRetType.asSubclass(iEnumText.class);
+                    try {
+                        iEnumText[] enumConstants = enumTextClass.getEnumConstants();
 
-            }
-            Class<? extends iEnumText>[] classes1 = dirtField.enumListableType();
-            if (classes1.length > 0) {
-                listableClass = classes1[0];
-            }
-            if (listableClass != null) {
-
-                try {
-                    iEnumText[] enumConstants = listableClass.getEnumConstants();
-                    source = new LinkedHashMap();
-                    for (iEnumText value : enumConstants) {
-                        if (value.toString().equals("null")) {
-                            System.out.println("");
+                        for (iEnumText value : enumConstants) {
+                            source.put(value, new DirtEnumValue(value.getText(), value.toString(), ""));
                         }
-                        source.put(value, new DirtEnumValue(value.getText(), value.toString(), ""));
-                    }
 
-                } catch (Exception e) {
-                   e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    Field[] fields = fieldRetType.getFields();
+                    for (Field e : fields) {
+                        String name = e.getName();
+                        System.out.println(name);
+                        source.put(name, new DirtEnumValue(name, name, ""));
+                    }
                 }
             }
+
             DirtHQLSource[] dirtSources = dirtField.sourceProvider();
             if (dirtSources.length > 0) {
                 DirtHQLSource dirtSource = dirtSources[0];
@@ -384,7 +376,7 @@ public class DirtEntityType {
         DirtSubmit[] submitables = dirtField.dirtSubmit();
         if (submitables.length != 0) {
             DirtSubmit submitable = submitables[0];
-            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType);
+            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader, metaType);
             tableHeader.setSubmitType(dirtSubmitType);
             dirtSubmitType.setSubmitable(true);
             try {
@@ -450,10 +442,10 @@ public class DirtEntityType {
                     .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
                     .setParameter(1, field.getName())
                     .getResultList();
-            if(resultList== null || resultList.size()==0){
+            if (resultList == null || resultList.size() == 0) {
                 return null;
-            }else {
-                metaType =  resultList.get(0);
+            } else {
+                metaType = resultList.get(0);
             }
 
         }
@@ -461,7 +453,7 @@ public class DirtEntityType {
         return metaType;
     }
 
-    public static Map<String, DirtActionType>  getActionRecursively(Map<String, DirtActionType>  out,Class<?> clazz,DirtContext dirtContext){
+    public static Map<String, DirtActionType> getActionRecursively(Map<String, DirtActionType> out, Class<?> clazz, DirtContext dirtContext) {
         for (Method declaredMethod : clazz.getDeclaredMethods()) {
             DirtAction actionAnnotation = declaredMethod.getAnnotation(DirtAction.class);
             if (actionAnnotation != null) {
@@ -479,7 +471,7 @@ public class DirtEntityType {
                 if (parameters.length > 0) {
                     for (int i = 0; i < parameters.length; i++) {
                         Parameter parameter = parameters[i];
-                        DirtEntityType dirtEntity =  dirtContext.getDirtEntity(parameter.getType().getName());
+                        DirtEntityType dirtEntity = dirtContext.getDirtEntity(parameter.getType().getName());
                         if (dirtEntity == null) {
                             System.out.println("bug here");
                         }
@@ -493,20 +485,22 @@ public class DirtEntityType {
                 out.put(declaredMethod.getName(), dirtActionType);
             }
         }
-        if(clazz.getSuperclass()!=null)
-            getActionRecursively(out,clazz.getSuperclass(),dirtContext);
+        if (clazz.getSuperclass() != null)
+            getActionRecursively(out, clazz.getSuperclass(), dirtContext);
         return out;
     }
+
     private void initActionMap() {
         this.actionMap.clear();
-        getActionRecursively(this.actionMap, this.entityClass,dirtContext);
+        getActionRecursively(this.actionMap, this.entityClass, dirtContext);
     }
 
 
     /**
-     *  得到子类与所有父类的 field
+     * 得到子类与所有父类的 field
+     *
      * @param fields 返回值
-     * @param type 目标 class
+     * @param type   目标 class
      * @return
      */
     public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
@@ -518,19 +512,20 @@ public class DirtEntityType {
     }
 
     // 递归父类拿 DirtField
-    public static Map<String, DirtField> getFieldMapRecursively(Map<String, DirtField> out, Class<?> clazz){
+    public static Map<String, DirtField> getFieldMapRecursively(Map<String, DirtField> out, Class<?> clazz) {
         for (Field declaredField : clazz.getDeclaredFields()) {
             DirtField dirtField = declaredField.getAnnotation(DirtField.class);
             if (dirtField != null) {
                 out.put(declaredField.getName(), dirtField);
             }
         }
-        if(clazz.getSuperclass()!=null)
-            getFieldMapRecursively(out,clazz.getSuperclass());
+        if (clazz.getSuperclass() != null)
+            getFieldMapRecursively(out, clazz.getSuperclass());
 
         return out;
 
     }
+
     public void initDirtFieldMap() {
         this.dirtFieldMap.clear();
         getFieldMapRecursively(this.dirtFieldMap, this.entityClass);

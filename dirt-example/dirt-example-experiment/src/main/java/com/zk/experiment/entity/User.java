@@ -75,6 +75,14 @@ public class User extends DirtBaseIdEntity {
 
 
 
+    enum  MyEnum{
+        HELLO,
+        WORLD
+    }
+    @DirtField(title = "myenum")
+    MyEnum myEnum;
+
+
 
     @DirtAction(text = "详情")
     public void detail() {}

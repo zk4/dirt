@@ -4,7 +4,7 @@ import com.zk.dirt.core.eDirtEntityRelation;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.experiment.eSubmitWidth;
-import com.zk.dirt.intef.iEnumProvider;
+import com.zk.dirt.intef.iDataSource;
 import com.zk.dirt.intef.iEnumText;
 
 import java.lang.annotation.Retention;
@@ -61,15 +61,17 @@ public @interface DirtField {
 
     // 以下两者任选一，不要同时选，
     // 基于类做下拉数据源
-    Class<? extends iEnumProvider>[] enumProvider() default {};
+    //Class<? extends iEnumProvider>[] enumProvider() default {};
     // 基于 enum 做数据源
-    Class<? extends iEnumText>[] enumListableType() default {};
+    //Class<? extends iEnumText>[] enumListableType() default {};
 
     // 搜索表单相关
     DirtDepends[] dirtDepends() default {};
 
     // UI组件的源数据
     DirtHQLSource[] sourceProvider() default {};
+
+    Class<? extends iDataSource>[] dataSource() default  {};
 
     boolean search() default  true;
     // 筛选表单，为 true 时使用 ProTable 自带的，为 false 时关闭本地筛选
