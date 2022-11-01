@@ -8,8 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class DirtResourceConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/dirt/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/dirt/js/**").addResourceLocations("classpath:/static/js/");
+        registry.addResourceHandler("/dirt/**").addResourceLocations("classpath:/static/");
     }
 }

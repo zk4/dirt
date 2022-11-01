@@ -6,7 +6,7 @@
 
     <groupId>com.zk</groupId>
     <artifactId>dirt-parent</artifactId>
-    <version>0.0.5.BETA</version>
+    <version>0.0.6.BETA</version>
 
 
     <name>dirt-parent</name>
@@ -116,17 +116,17 @@
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>dirt</artifactId>
-                <version>0.0.5.BETA</version>
+                <version>0.0.6.BETA</version>
             </dependency>
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>spring-boot-starter-dirt</artifactId>
-                <version>0.0.5.BETA</version>
+                <version>0.0.6.BETA</version>
             </dependency>
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>dirt-common-core</artifactId>
-                <version>0.0.5.BETA</version>
+                <version>0.0.6.BETA</version>
             </dependency>
 
             <dependency>
