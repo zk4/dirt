@@ -11,7 +11,7 @@ class DirtSubmitTypeTest {
     void getValueType() {
         DirtFieldType dirtFieldType = new DirtFieldType(null);
         dirtFieldType.setValueType(eUIType.time.toString());
-        DirtSubmitType dirtSubmitType = new DirtSubmitType(dirtFieldType,null);
+        DirtSubmitType dirtSubmitType = new DirtSubmitType(dirtFieldType,null, null,null);
         Assertions.assertEquals(dirtSubmitType.getValueType(),"time");
     }
 
@@ -20,7 +20,7 @@ class DirtSubmitTypeTest {
     void getValueType2() {
         DirtFieldType dirtFieldType = new DirtFieldType(null);
         dirtFieldType.setValueType(eUIType.time.toString());
-        DirtSubmitType dirtSubmitType = new DirtSubmitType(dirtFieldType,null);
+        DirtSubmitType dirtSubmitType = new DirtSubmitType(dirtFieldType,null, null,null);
         dirtSubmitType.setValueType(eUIType.textarea.toString());
         Assertions.assertEquals(dirtSubmitType.getValueType(),"textarea");
     }

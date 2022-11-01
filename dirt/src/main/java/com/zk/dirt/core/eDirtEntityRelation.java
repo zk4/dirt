@@ -2,7 +2,7 @@ package com.zk.dirt.core;
 
 import com.zk.dirt.intef.iEnumText;
 
-public enum eDirtEntityRelation implements iEnumText {
+public enum eDirtEntityRelation implements iEnumText{
     None,
     OneToOne,
     OneToMany,

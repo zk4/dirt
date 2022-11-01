@@ -1,7 +1,7 @@
 package com.zk.experiment.provider;
 
 import com.zk.dirt.core.DirtEnumValue;
-import com.zk.dirt.intef.iEnumProvider;
+import com.zk.dirt.intef.iNoArgDatasource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class SQLProvider implements iEnumProvider<String, DirtEnumValue> {
+public class SQLProvider implements iNoArgDatasource<String, DirtEnumValue> {
 
     @Autowired
     EntityManager entityManager;

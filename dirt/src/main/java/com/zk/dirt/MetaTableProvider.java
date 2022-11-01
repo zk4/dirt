@@ -2,7 +2,7 @@ package com.zk.dirt;
 
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.DirtEnumValue;
-import com.zk.dirt.intef.iEnumProvider;
+import com.zk.dirt.intef.iNoArgDatasource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-public class MetaTableProvider implements iEnumProvider<String, DirtEnumValue> {
+public class MetaTableProvider implements iNoArgDatasource<String, DirtEnumValue> {
 
     @Autowired
     EntityManager entityManager;

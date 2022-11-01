@@ -1,4 +1,5 @@
 package com.zk.dirt.intef;
 
-public interface iDataSource {
+public interface iDataSource  {
+
 }

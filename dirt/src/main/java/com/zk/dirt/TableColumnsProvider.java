@@ -2,7 +2,7 @@ package com.zk.dirt;
 
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.DirtEnumValue;
-import com.zk.dirt.intef.iDependProvider;
+import com.zk.dirt.intef.iWithArgDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class TableColumnsProvider implements iDependProvider<String, DirtEnumValue> {
+public class TableColumnsProvider implements iWithArgDataSource<String, DirtEnumValue> {
 
     @Autowired
     EntityManager entityManager;

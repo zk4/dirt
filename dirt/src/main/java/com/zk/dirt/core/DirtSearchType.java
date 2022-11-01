@@ -1,6 +1,7 @@
 package com.zk.dirt.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zk.dirt.annotation.DirtSearch;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.util.StringUtils;
@@ -24,12 +25,18 @@ public class DirtSearchType {
 
     @ApiModelProperty(value = "搜索操作符，当前未实现")
     private String operator;
-    public DirtSearchType(DirtFieldType fieldType) {
+
+    public DirtSearchType(DirtFieldType fieldType, DirtSearch dirtSearch) {
         this.fieldType = fieldType;
+
+        if (dirtSearch != null)
+            this.setValueType(dirtSearch.valueType().toString());
+        if (dirtSearch != null)
+            this.setOperator(dirtSearch.operator().toString());
     }
 
     public String getTitle() {
-        if (StringUtils.isEmpty(this.title)   && this.fieldType != null) {
+        if (StringUtils.isEmpty(this.title) && this.fieldType != null) {
             return this.fieldType.title;
         }
         return title;

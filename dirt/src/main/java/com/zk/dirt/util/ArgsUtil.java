@@ -106,7 +106,7 @@ public class ArgsUtil {
      * @throws InvocationTargetException
      */
     public static <T> void updateEntity(Class<?> rawType, T enhancedInstance, Map args, EntityManager entityManager, ObjectMapper objectMapper) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
-        // types is converted, save me sometime
+        // types is converted, save me some time
         Object typedArgs = objectMapper.convertValue(args, rawType);
 
         for (Field declaredField : rawType.getDeclaredFields()) {

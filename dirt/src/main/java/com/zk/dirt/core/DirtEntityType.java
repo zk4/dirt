@@ -3,7 +3,6 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
-import com.zk.dirt.experiment.ColProps;
 import com.zk.dirt.intef.*;
 import com.zk.dirt.rule.DirtRuleAnnotationConvertor;
 import com.zk.dirt.util.ExceptionUtils;
@@ -39,7 +38,7 @@ public class DirtEntityType {
 
     private final Map<String, Class> idOfEntityMap = new HashMap<>();
 
-    private final Map<String, iDependProvider> dependProviderMap = new HashMap<>();
+    private final Map<String, iWithArgDataSource> dependProviderMap = new HashMap<>();
 
 
     ApplicationContext applicationContext;
@@ -277,8 +276,8 @@ public class DirtEntityType {
             if (!args.containsKey(onColumn)) {
                 throw new RuntimeException("参数不够联动");
             }
-            Class<? extends iDependProvider> aClass = dependsAnnotation.dependsProvider();
-            iDependProvider enumProvider = applicationContext.getBean(aClass);
+            Class<? extends iWithArgDataSource> aClass = dependsAnnotation.dependsProvider();
+            iWithArgDataSource enumProvider = applicationContext.getBean(aClass);
 
             source = enumProvider.getSource(args);
             initialValue = enumProvider.initialValue();
@@ -286,8 +285,8 @@ public class DirtEntityType {
         // 2. 无参静态 datasource
         else if (dataSource.length > 0) {
             Class<? extends iDataSource> ds = dataSource[0];
-            if (iEnumProvider.class.isAssignableFrom(ds)) {
-                iEnumProvider enumProvider = (iEnumProvider) applicationContext.getBean(ds);
+            if (iNoArgDatasource.class.isAssignableFrom(ds)) {
+                iNoArgDatasource enumProvider = (iNoArgDatasource) applicationContext.getBean(ds);
                 source = enumProvider.getSource();
                 initialValue = enumProvider.initialValue();
             }
@@ -365,60 +364,19 @@ public class DirtEntityType {
         DirtSearch[] dirtSearches = dirtField.dirtSearch();
         if (dirtSearches.length != 0) {
             DirtSearch dirtSearch = dirtSearches[0];
-            DirtSearchType dirtSearchType = new DirtSearchType(tableHeader);
+            DirtSearchType dirtSearchType = new DirtSearchType(tableHeader,dirtSearch);
             tableHeader.setSearchType(dirtSearchType);
-
-            dirtSearchType.setValueType(dirtSearch.valueType().toString());
-            dirtSearchType.setOperator(dirtSearch.operator().toString());
         }
 
         //  dirt submit--------------------------------------------
         DirtSubmit[] submitables = dirtField.dirtSubmit();
         if (submitables.length != 0) {
             DirtSubmit submitable = submitables[0];
-            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader, metaType);
-            tableHeader.setSubmitType(dirtSubmitType);
-            dirtSubmitType.setSubmitable(true);
-            try {
-                ColProps colProps = submitable.colProps().newInstance();
-                dirtSubmitType.setColProps(colProps);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
 
-            dirtSubmitType.setPlaceholder(submitable.placeholder());
-            dirtSubmitType.setWidth(submitable.width().getValue());
-            dirtSubmitType.setIndex(submitable.index());
-            dirtSubmitType.setValueType(submitable.valueType().toString());
-            HashMap formItemProps = new HashMap();
-
-            // 兼容 JSR
             ArrayList<Map> rules = DirtRuleAnnotationConvertor.parseRules(field);
-            if (rules != null && rules.size() > 0) {
-                formItemProps.put("rules", rules);
-                dirtSubmitType.setFormItemProps(formItemProps);
-            }
+            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType,submitable,rules );
+            tableHeader.setSubmitType(dirtSubmitType);
 
-            // 很重要，不然ProForm 提交时拿不到值
-            assert name != null && name.length() > 0;
-            dirtSubmitType.setKey(name);
-
-
-            dirtSubmitType.setTooltip(headerTooltip);
-
-            // WARNING. using dirtField title for submit label
-            String submitlable = dirtField.title();
-            if (submitlable.length() == 0) {
-                submitlable = name;
-            }
-            dirtSubmitType.setTitle(submitlable);
-
-            if (source != null)
-                dirtSubmitType.setValueEnum(source);
-            if (initialValue != null)
-                dirtSubmitType.setInitialValue(initialValue);
 
             if (oneToMany != null)
                 tableHeader.setRelation(eDirtEntityRelation.OneToMany);

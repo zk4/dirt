@@ -2,14 +2,14 @@ package com.zk.templator.provider;
 
 import com.google.common.collect.ImmutableMap;
 import com.zk.dirt.core.DirtEnumValue;
-import com.zk.dirt.intef.iEnumProvider;
+import com.zk.dirt.intef.iNoArgDatasource;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class StatusProvider implements iEnumProvider<String, DirtEnumValue> {
+public class StatusProvider implements iNoArgDatasource<String, DirtEnumValue> {
     @Override
     public ImmutableMap<String, DirtEnumValue> getSource() {
         List<DirtEnumValue> dirtEnumValues = Arrays.asList(new DirtEnumValue("全部", "", "white"));

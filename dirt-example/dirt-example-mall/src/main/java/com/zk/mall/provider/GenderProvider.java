@@ -1,11 +1,11 @@
 package com.zk.mall.provider;
 
 import com.google.common.collect.ImmutableMap;
-import com.zk.dirt.intef.iEnumProvider;
+import com.zk.dirt.intef.iNoArgDatasource;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GenderProvider implements iEnumProvider<String,ImmutableMap> {
+public class GenderProvider implements iNoArgDatasource<String,ImmutableMap> {
     @Override
     public ImmutableMap<String,ImmutableMap> getSource() {
         return ImmutableMap.of(

@@ -5,5 +5,6 @@ package com.zk.dirt.intef;
  */
 public interface iEnumText<T> extends  iDataSource {
 
+
     T getText();
 }
