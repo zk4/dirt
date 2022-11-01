@@ -11,6 +11,7 @@
     </parent>
     <artifactId>dirt-example-experiment</artifactId>
 
+    <packaging>jar</packaging>
 
     <dependencies>
 
@@ -21,13 +22,13 @@
             <scope>test</scope>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>com.zk</groupId>-->
-            <!--<artifactId>spring-boot-starter-dirt</artifactId>-->
-            <!--<version>0.0.1.BETA</version>-->
+        <!--<groupId>com.zk</groupId>-->
+        <!--<artifactId>spring-boot-starter-dirt</artifactId>-->
+        <!--<version>0.0.1.BETA</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>com.zk</groupId>-->
-            <!--<artifactId>dirt-common-core</artifactId>-->
+        <!--<groupId>com.zk</groupId>-->
+        <!--<artifactId>dirt-common-core</artifactId>-->
         <!--</dependency>-->
         <dependency>
             <groupId>com.zk</groupId>
@@ -45,8 +46,8 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework.plugin</groupId>-->
-            <!--<artifactId>spring-plugin-core</artifactId>-->
+        <!--<groupId>org.springframework.plugin</groupId>-->
+        <!--<artifactId>spring-plugin-core</artifactId>-->
         <!--</dependency>-->
 
         <dependency>
@@ -61,15 +62,14 @@
 
 
         <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-jpamodelgen</artifactId>-->
+        <!--<groupId>org.hibernate</groupId>-->
+        <!--<artifactId>hibernate-jpamodelgen</artifactId>-->
         <!--</dependency>-->
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
-
 
 
         <dependency>
@@ -92,13 +92,13 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-cache</artifactId>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-cache</artifactId>-->
         <!--</dependency>-->
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-data-redis</artifactId>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-data-redis</artifactId>-->
         <!--</dependency>-->
 
 
@@ -111,7 +111,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
 
 
         <!--hibernate 相关-->
@@ -151,4 +150,52 @@
         </dependency>
 
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.1.1.RELEASE</version>
+                <configuration>
+                    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--&lt;!&ndash; other Maven plugins ... &ndash;&gt;-->
+
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+                <!--<version>3.1.1</version>-->
+
+                <!--<configuration>-->
+                    <!--<descriptorRefs>-->
+                        <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                    <!--</descriptorRefs>-->
+                <!--</configuration>-->
+
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>make-assembly</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>single</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+
+            <!--</plugin>-->
+
+        </plugins>
+    </build>
+
 </project>
