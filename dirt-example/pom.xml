@@ -11,12 +11,12 @@
 
     <modules>
 
-        <module>dirt-example-member</module>
+        <!--<module>dirt-example-member</module>-->
         <module>dirt-example-experiment</module>
-        <module>dirt-example-eiam</module>
-        <module>dirt-example-mall</module>
-        <module>dirt-example-templator</module>
-        <module>dirt-example-feign-proxy</module>
+        <!--<module>dirt-example-eiam</module>-->
+        <!--<module>dirt-example-mall</module>-->
+        <!--<module>dirt-example-templator</module>-->
+        <!--<module>dirt-example-feign-proxy</module>-->
      </modules>
 
     <artifactId>dirt-example</artifactId>
