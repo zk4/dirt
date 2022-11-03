@@ -123,7 +123,7 @@ ManyToMany 多对多，关系任意，可重复
 ## BUG
 1. [x] 可用星期排序有 bug，会多出几条,　与 relation 有关
 1. [x] 在 runtime 别依赖 paramter.getName()，比如  public void call(String name){...} "name" 这个名字很可能被编译器改成 arg0 或其他。
-1. [ ] 逻辑删除有问题， deleteInBatch 不走逻辑删除，先用 deleteAll，性能可优化
+1. [x] 逻辑删除有问题， deleteInBatch 不走逻辑删除，先用 deleteAll，性能可优化
 1. [ ] 前端颜色选择有问题
 1. [ ] 因为将构建 header 的逻辑放到了 DirtEntity初始化时, 一些动态的 enum 在添加后是看不到的。需要做成 lambda 或接口形式延迟获得
 1. [x] objectMapper 不是 bug 的 bug， https://github.com/FasterXML/jackson-databind/issues/2868
@@ -134,190 +134,66 @@ ManyToMany 多对多，关系任意，可重复
 
    
 
-根源跟踪：
-
-
-
-```java
- com.fasterxml.jackson.databind.introspect.POJOPropertiesCollector
- protected void collectAll(...){
-   ... 
-	_addFields(props);  //这一步没问题，构造了部分 props
-  _addMethods(props);  ///当 aInteger 时 这一步有问题
-   ...
-  }
-```
-
-aInteger 会解析出两个 props
-
-一个 prop的 property name 是 aInteger， 但没有 getter setter， 
-
-而另一个prop 的  property name  则为 ainteger ，且生成了 getter setter
-
-如下：
-
-```ini
-"aInteger" -> "[Property 'aInteger'; ctors: null, field(s): [field com.zk.dirt.util.ArgsUtilTest$CamelCaseData#aInteger][visible=false,ignore=false,explicitName=false], 
-getter(s): null, 
-setter(s): null]"
-```
-
-
-
-```ini
-"ainteger" -> "[Property 'ainteger'; ctors: null, field(s): null, 
-getter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#getAInteger(0 params)][visible=true,ignore=false,explicitName=false], 
-setter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#setAInteger(1 params)][visible=true,ignore=false,explicitName=false]]"
-```
-
-
-
- 而当 anInteger 时 props 只有一个值 
-
-```ini
-"anInteger" -> "[Property 'anInteger'; 
-ctors: null, 
-field(s): [field com.zk.dirt.util.ArgsUtilTest$CamelCaseData#anInteger][visible=false,ignore=false,explicitName=false], 
-getter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#getAnInteger(0 params)][visible=true,ignore=false,explicitName=false], 
-setter(s): [method com.zk.dirt.util.ArgsUtilTest$CamelCaseData#setAnInteger(1 params)][visible=true,ignore=false,explicitName=false]]"
-```
-
-
-
-而从 getter 推名字主要是以下方法
-
-```
-com.fasterxml.jackson.databind.util.BeanUtil
-implName = BeanUtil.okNameForRegularGetter(m, m.getName(), _stdBeanNaming);
-```
-
-
-
-在  okNameForRegularGetter 里有这样的注释，说明了为什么要这样处理一个小写字母开头的 field。
-
-```java
-// 17-Dec-2014, tatu: As per [databind#653], need to follow more
-//   closely Java Beans spec; specifically, if two first are upper-case,
-//   then no lower-casing should be done.
-if ((offset + 1) < end) {
-  if (Character.isUpperCase(basename.charAt(offset+1))) {
-    return basename.substring(offset);
-  }
-}
-```
-
-可以找到这个： https://github.com/fasterxml/jackson-databind/issues/653
-
-```ini
-JavaBeans spec:
-getUrl/setUrl => property name: url
-getURL/setURL => property name: URL
-
-Jackson:
-getUrl/setUrl => property name: url
-getURL/setURL => property name: url
-```
-
-而 [JavaBeans spec](https://download.oracle.com/otn-pub/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/beans.101.pdf?AuthParam=1662705279_f47591283f3d893b23340a328b484cf0) 的确如此这样规定。
-
-![image-20220909143521593](https://zk4bucket.oss-cn-beijing.aliyuncs.com/uPic/image-20220909143521593.png)
-
-
-
-做个简单测试：
-
-``` java
- @Test
-    void testGetterName() {
-        String ret = BeanUtil.okNameForRegularGetter(null, "getAInteger", true);
-        System.out.println(ret);  // AInteger
-         ret = BeanUtil.okNameForRegularGetter(null, "getAInteger", false);
-        System.out.println(ret);  // ainteger
-        ret = BeanUtil.okNameForRegularGetter(null, "getAnInteger", true);
-        System.out.println(ret);  // anInteger
-        ret = BeanUtil.okNameForRegularGetter(null, "getAnInteger", false);
-        System.out.println(ret);  // anInteger
-    }
-```
-
-
-
-
-
-
-
 
 
 ## TIPS
-1. js object 与 json 不对称容易导致的 bug，比如： 从 java 返回 Map<Long,String>，序列化完就变成了 Map<String,String>，要特别注意。
-       json 的 key 只能是字符串！且要有双引号，object 可以
+1. 后端与前端在数据传递时, 不要使用 Key primitive Number 类型,
+   原因: js object 与 json 不对称会导致的 bug，
+   比如: 从 java 返回 Map<Long,String>，序列化完就变成了 Map<String,String>，。
+       json 的 key 只能是字符串.且要有双引号
 
 
 
 ## 参考
-
-### spring plugin 机制
-
+spring plugin 机制
 https://www.cnblogs.com/m78-seven/p/15399971.html
 
-### spring ApplicationEvent 机制
-
+spring ApplicationEvent 机制
 https://www.cnblogs.com/m78-seven/p/15417797.html
 
  
 
-### JPA RSQL version 2
-
+JPA RSQL version 2
 https://github.com/perplexhub/rsql-jpa-specification
 
-* spring-filter
+spring-filter
 https://github.com/turkraft/spring-filter
 
 fluent-hibernate
 https://github.com/v-ladynev/fluent-hibernate
 
-### 智能表单
-
+智能表单
 - Cross Device & High Performance Normal Form/Dynamic(JSON Schema) Form/Form Builder -- Support React/React Native/Vue 2/Vue 3
 https://github.com/alibaba/formily
 
 - 阿里巴巴 - 飞猪中后台「表单/表格/图表」开箱即用解决方案
 https://xrender.fun/
 
-### alibab fusion
-
+alibab fusion
 https://github.com/alibaba-fusion/next
 
 https://qingflow.com/index
 https://qingflow.com/help/docs/6114c2d7d601550046421ddf
 
-### antd admin
-
+antd admin
 https://icode.best/i/36721736606141
 
-### charts
-
+charts
 https://recharts.org/en-US/examples/PieChartWithPaddingAngle
-
 https://github.com/d2-projects/d2-admin
 
-### 脚手架市场
-
+脚手架市场
 https://scaffold.ant.design/#/
-
 https://gitee.com/JeeHuangBingGui/jeeSpringCloud
 
-### JsonSql.js
-
+JsonSql.js
 https://gitee.com/JeeHuangBingGui/JsonSql
 
-### 事件驱动 flow-eda
-
+事件驱动 flow-eda
 https://linxfeng.github.io/flow-eda/#/introduce/overview
 
 
-### 服务端脚手架
-
+服务端脚手架
 1. Guns
 2. pig
 3. RuoYi
