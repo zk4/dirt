@@ -18,14 +18,14 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@DirtEntity("岗位2")
+@DirtEntity("岗位")
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "upms_sys_dept")
 @SQLDelete(sql = "UPDATE upms_sys_dept SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-public class SysPost extends  MyBaseIdTreeEntity<SysPost> {
+public class SysPost extends MyBaseIdNameEntity<SysPost> {
 
 
 

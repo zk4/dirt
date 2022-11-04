@@ -13,29 +13,14 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.lang.reflect.ParameterizedType;
 
 @Data
 @DynamicInsert
 @DynamicUpdate
 @MappedSuperclass
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = MyBaseIdTreeEntity.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idNameObj")
-public   class MyBaseIdTreeEntity<T> extends MyBaseIdEntity  {
-
-    /**
-     * 在 runtime 时拿到泛型的类型
-     * @return
-     */
-    public String fetchGenericType(String T){
-        if("T".equals(T)) {
-            return ((Class<T>) ((ParameterizedType) getClass()
-                    .getGenericSuperclass()).getActualTypeArguments()[0]).getClass().getSimpleName();
-        }else{
-            throw  new RuntimeException("不知道啥泛型");
-        }
-    }
-
+@JsonIdentityInfo(scope = MyBaseIdNameEntity.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idNameObj")
+public   class MyBaseIdNameEntity<T> extends MyBaseIdEntity  {
 
     @Data
     @AllArgsConstructor
@@ -55,12 +40,9 @@ public   class MyBaseIdTreeEntity<T> extends MyBaseIdEntity  {
     Boolean isLeaf;
 
 
-
     @DirtField(title = "名字" )
     @NotEmpty
     @Size(max = 30)
     String name;
-
-
 
 }
