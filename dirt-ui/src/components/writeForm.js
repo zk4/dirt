@@ -70,8 +70,8 @@ export default (props) => {
     }
     if (column.valueType === UIConsts.selectInputMultipal) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        // debugger
-        return <SelectInput.WriteView handleChange={e=>{
+        let options= Object.entries(item.valueEnum).map(([k,v])=>{return {label:v.text,value:v.text}})
+        return <SelectInput.WriteView options={options} handleChange={e=>{
          form.setFieldValue(columnKey, e)
         }}/>
       }

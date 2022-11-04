@@ -22,8 +22,8 @@ const SearchView = (props) => {
     if(props.size){
       if(props.size < e.length)
       {
-        message.error('超出可输大小');
-        a = a.splice(0,props.size)
+        // message.error('超出可输大小');
+        a = a.splice(a.length-props.size,props.size)
       }
     }
       setValue(a)

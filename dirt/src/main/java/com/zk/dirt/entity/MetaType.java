@@ -57,7 +57,7 @@ public class MetaType extends DirtBaseIdEntity {
     @DirtField(title = "是否必须存在")
     Boolean mandate;
 
-    @DirtField(title = "分组名", uiType =  eUIType.selectInput, dataSource = MetaGroupProvider.class )
+    @DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, dataSource = MetaGroupProvider.class )
     String groupName;
 
     @DirtField(title = "分组排序")
