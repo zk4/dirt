@@ -1,6 +1,7 @@
 package com.zk.dirt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zk.dirt.conf.DirtQueryFilter;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.util.ArgsUtil;
@@ -40,6 +41,19 @@ public class JPAPersistProxyImp implements iPersistProxy {
 	public <ID> Optional findById(Class clazz, ID id) {
 		SimpleJpaRepository jpaRepository = dirtContext.getRepoByType(clazz);
 		return jpaRepository.findById(id);
+	}
+
+	@Override
+	public <ID> Optional findByCode(Class clazz, ID code) {
+		DirtQueryFilter specFilter = new DirtQueryFilter("code ~ " + code.toString());
+		List<Object> all = findAll(clazz, specFilter.getSpec());
+		if(all.size()>1){
+			throw new RuntimeException("相同 code 返回值有两个");
+		}
+		else  if(all.size()  ==1){
+			return  Optional.of(all.get(0));
+		}
+		return Optional.empty();
 	}
 
 	@Override

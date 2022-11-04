@@ -18,6 +18,8 @@ public interface iPersistProxy  {
 
 	<ID> Optional findById(Class clazz, ID id);
 
+	<ID> Optional findByCode(Class clazz, ID code);
+
 	<T,ID>  T getOne(Class<T> clazz, ID id) ;
 
 	<ID>  void deleteById(Class clazz,ID id);

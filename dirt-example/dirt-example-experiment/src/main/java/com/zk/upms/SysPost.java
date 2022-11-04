@@ -59,7 +59,7 @@ public class SysPost extends MyBaseIdEntity {
     }
 
 
-    @DirtField(title = "目录名" )
+    @DirtField(title = "岗位名" )
     @NotEmpty
     @Size(max = 30)
     String name;
@@ -68,7 +68,7 @@ public class SysPost extends MyBaseIdEntity {
     @JsonIgnore
     SysPost parent;
 
-    @DirtField(title = "子岗位")
+    @DirtField(title = "子岗")
     @OneToMany
     @JoinColumn(name = "parent")
     @JsonIdentityReference(alwaysAsId = true)
@@ -77,10 +77,6 @@ public class SysPost extends MyBaseIdEntity {
     /** 岗位编码 */
     @DirtField(title = "岗位编码")
     private String postCode;
-
-    /** 岗位名称 */
-    @DirtField(title = "岗位名称")
-    private String postName;
 
     /** 岗位排序 */
     @DirtField(title = "岗位排序")

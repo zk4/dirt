@@ -41,7 +41,7 @@ spring:
         dialect: com.zk.dirt.repo.MySQL5DialectNoFK
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 #      naming:
 #        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
 #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
