@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.turkraft.springfilter.boot.SpringFilterWebConfig,\
+com.turkraft.springfilter.boot.SpringFilterAutoConfig
