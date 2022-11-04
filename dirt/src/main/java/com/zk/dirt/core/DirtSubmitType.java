@@ -133,7 +133,7 @@ public class DirtSubmitType {
         return tooltip;
     }
     public Map getValueEnum() {
-        if (this.valueEnum == null && this.valueEnum != null) {
+        if (this.valueEnum == null && this.fieldType != null) {
             return this.fieldType.valueEnum;
         }
         return valueEnum;
