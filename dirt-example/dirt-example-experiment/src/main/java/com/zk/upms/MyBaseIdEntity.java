@@ -27,13 +27,10 @@ public  class MyBaseIdEntity implements Serializable, iID {
 
     private static final long serialVersionUID = 2359852974346431431L;
     
-    // 有点屌，以当前 value 做为整个 entity 序列化的值，在这也就是 id
-    // @JsonValue
+
 
     @Id
-    // https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela/32223785#32223785
     @Access(AccessType.PROPERTY)
-
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
     @Column(name = "id")
     @DirtField(title = "id",index = -999999, uiType = eUIType.text,fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
