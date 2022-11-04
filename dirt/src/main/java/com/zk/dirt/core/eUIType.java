@@ -38,6 +38,9 @@ public enum eUIType {
     select,
     //树形下拉框
     treeSelect,
+    //可下拉，可输入
+    selectInput,
+    selectInputMultipal,
 
     entitySelect,
     // 多选框

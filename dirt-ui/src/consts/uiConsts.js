@@ -31,6 +31,9 @@ export default {
   richtext: "richtext",
   //下拉框
   select: "select",
+  selectInputMultipal:"selectInputMultipal",
+  //可下拉，可输入
+  selectInput:"selectInput",
   //树形下拉框
   treeSelect: "treeSelect",
 

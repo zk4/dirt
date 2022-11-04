@@ -8,6 +8,7 @@ import customRender from './customRender'
 import RichText from './richEditor'
 import Cascader from './cascader'
 import ImageUploader from './imageUploader'
+import SelectInput from './selectInput'
 import network from '../logic/network'
 import {SearchOutlined} from '@ant-design/icons';
 
@@ -59,6 +60,22 @@ export default (props) => {
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 formItem
+    if (column.valueType === UIConsts.selectInput) {
+      column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        let options= Object.entries(item.valueEnum).map(([k,v])=>{return {label:v.text,value:v.text}})
+        return <SelectInput.WriteView options={options} size={1} handleChange={e=>{
+         form.setFieldValue(columnKey, e[0])
+        }}/>
+      }
+    }
+    if (column.valueType === UIConsts.selectInputMultipal) {
+      column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        // debugger
+        return <SelectInput.WriteView handleChange={e=>{
+         form.setFieldValue(columnKey, e)
+        }}/>
+      }
+    }
     if (column.valueType === UIConsts.cascader) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         // debugger

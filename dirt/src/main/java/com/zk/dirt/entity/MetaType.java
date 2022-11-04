@@ -1,6 +1,7 @@
 package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zk.dirt.MetaGroupProvider;
 import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.annotation.DirtAction;
@@ -55,6 +56,12 @@ public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(title = "是否必须存在")
     Boolean mandate;
+
+    @DirtField(title = "分组名", uiType =  eUIType.selectInput, dataSource = MetaGroupProvider.class )
+    String groupName;
+
+    @DirtField(title = "分组排序")
+    Integer groupIndex;
 
     @DirtAction(text = "详情")
     public void detail() {
