@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -133,7 +134,9 @@ public class DirtService {
     @SneakyThrows
     public Object getById(String entityName, Long id) {
         Class<?> entityClass = Class.forName(entityName);
-        return persistProxy.findById(entityClass, id);
+        Optional byId = persistProxy.findById(entityClass, id);
+        if(byId.isPresent())return byId.get();
+        throw new RuntimeException("不存在的 id");
     }
 
 

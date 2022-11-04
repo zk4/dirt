@@ -205,7 +205,7 @@ export default function DirtTable(props) {
             actionRef.current.reload();
           }
           )
-        } triggerCompoent={<a href="#!"> {text} </a>} />
+        } triggerCompoent={<a> {text} </a>} />
     }
     else if (key === 'delete') {
 
