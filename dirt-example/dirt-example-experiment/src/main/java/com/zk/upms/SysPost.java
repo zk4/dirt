@@ -82,4 +82,8 @@ public class SysPost extends MyBaseIdEntity {
     @DirtField(title = "岗位排序")
     private Integer postSort;
 
+    @Override
+    public String genCode() {
+        return "Post_"+getSnowId();
+    }
 }

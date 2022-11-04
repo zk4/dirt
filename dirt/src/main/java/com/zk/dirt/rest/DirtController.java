@@ -138,9 +138,19 @@ public class DirtController {
 
     }
 
+    @GetMapping(value = "/dirt/getDataByCode", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "根据 code 获取单条数据")
+    @SneakyThrows
+    public String getByCode(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "code") String code) {
+        Object byId = dirtService.getByCode(entityName, code);
+        Result<Object> success = Result.success(byId);
+        return objectMapper.writeValueAsString(success);
+
+    }
+
 
     @GetMapping(value = "/dirt/getData", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "获取单条数据")
+    @ApiOperation(value = "根据 id 获取单条数据")
     @SneakyThrows
     public String getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) {
         Object byId = dirtService.getById(entityName, id);

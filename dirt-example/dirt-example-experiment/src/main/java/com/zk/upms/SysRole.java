@@ -98,4 +98,9 @@ public class SysRole extends MyBaseIdEntity {
     //        inverseJoinColumns={@JoinColumn(name="roleId")})
     //@JsonIdentityReference(alwaysAsId = true)
     //private Set<String> permissions;
+
+    @Override
+    public String genCode() {
+        return "Role_"+getSnowId();
+    }
 }

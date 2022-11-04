@@ -115,4 +115,9 @@ public class SysMenu extends MyBaseIdEntity {
 
     /** 菜单图标 */
     private String icon;
+
+    @Override
+    public String genCode() {
+        return "Menu_"+getSnowId();
+    }
 }

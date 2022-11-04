@@ -160,4 +160,10 @@ public class DirtService {
         return  dirtContext.getDirtEntity(entityName).getFieldType(fieldName, args);
     }
 
+    public Object getByCode(String entityName, String code) throws ClassNotFoundException {
+        Class<?> entityClass = Class.forName(entityName);
+        Optional byId = persistProxy.findByCode(entityClass, code);
+        if(byId.isPresent())return byId.get();
+        throw new RuntimeException("不存在的 code");
+    }
 }

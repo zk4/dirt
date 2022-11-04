@@ -29,6 +29,11 @@ import java.util.Set;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = SysDept.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class SysDept extends MyBaseIdEntity {
+    @Override
+    public String genCode() {
+        return "Dept_"+getSnowId();
+    }
+
     @Data
     @AllArgsConstructor
     public static class IdNameObj {

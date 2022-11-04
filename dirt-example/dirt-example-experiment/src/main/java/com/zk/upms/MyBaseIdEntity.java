@@ -3,6 +3,7 @@ package com.zk.upms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.conf.DirtSnowflake;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.entity.iID;
@@ -52,6 +53,14 @@ public  class MyBaseIdEntity implements Serializable, iID {
         return new IdObj(this.id);
     }
 
+    @DirtField(title = "编码")
+    @Column(updatable = false)
+    String code;
+
+    public  String genCode(){
+        throw new  RuntimeException("code 生成方法未实现");
+    }
+
 
     @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
     @JsonIgnore
@@ -87,9 +96,19 @@ public  class MyBaseIdEntity implements Serializable, iID {
     //@PreRemove - 在EntityManager中标记要删除的实体时
     //@PostRemove- 从数据库中删除实体（在commit或期间flush）
 
+    static DirtSnowflake snowflake = new DirtSnowflake();
 
+    public Long getSnowId(){
+        return snowflake.nextId();
+    }
     @PrePersist
     public void onCreate() {
+        if(code==null){
+            try {
+                this.code = genCode();
+            }catch (Exception e ){
+            }
+        }
         if(this.createdTime==null){
             this.createdTime = LocalDateTime.now();
         }

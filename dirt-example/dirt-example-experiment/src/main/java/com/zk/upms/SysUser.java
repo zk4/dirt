@@ -145,5 +145,9 @@ public class SysUser extends MyBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     Set<SysRole> roles;
 
+    @Override
+    public String genCode() {
+        return "User_"+getSnowId();
+    }
 
 }
