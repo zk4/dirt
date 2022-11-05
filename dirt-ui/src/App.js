@@ -1,5 +1,6 @@
 import React, {useState, useEffect,useSearchParams} from "react";
 import 'antd/dist/antd.css';
+import './App.css'
 import axios from 'axios'
 import Table from './components/dirtTable'
 import qs from 'qs'
