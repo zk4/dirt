@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.annotation.DirtHQLSource;
-import com.zk.dirt.annotation.DirtSubmit;
+import com.zk.dirt.annotation.*;
 import com.zk.dirt.core.eUIType;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,10 +33,10 @@ public class SysRole extends MyBaseIdEntity {
     private String roleName;
 
 
-    @DirtField(title = "角色权限",
-            uiType = eUIType.select,
-            sourceProvider = @DirtHQLSource(hql = "select d.entries from DictionaryIndex as d where d.name='permission\'"),
-            dirtSubmit = @DirtSubmit
+    @DirtField(
+            title = "角色权限",
+            uiType = eUIType.selectLiveInput,
+            depends = @DirtDepends(onEntity =SysRole.class , onColumn = "roleKey")
     )
     private String roleKey;
 
