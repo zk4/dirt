@@ -1,11 +1,10 @@
 package com.zk.dirt.annotation;
 
-import com.zk.dirt.intef.iWithArgDataSource;
+import com.zk.dirt.DependsProvider;
+import com.zk.dirt.intef.iDenpendsWithArgsDataSource;
 
 public @interface DirtDepends {
-    // TODO： 还未实现 :(
-    // 当 onColumn 值变化时，触发 iDependProvider 计算
-
+    Class[] onEntity() default {};
     String onColumn();
-    Class<? extends iWithArgDataSource> dataSource();
+    Class<? extends iDenpendsWithArgsDataSource> dataSource() default DependsProvider.class;
 }

@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class TableColumnsProvider implements iDenpendsWithArgsDataSource<String, DirtEnumValue> {
+public class DependsProvider implements iDenpendsWithArgsDataSource<String, DirtEnumValue> {
 
     @Autowired
     EntityManager entityManager;
@@ -22,8 +23,11 @@ public class TableColumnsProvider implements iDenpendsWithArgsDataSource<String,
     DirtContext dirtContext;
     @Override
     public List<Option> getSource(Map<String,Object> args) {
-        String  tableName = (String)args.get("tableName");
-        List<Option> collect = dirtContext.getColumns(tableName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
+        String  tableName = "MetaType";
+        String column = "columnName";
+        Query query = entityManager.createQuery("select DISTINCT "+ column +" from  "+tableName);
+        List<String> resultList = query.getResultList();
+        List<Option> collect = resultList.stream().map(s -> new Option(s, s)).collect(Collectors.toList());
         return collect;
     }
 

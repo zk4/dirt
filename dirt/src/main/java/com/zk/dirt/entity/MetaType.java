@@ -42,6 +42,16 @@ public class MetaType extends DirtBaseIdEntity {
     )
     String columnName;
 
+
+    @DirtField(
+            title = "列名2",
+            uiType = eUIType.selectLiveInput,
+            tooltip = "影响的列名2",
+            fixed = DirtField.eFixedType.LEFT,
+            depends = @DirtDepends(onEntity =MetaType.class ,onColumn = "tableName")
+    )
+    String columnName2;
+
     @DirtField(title = "新列名", tooltip = "仅改变显示，不影响内部逻辑")
     String title;
 

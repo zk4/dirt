@@ -38,7 +38,7 @@ public class DirtEntityType {
 
     private final Map<String, Class> idOfEntityMap = new HashMap<>();
 
-    private final Map<String, iWithArgDataSource> dependDataSources = new HashMap<>();
+    private final Map<String, iDenpendsWithArgsDataSource> dependDataSources = new HashMap<>();
 
     private final Map<String, MetaType> metaCache = new HashMap<>();
 
@@ -255,9 +255,14 @@ public class DirtEntityType {
             DirtDepends dependsAnnotation = dependDS[0];
             String onColumn = dependsAnnotation.onColumn();
             tableHeader.setDependColumn(onColumn);
-            Class<? extends iWithArgDataSource> aClass = dependsAnnotation.dataSource();
-            iWithArgDataSource ds = applicationContext.getBean(aClass);
-            dependDataSources.put(entityClass.getName() + "." + field.getName(), ds);
+            Class<? extends iDenpendsWithArgsDataSource> aClass = dependsAnnotation.dataSource();
+            iDenpendsWithArgsDataSource ds = applicationContext.getBean(aClass);
+            String name = entityClass.getName();
+            if(dependsAnnotation.onEntity().length>0){
+                if(dependsAnnotation.onEntity().length>1) throw new RuntimeException("只允许一个 class");
+                name = dependsAnnotation.onEntity()[0].getName();
+            }
+            dependDataSources.put(name + "." + field.getName(), ds);
         }
         // 2. 无参静态 datasource
         else if (dataSource.length > 0) {
@@ -495,8 +500,8 @@ public class DirtEntityType {
         });
     }
 
-    public iWithArgDataSource getOptionFunction(String key) {
-        iWithArgDataSource iWithArgDataSource = dependDataSources.get(key);
+    public iDenpendsWithArgsDataSource getOptionFunction(String key) {
+        iDenpendsWithArgsDataSource iWithArgDataSource = dependDataSources.get(key);
         return iWithArgDataSource;
     }
     public void  removeOptionFunctionKey(String key) {

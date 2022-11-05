@@ -9,7 +9,7 @@ import com.zk.dirt.core.*;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
-import com.zk.dirt.intef.iWithArgDataSource;
+import com.zk.dirt.intef.iDenpendsWithArgsDataSource;
 import com.zk.dirt.util.ArgsUtil;
 import com.zk.dirt.wrapper.Result;
 import lombok.SneakyThrows;
@@ -162,7 +162,7 @@ public class DirtService {
 
     public List<Option> getOptions(String entityName, String fieldName, Map args){
         ArrayList<Option> options = new ArrayList<>();
-        iWithArgDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
+        iDenpendsWithArgsDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
         List<Option> source = optionFunction.getSource(args);
         return  source;
     }
