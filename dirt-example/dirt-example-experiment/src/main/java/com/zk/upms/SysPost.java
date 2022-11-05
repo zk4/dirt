@@ -21,8 +21,8 @@ import java.util.Set;
 @DirtEntity("岗位")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "upms_sys_dept")
-@SQLDelete(sql = "UPDATE upms_sys_dept SET deleted = true WHERE id=?  and version=? ")
+@Table(name = "sys_dept")
+@SQLDelete(sql = "UPDATE sys_dept SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class SysPost extends MyBaseIdNameEntity<SysPost> {

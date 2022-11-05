@@ -1,7 +1,6 @@
 package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.MetaGroupProvider;
 import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.annotation.DirtAction;
@@ -35,15 +34,15 @@ public class MetaType extends DirtBaseIdEntity {
     String tableName;
 
     @DirtField(
-            title = "column 名",
-            uiType = eUIType.selectSearhInput,
+            title = "列名",
+            uiType = eUIType.selectLiveInput,
             tooltip = "影响的列名",
             fixed = DirtField.eFixedType.LEFT,
             depends = @DirtDepends(onColumn = "tableName", dataSource = TableColumnsProvider.class)
     )
     String columnName;
 
-    @DirtField(title = "column 重命名", tooltip = "仅改变显示，不影响内部逻辑")
+    @DirtField(title = "新列名", tooltip = "仅改变显示，不影响内部逻辑")
     String title;
 
     @DirtField(title = "是否可搜索",tooltip = "是否在搜索表单里显示")
@@ -58,11 +57,11 @@ public class MetaType extends DirtBaseIdEntity {
     @Column(nullable = false,columnDefinition="bit  COMMENT '是否必须存在, false: 不可 true: 可'")
     Boolean mandate;
 
-    @DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, dataSource = MetaGroupProvider.class )
-    String groupName;
-
-    @DirtField(title = "分组排序")
-    Integer groupIndex;
+    //@DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, dataSource = MetaGroupProvider.class )
+    //String groupName;
+    //
+    //@DirtField(title = "分组排序")
+    //Integer groupIndex;
 
 
     @DirtAction(text = "详情")

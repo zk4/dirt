@@ -24,8 +24,8 @@ import java.util.Set;
 @DirtEntity("资源")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "upms_sys_resource")
-@SQLDelete(sql = "UPDATE upms_sys_resource SET deleted = true WHERE id=?  and version=? ")
+@Table(name = "sys_resource")
+@SQLDelete(sql = "UPDATE sys_resource SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = SysResource.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idNameObj")

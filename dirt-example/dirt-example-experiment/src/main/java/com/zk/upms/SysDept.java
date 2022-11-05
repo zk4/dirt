@@ -23,8 +23,8 @@ import java.util.Set;
 @DirtEntity("部门")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "upms_sys_Dept")
-@SQLDelete(sql = "UPDATE upms_sys_Dept SET deleted = true WHERE id=?  and version=? ")
+@Table(name = "sys_Dept")
+@SQLDelete(sql = "UPDATE sys_Dept SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = SysDept.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

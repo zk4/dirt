@@ -32,7 +32,7 @@ export default {
   //下拉框
   select: "select",
   selectInputMultipal:"selectInputMultipal",
-  selectSearhInput:"selectSearhInput",
+  selectLiveInput:"selectLiveInput",
   //可下拉，可输入
   selectInput:"selectInput",
   //树形下拉框

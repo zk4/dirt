@@ -9,7 +9,7 @@ import RichText from './richEditor'
 import Cascader from './cascader'
 import ImageUploader from './imageUploader'
 import SelectInput from './selectInput'
-import SelectSearhInput from './selectSearhInput'
+import SelectLiveInput from './selectLiveInput'
 import network from '../logic/network'
 import {SearchOutlined} from '@ant-design/icons';
 
@@ -61,10 +61,10 @@ export default (props) => {
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation,dependColumn} = column
     // 自定义创建 formItem
-    if (column.valueType === UIConsts.selectSearhInput) {
+    if (column.valueType === UIConsts.selectLiveInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
-        return <SelectSearhInput.WriteView fetchOptions={
+        return <SelectLiveInput.WriteView fetchOptions={
           async (username) => {
             const dependsName = dependColumn
             const arg = form.getFieldValue(dependsName)

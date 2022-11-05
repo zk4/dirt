@@ -27,8 +27,8 @@ import java.util.Set;
 @DirtEntity("用户")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "upms_sys_user")
-@SQLDelete(sql = "UPDATE upms_sys_user SET deleted = true WHERE id=?  and version=? ")
+@Table(name = "sys_user")
+@SQLDelete(sql = "UPDATE sys_user SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = SysUser.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.DirtHQLSource;
+import com.zk.dirt.annotation.DirtSubmit;
+import com.zk.dirt.core.eUIType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,22 +25,22 @@ import java.util.Set;
 @DirtEntity("角色")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "upms_sys_role")
-@SQLDelete(sql = "UPDATE upms_sys_role SET deleted = true WHERE id=?  and version=? ")
+@Table(name = "sys_role")
+@SQLDelete(sql = "UPDATE sys_role SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = SysRole.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class SysRole extends MyBaseIdEntity {
-    /**
-     * 角色名称
-     */
+
     @DirtField(title = "角色名称")
     private String roleName;
 
-    /**
-     * 角色权限
-     */
-    @DirtField(title = "角色权限")
+
+    @DirtField(title = "角色权限",
+            uiType = eUIType.select,
+            sourceProvider = @DirtHQLSource(hql = "select d.entries from DictionaryIndex as d where d.name='permission\'"),
+            dirtSubmit = @DirtSubmit
+    )
     private String roleKey;
 
     /**
