@@ -7,5 +7,5 @@ public @interface DirtDepends {
     // 当 onColumn 值变化时，触发 iDependProvider 计算
 
     String onColumn();
-    Class<? extends iWithArgDataSource> dependsProvider();
+    Class<? extends iWithArgDataSource> dataSource();
 }

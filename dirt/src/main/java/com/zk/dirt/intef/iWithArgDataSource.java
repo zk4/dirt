@@ -1,8 +1,11 @@
 package com.zk.dirt.intef;
 
+import com.zk.dirt.core.Option;
+
+import java.util.List;
 import java.util.Map;
 
 public interface iWithArgDataSource<K,V> extends  iDataSource{
-    Map<K, V> getSource(Map<String,Object> args);
+    List<Option> getSource(Map<String,Object> args);
     K initialValue();
 }

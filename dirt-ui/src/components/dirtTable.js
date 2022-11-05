@@ -150,7 +150,7 @@ export default function DirtTable(props) {
         return c;
       })
       .sort((a, b) => a.index - b.index);
-    return <WriteForm name="创建" columns={submitTypes}
+    return <WriteForm entityName={entityName} name="创建" columns={submitTypes}
       onFinish={values =>
         network.createAsync(entityName, values, () => {actionRef.current.reload()})
       }
@@ -199,7 +199,7 @@ export default function DirtTable(props) {
       // 只读模式
       // https://github.com/ant-design/pro-components/issues/3323
 
-      return <WriteForm key={key} name={text} readOnly={isDetailed} columns={formData}
+      return <WriteForm entityName={entityName} key={key} name={text} readOnly={isDetailed} columns={formData}
         onFinish={(postdata) =>
           network.updateAsync(entityName, postdata, () => {
             actionRef.current.reload();
@@ -237,7 +237,7 @@ export default function DirtTable(props) {
         //  自定义action 带参数，弹出 form 由用户输入
         let actionFormArgs = entries.reduce((a, [k, v]) => {a.push(v); return a;}, [])
         // console.log(actionFormArgs)
-        return <WriteForm key={key} name={text} columns={action.argColumnsMap.args} onFinish={(postdata) => {
+        return <WriteForm entityName={entityName} key={key} name={text} columns={action.argColumnsMap.args} onFinish={(postdata) => {
           doAction(text, {
             entityName,
             actionName: key,

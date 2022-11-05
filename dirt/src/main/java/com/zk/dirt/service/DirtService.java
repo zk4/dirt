@@ -9,10 +9,9 @@ import com.zk.dirt.core.*;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
+import com.zk.dirt.intef.iWithArgDataSource;
 import com.zk.dirt.util.ArgsUtil;
 import com.zk.dirt.wrapper.Result;
-import lombok.Builder;
-import lombok.Data;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +24,6 @@ import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -160,20 +158,14 @@ public class DirtService {
         return  dirtContext.getDirtEntity(entityName).getFieldType(fieldName, args);
     }
 
-    @Data
-    @Builder
-    static public class Option {
-        String label;
-        String value;
-    }
+
 
     public List<Option> getOptions(String entityName, String fieldName, Map args){
         ArrayList<Option> options = new ArrayList<>();
-        List<Option> collect = dirtContext.getColumns(entityName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
-        //options.add(new Option("a","a"));
-        //options.add(new Option("b","b"));
-        //options.add(new Option("c","c"));
-        return  collect;
+        iWithArgDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
+        //List<Option> collect = dirtContext.getColumns(entityName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
+        List<Option> source = optionFunction.getSource(args);
+        return  source;
     }
 
     public Object getByCode(String entityName, String code) throws ClassNotFoundException {

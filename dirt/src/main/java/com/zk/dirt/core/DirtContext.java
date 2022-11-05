@@ -3,6 +3,7 @@ package com.zk.dirt.core;
 
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtScan;
+import com.zk.dirt.intef.iWithArgDataSource;
 import com.zk.dirt.util.PackageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
@@ -138,6 +139,13 @@ public class DirtContext {
 
     public Map<String, DirtViewType> getNameEntityMap() {
         return nameEntityMap;
+    }
+
+    public iWithArgDataSource getOptionFunction(String entityName, String subKey){
+        DirtEntityType dirtEntityType = nameDirtEntityMap.get(entityName);
+        String key = entityName+"."+subKey;
+        iWithArgDataSource optionFunction = dirtEntityType.getOptionFunction(key);
+        return optionFunction;
     }
 
 }

@@ -12,7 +12,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 100, ...props }) {
     const loadOptions = (value) => {
       fetchRef.current += 1;
       const fetchId = fetchRef.current;
-      setOptions([]);
+      // setOptions([]);
       setFetching(true);
       setLoading(true)
       fetchOptions(value).then((newOptions) => {

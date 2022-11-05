@@ -2,14 +2,15 @@ package com.zk.dirt;
 
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.DirtEnumValue;
+import com.zk.dirt.core.Option;
 import com.zk.dirt.intef.iWithArgDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class TableColumnsProvider implements iWithArgDataSource<String, DirtEnumValue> {
@@ -20,17 +21,10 @@ public class TableColumnsProvider implements iWithArgDataSource<String, DirtEnum
     @Autowired
     DirtContext dirtContext;
     @Override
-    public Map<String, DirtEnumValue> getSource(Map<String,Object> args) {
-        HashMap source = new HashMap<Long, DirtEnumValue>();
+    public List<Option> getSource(Map<String,Object> args) {
         String  tableName = (String)args.get("tableName");
-        //TODO: 仅获取 metaable = true
-        List<String> columns = dirtContext.getColumns(tableName);
-
-        for (String column : columns) {
-            source.put(column,
-                    new DirtEnumValue(column, column, ""));
-        }
-        return source;
+        List<Option> collect = dirtContext.getColumns(tableName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
+        return collect;
     }
 
     @Override

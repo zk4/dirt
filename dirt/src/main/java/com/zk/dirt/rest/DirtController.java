@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.conf.DirtQueryFilter;
 import com.zk.dirt.core.DirtFieldType;
 import com.zk.dirt.core.DirtViewType;
+import com.zk.dirt.core.Option;
 import com.zk.dirt.service.DirtService;
 import com.zk.dirt.wrapper.Result;
 import io.swagger.annotations.ApiModel;
@@ -210,7 +211,7 @@ public class DirtController {
     @PostMapping(value = "/dirt/getOptions", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取 动态 options")
     public String getOptions(@RequestBody OptionReq req) throws JsonProcessingException {
-        List<DirtService.Option> options = dirtService.getOptions(req.entityName, req.fieldName, req.args);
+        List<Option> options = dirtService.getOptions(req.entityName, req.subKey, req.args);
         return objectMapper.writeValueAsString(Result.success(options));
     }
 
@@ -220,8 +221,8 @@ public class DirtController {
         @ApiModelProperty("实体名")
         String entityName;
 
-        @ApiModelProperty("field")
-        String fieldName;
+        @ApiModelProperty("subKey")
+        String subKey;
 
         @ApiModelProperty("参数")
         Map args;

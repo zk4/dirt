@@ -9,6 +9,10 @@ axios.defaults.baseURL = 'http://127.0.0.1:8081/dirt/'
 
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
+  if(res.status!=200){
+      message.error(res.statusText);
+      return Promise.reject(res.statusText);
+  }
   // compatiable with  wrapper response 
   if (isObj(res) && 'data' in res && isObj(res.data) && 'code' in res.data) {
     if (res.data.code === 0) {
@@ -31,10 +35,10 @@ axios.interceptors.response.use(function (res) {
     return res;
   }
 }, function (error) {
-  message.error(error);
+  message.error(error?.response?.data?.error);
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
-  return Promise.reject(error);
+  return Promise.reject(error?.response?.data?.error);
 });
 const getOptionsAsync = async (postData) => {
   let ret = await axios.post(`getOptions`, postData || {})

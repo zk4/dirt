@@ -14,7 +14,7 @@ import network from '../logic/network'
 import {SearchOutlined} from '@ant-design/icons';
 
 export default (props) => {
-  const {name, triggerCompoent, columns, onFinish, onInit} = props;
+  const {entityName, name, triggerCompoent, columns, onFinish, onInit} = props;
   // debugger
   // 有可能有多个 modal 需要保持状态，使用{}
   const [isModalOpen, setIsModalOpen] = useState({});
@@ -66,14 +66,16 @@ export default (props) => {
         let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
         return <SelectSearhInput.WriteView fetchOptions={
           async (username) => {
-            const v = form.getFieldValue('tableName')
-            return network.getOptionsAsync({entityName: v});
+            const dependsName = 'tableName'
+            const arg = form.getFieldValue(dependsName)
+            // debugger
+            return network.getOptionsAsync({entityName, subKey:columnKey,args:{[dependsName]:arg}});
           }
         }
           onChange={
             (e) => {
               // debugger
-              form.setFieldValue(columnKey, e[0].value)
+              form.setFieldValue(columnKey, e?.[0]?.value)
             }
           }
         />

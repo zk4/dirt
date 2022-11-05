@@ -38,7 +38,7 @@ public class DirtEntityType {
 
     private final Map<String, Class> idOfEntityMap = new HashMap<>();
 
-    private final Map<String, iWithArgDataSource> dependProviderMap = new HashMap<>();
+    private final Map<String, iWithArgDataSource> dependDataSources = new HashMap<>();
 
 
     ApplicationContext applicationContext;
@@ -105,7 +105,7 @@ public class DirtEntityType {
                 //
                 //        Class<? extends iDependProvider> aClass = dirtDepend.dependsProvider();
                 //        iDependProvider bean = applicationContext.getBean(aClass);
-                //        dependProviderMap.put(field.getName(),bean);
+                //        dependDataSource.put(field.getName(),bean);
                 //
                 //    }
                 //    return depends.length==0;
@@ -260,27 +260,22 @@ public class DirtEntityType {
         //-----------------------------------------
         // 设置 valueEnum, initialValue
         // 优先级：
-        // 1. 有参动态 provider，比如联动，需要依赖 args
-        // 2. 无参静态 provider
+        // 1. 有参动态 datasource
+        // 2. 无参静态 datasource
         // 3. 枚举列表
 
         Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
-        DirtDepends[] dirtDepends = dirtField.depends();
+        DirtDepends[] dependDS = dirtField.depends();
         Map source = new HashMap();
         Object initialValue = null;
 
-        // 1. 有参动态 provider，联动
-        if (dirtDepends.length > 0 && args != null && args.size() > 0) {
-            DirtDepends dependsAnnotation = dirtDepends[0];
+        // 1. 有参动态 datasource，联动
+        if (dependDS.length > 0 ) {
+            DirtDepends dependsAnnotation = dependDS[0];
             String onColumn = dependsAnnotation.onColumn();
-            if (!args.containsKey(onColumn)) {
-                throw new RuntimeException("参数不够联动");
-            }
-            Class<? extends iWithArgDataSource> aClass = dependsAnnotation.dependsProvider();
-            iWithArgDataSource enumProvider = applicationContext.getBean(aClass);
-
-            source = enumProvider.getSource(args);
-            initialValue = enumProvider.initialValue();
+            Class<? extends iWithArgDataSource> aClass = dependsAnnotation.dataSource();
+            iWithArgDataSource ds = applicationContext.getBean(aClass);
+            dependDataSources.put(entityClass.getName()+"."+field.getName(), ds);
         }
         // 2. 无参静态 datasource
         else if (dataSource.length > 0) {
@@ -513,6 +508,10 @@ public class DirtEntityType {
                 this.idOfEntityMap.put(s, aClass);
             }
         });
+    }
+    public iWithArgDataSource getOptionFunction(String key){
+        iWithArgDataSource iWithArgDataSource = dependDataSources.get(key);
+        return iWithArgDataSource;
     }
 
 }
