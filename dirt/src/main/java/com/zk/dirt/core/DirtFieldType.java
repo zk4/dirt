@@ -165,24 +165,5 @@ public class DirtFieldType {
         return title;
     }
 
-    //public Boolean getHideInSearch() {
-    //    if (metaType != null) return metaType.getHideInSearch();
-    //    return hideInSearch;
-    //}
-    //
-    //public Boolean getHideInTable() {
-    //    if (metaType != null) return metaType.getHideInTable();
-    //    return hideInTable;
-    //}
-    //
-    //public Boolean getHideInForm() {
-    //    if (metaType != null) return metaType.getHideInForm();
-    //    return hideInForm;
-    //}
-
-
-    public String getDependColumn() {
-        return dependColumn;
-    }
 }
 

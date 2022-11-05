@@ -33,12 +33,13 @@ import javax.persistence.*;
 public class MetaType extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "实体全名", uiType = eUIType.select, dataSource = MetaTableProvider.class)
+    @DirtField(title = "实体全名", uiType = eUIType.select, fixed = DirtField.eFixedType.LEFT,dataSource = MetaTableProvider.class)
     String tableName;
 
     @DirtField(
             title = "column 名",
             uiType = eUIType.selectSearhInput,
+            fixed = DirtField.eFixedType.LEFT,
             depends = @DirtDepends(onColumn = "tableName", dataSource = TableColumnsProvider.class)
     )
     String columnName;

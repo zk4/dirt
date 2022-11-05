@@ -11,11 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.OptimisticLock;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 // 插入时只插入非 null, 子类如果需要也要加上
@@ -58,16 +56,16 @@ public  class MyBaseIdEntity implements Serializable, iID {
         throw new  RuntimeException("code 生成方法未实现");
     }
 
-
-    @Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
-    @JsonIgnore
-    protected LocalDateTime updatedTime;
-
-
-    @Column(nullable = false,columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
-    @OptimisticLock(excluded = true) // 不触发乐观锁
-    @JsonIgnore
-    protected LocalDateTime createdTime;
+    //
+    //@Column(nullable = false,columnDefinition="DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
+    //@JsonIgnore
+    //protected LocalDateTime updatedTime;
+    //
+    //
+    //@Column(nullable = false,columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
+    //@OptimisticLock(excluded = true) // 不触发乐观锁
+    //@JsonIgnore
+    //protected LocalDateTime createdTime;
 
 
     // 软删除
@@ -106,12 +104,12 @@ public  class MyBaseIdEntity implements Serializable, iID {
             }catch (Exception e ){
             }
         }
-        if(this.createdTime==null){
-            this.createdTime = LocalDateTime.now();
-        }
-        if(this.updatedTime==null){
-            this.updatedTime = LocalDateTime.now();
-        }
+        //if(this.createdTime==null){
+        //    this.createdTime = LocalDateTime.now();
+        //}
+        //if(this.updatedTime==null){
+        //    this.updatedTime = LocalDateTime.now();
+        //}
         if(this.deleted==null){
             this.deleted = false;
         }
@@ -120,9 +118,9 @@ public  class MyBaseIdEntity implements Serializable, iID {
     @PreUpdate
     public void onUpdate() {
 
-        if(this.updatedTime==null){
-            this.updatedTime = LocalDateTime.now();
-        }
+        //if(this.updatedTime==null){
+        //    this.updatedTime = LocalDateTime.now();
+        //}
     }
 
 

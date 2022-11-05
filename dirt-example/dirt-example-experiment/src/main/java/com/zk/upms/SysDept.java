@@ -43,10 +43,10 @@ public class SysDept extends MyBaseIdEntity {
     }
 
     @Transient
-    SysMenu.IdNameObj idNameObj;
+    SysResource.IdNameObj idNameObj;
 
-    public SysMenu.IdNameObj getIdNameObj() {
-        return new SysMenu.IdNameObj(this.id,this.name,this.isLeaf);
+    public SysResource.IdNameObj getIdNameObj() {
+        return new SysResource.IdNameObj(this.id,this.name,this.isLeaf);
     }
 
     Boolean isLeaf;
@@ -77,33 +77,22 @@ public class SysDept extends MyBaseIdEntity {
     @JsonIdentityReference(alwaysAsId = true)
     Set<SysDept> subDepts;
 
-    /** 祖级列表 */
 
-    private String ancestors;
 
-    /** 部门名称 */
-    private String deptName;
-
-    /** 显示顺序 */
+    @DirtField(title = "显示顺序")
     private Integer orderNum;
 
-    /** 负责人 */
-    private String leader;
+    @DirtField(title = "负责人")
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private SysUser leader;
 
-    /** 联系电话 */
+
+    @DirtField(title = "联系电话")
     private String phone;
 
-    /** 邮箱 */
+
+    @DirtField(title = "邮箱")
     private String email;
-
-    /** 部门状态:0正常,1停用 */
-    private String status;
-
-    /** 删除标志（0代表存在 2代表删除） */
-    private String delFlag;
-
-    /** 父部门名称 */
-    private String parentName;
-
 
 }

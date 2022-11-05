@@ -40,16 +40,11 @@ public class DirtContext {
     public DirtContext() {
     }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-
     @PostConstruct
     public void init() throws ClassNotFoundException {
         String mainClassName = PackageUtil.getMainClassName();
         Class<?> aClass = Class.forName(mainClassName);
-        DirtScan scanPackageAnno = (DirtScan) aClass.getDeclaredAnnotation(DirtScan.class);
+        DirtScan scanPackageAnno = aClass.getDeclaredAnnotation(DirtScan.class);
 
         String[] scanPackages = new String[]{"com.zk.dirt.entity"};
 

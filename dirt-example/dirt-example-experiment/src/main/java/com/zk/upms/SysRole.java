@@ -75,7 +75,7 @@ public class SysRole extends MyBaseIdEntity {
             joinColumns = {@JoinColumn(name = "roleId")},
             inverseJoinColumns = {@JoinColumn(name = "menuId")})
     @JsonIdentityReference(alwaysAsId = true)
-    private Set<SysMenu> menus;
+    private Set<SysResource> menus;
 
     /**
      * 部门组（数据权限）

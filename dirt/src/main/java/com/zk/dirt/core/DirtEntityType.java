@@ -54,7 +54,6 @@ public class DirtEntityType {
         this.entityClass = classAnnotationClass;
     }
 
-
     public List<DirtFieldType> getHeads() {
         lazyInit();
         return heads;
@@ -94,23 +93,6 @@ public class DirtEntityType {
                     // 为 null，则放过，使用默认 column 信息
                     return true;
                 })
-                // 不显示有 dependsOnColumn 没值的字段
-                // 同时记录请求获取方法
-                //.filter(field -> {
-                //    DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
-                //    DirtDepends[] depends = dirtField.depends();
-                //
-                //    // 维护方法列表  fieldName : iDependsProvider.class
-                //    if(depends.length>0){
-                //        DirtDepends dirtDepend = depends[0];
-                //
-                //        Class<? extends iDependProvider> aClass = dirtDepend.dependsProvider();
-                //        iDependProvider bean = applicationContext.getBean(aClass);
-                //        dependDataSource.put(field.getName(),bean);
-                //
-                //    }
-                //    return depends.length==0;
-                //})
                 .map((Field field1) -> getFieldType(field1, null))
                 .collect(Collectors.toList());
 
@@ -132,16 +114,13 @@ public class DirtEntityType {
             action.setTitle("操作");
             action.setActions(this.actionMap);
 
-
             this.heads.add(action);
         }
         //  排序 header
         this.heads.sort(Comparator.comparingInt(DirtFieldType::getIndex));
-
     }
 
     public DirtFieldType getFieldType(String fieldName, Map<String, Object> args) {
-
         //TODO: duplicated code, optimize
         List<Field> fields = new ArrayList<>();
         fields = getAllFields(fields, entityClass);
@@ -154,7 +133,7 @@ public class DirtEntityType {
 
     /**
      * @param field entity 的字段
-     * @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
+     * @deprecated  @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
      * @return
      */
     public DirtFieldType getFieldType(Field field, Map<String, Object> args) {
