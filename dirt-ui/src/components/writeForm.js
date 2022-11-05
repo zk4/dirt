@@ -9,6 +9,7 @@ import RichText from './richEditor'
 import Cascader from './cascader'
 import ImageUploader from './imageUploader'
 import SelectInput from './selectInput'
+import SelectSearhInput from './selectSearhInput'
 import network from '../logic/network'
 import {SearchOutlined} from '@ant-design/icons';
 
@@ -18,7 +19,7 @@ export default (props) => {
   // 有可能有多个 modal 需要保持状态，使用{}
   const [isModalOpen, setIsModalOpen] = useState({});
   const [fieldName, setFieldName] = useState("");
-  
+
 
   const showModal = (name) => {
     setIsModalOpen(s => {return {...s, [name]: true}});
@@ -60,20 +61,38 @@ export default (props) => {
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation} = column
     // 自定义创建 formItem
+    if (column.valueType === UIConsts.selectSearhInput) {
+      column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
+        return <SelectSearhInput.WriteView fetchOptions={
+          async (username) => {
+            const v = form.getFieldValue('tableName')
+            return network.getOptionsAsync({entityName: v});
+          }
+        }
+          onChange={
+            (e) => {
+              // debugger
+              form.setFieldValue(columnKey, e[0].value)
+            }
+          }
+        />
+      }
+    }
     if (column.valueType === UIConsts.selectInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        let options= Object.entries(item.valueEnum).map(([k,v])=>{return {label:v.text,value:v.text}})
-        return <SelectInput.WriteView options={options} size={1} handleChange={e=>{
-         form.setFieldValue(columnKey, e[0])
-        }}/>
+        let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
+        return <SelectInput.WriteView options={options} size={1} handleChange={e => {
+          form.setFieldValue(columnKey, e[0])
+        }} />
       }
     }
     if (column.valueType === UIConsts.selectInputMultipal) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        let options= Object.entries(item.valueEnum).map(([k,v])=>{return {label:v.text,value:v.text}})
-        return <SelectInput.WriteView options={options} handleChange={e=>{
-         form.setFieldValue(columnKey, e)
-        }}/>
+        let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
+        return <SelectInput.WriteView options={options} handleChange={e => {
+          form.setFieldValue(columnKey, e)
+        }} />
       }
     }
     if (column.valueType === UIConsts.cascader) {

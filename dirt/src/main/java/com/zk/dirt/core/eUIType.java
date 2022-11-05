@@ -41,7 +41,7 @@ public enum eUIType {
     //可下拉，可输入
     selectInput,
     selectInputMultipal,
-
+    selectSearhInput,
     entitySelect,
     // 多选框
     checkbox,

@@ -11,6 +11,8 @@ import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
 import com.zk.dirt.util.ArgsUtil;
 import com.zk.dirt.wrapper.Result;
+import lombok.Builder;
+import lombok.Data;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,10 +24,8 @@ import javax.persistence.EntityManager;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -158,6 +158,22 @@ public class DirtService {
 
     public DirtFieldType getDirtField(String entityName, String fieldName, Map args) throws JsonProcessingException {
         return  dirtContext.getDirtEntity(entityName).getFieldType(fieldName, args);
+    }
+
+    @Data
+    @Builder
+    static public class Option {
+        String label;
+        String value;
+    }
+
+    public List<Option> getOptions(String entityName, String fieldName, Map args){
+        ArrayList<Option> options = new ArrayList<>();
+        List<Option> collect = dirtContext.getColumns(entityName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
+        //options.add(new Option("a","a"));
+        //options.add(new Option("b","b"));
+        //options.add(new Option("c","c"));
+        return  collect;
     }
 
     public Object getByCode(String entityName, String code) throws ClassNotFoundException {

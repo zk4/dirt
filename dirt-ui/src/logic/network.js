@@ -36,6 +36,11 @@ axios.interceptors.response.use(function (res) {
   // 对响应错误做点什么
   return Promise.reject(error);
 });
+const getOptionsAsync = async (postData) => {
+  let ret = await axios.post(`getOptions`, postData || {})
+  // success_cb && success_cb()
+  return ret.data;
+}
 const getEntitySchemaAsync = async (entityName) => {
   const ret = await axios.get(`getEntitySchema?entityName=${entityName}`)
   return ret.data;
@@ -175,6 +180,7 @@ export default {
   deleteByIdsAsync,
   createAsync,
   updateAsync,
+  getOptionsAsync,
   actionAsync,
   getDirtFieldTypeAsync,
   searchFullAsync: getFullDataslAsync,

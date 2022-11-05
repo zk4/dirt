@@ -66,7 +66,7 @@ public @interface DirtField {
     //Class<? extends iEnumText>[] enumListableType() default {};
 
     // 搜索表单相关
-    DirtDepends[] dirtDepends() default {};
+    DirtDepends[] depends() default {};
 
     // UI组件的源数据
     DirtHQLSource[] sourceProvider() default {};

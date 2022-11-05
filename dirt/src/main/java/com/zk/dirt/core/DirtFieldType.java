@@ -101,6 +101,8 @@ public class DirtFieldType {
     @ApiModelProperty(value = "IE 下无效）列是否固定，可选 true (等效于 left) left right. https://ant.design/components/table-cn/#API")
     String fixed;
 
+    @ApiModelProperty(value = "依赖列，当列改变时，应该重新获取 feild 的 schema 数据")
+    String[] dependColumns;
 
     @ApiModelProperty(value = "在构造提交表单时的属性")
     DirtSubmitType submitType;

@@ -206,4 +206,35 @@ public class DirtController {
         @ApiModelProperty("参数")
         Map args;
     }
+
+    @PostMapping(value = "/dirt/getOptions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取 动态 options")
+    public String getOptions(@RequestBody OptionReq req) throws JsonProcessingException {
+        List<DirtService.Option> options = dirtService.getOptions(req.entityName, req.fieldName, req.args);
+        return objectMapper.writeValueAsString(Result.success(options));
+    }
+
+    @Data
+    @ApiModel("OptionReq")
+    static class OptionReq {
+        @ApiModelProperty("实体名")
+        String entityName;
+
+        @ApiModelProperty("field")
+        String fieldName;
+
+        @ApiModelProperty("参数")
+        Map args;
+    }
+    //
+    //@Data
+    //@Builder
+    //@ApiModel("OptionRes")
+    //static class Option {
+    //    @ApiModelProperty("label")
+    //    String label;
+    //
+    //    @ApiModelProperty("value")
+    //    String value;
+    //}
 }

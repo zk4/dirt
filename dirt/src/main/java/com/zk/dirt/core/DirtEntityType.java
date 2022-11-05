@@ -97,18 +97,18 @@ public class DirtEntityType {
                 // 同时记录请求获取方法
                 //.filter(field -> {
                 //    DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
-                //    DirtDepends[] dirtDepends = dirtField.dirtDepends();
+                //    DirtDepends[] depends = dirtField.depends();
                 //
                 //    // 维护方法列表  fieldName : iDependsProvider.class
-                //    if(dirtDepends.length>0){
-                //        DirtDepends dirtDepend = dirtDepends[0];
+                //    if(depends.length>0){
+                //        DirtDepends dirtDepend = depends[0];
                 //
                 //        Class<? extends iDependProvider> aClass = dirtDepend.dependsProvider();
                 //        iDependProvider bean = applicationContext.getBean(aClass);
                 //        dependProviderMap.put(field.getName(),bean);
                 //
                 //    }
-                //    return dirtDepends.length==0;
+                //    return depends.length==0;
                 //})
                 .map((Field field1) -> getFieldType(field1, null))
                 .collect(Collectors.toList());
@@ -265,7 +265,7 @@ public class DirtEntityType {
         // 3. 枚举列表
 
         Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
-        DirtDepends[] dirtDepends = dirtField.dirtDepends();
+        DirtDepends[] dirtDepends = dirtField.depends();
         Map source = new HashMap();
         Object initialValue = null;
 
