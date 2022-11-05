@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
+import com.zk.dirt.rule.DirtRules;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -107,14 +108,11 @@ public class DirtSubmitType {
             MetaType metaType = fieldType.getMetaType();
             if (metaType != null) {
                 Boolean mandate = metaType.getMandate();
-                System.out.println(mandate);
-
                 if (mandate) {
-                    System.out.println(mandate);
-                //    Map notEmpty = DirtRules.createNotEmpty(getKey() + "不可为空");
-                //    ArrayList<Map> objects = new ArrayList<>();
-                //    objects.add(notEmpty);
-                //    _formItemProps.put("rules", objects);
+                    Map notEmpty = DirtRules.createNotEmpty(getKey() + "不可为空");
+                    ArrayList<Map> objects = new ArrayList<>();
+                    objects.add(notEmpty);
+                    formItemProps.put("rules", objects);
                 }
             }
         }

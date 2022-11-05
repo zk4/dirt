@@ -31,12 +31,13 @@ import javax.persistence.*;
 public class MetaType extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "实体全名", uiType = eUIType.select, fixed = DirtField.eFixedType.LEFT,dataSource = MetaTableProvider.class)
+    @DirtField(title = "实体全名",tooltip = "影响的实体名", uiType = eUIType.select, fixed = DirtField.eFixedType.LEFT,dataSource = MetaTableProvider.class)
     String tableName;
 
     @DirtField(
             title = "column 名",
             uiType = eUIType.selectSearhInput,
+            tooltip = "影响的列名",
             fixed = DirtField.eFixedType.LEFT,
             depends = @DirtDepends(onColumn = "tableName", dataSource = TableColumnsProvider.class)
     )
@@ -45,16 +46,16 @@ public class MetaType extends DirtBaseIdEntity {
     @DirtField(title = "column 重命名", tooltip = "仅改变显示，不影响内部逻辑")
     String title;
 
-    @DirtField(title = "是否可搜索")
-    //@Column(nullable = false,columnDefinition="bit default false COMMENT '是否可搜索, false: 不可 true: 可'")
+    @DirtField(title = "是否可搜索",tooltip = "是否在搜索表单里显示")
+    @Column(nullable = false,columnDefinition="bit  COMMENT '是否可搜索, false: 不可 true: 可'")
     Boolean search;
 
-    @DirtField(title = "是否启用",initialValue = 1)
-    //@Column(nullable = false,columnDefinition="bit default true COMMENT '是否启用, false: 不可 true: 可'")
+    @DirtField(title = "是否启用",initialValue = 1,tooltip = "是否启用, 默认启用")
+    @Column(nullable = false,columnDefinition="bit  COMMENT '是否启用, false: 不可 true: 可'")
     Boolean enable;
 
-    @DirtField(title = "是否必须存在")
-    //@Column(nullable = false,columnDefinition="bit default false COMMENT '是否必须存在, false: 不可 true: 可'")
+    @DirtField(title = "是否必须存在",tooltip = "是否不可为 null, 默认可为 null, 在已运行的系统里切换此属性要非常慎重！")
+    @Column(nullable = false,columnDefinition="bit  COMMENT '是否必须存在, false: 不可 true: 可'")
     Boolean mandate;
 
     @DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, dataSource = MetaGroupProvider.class )
