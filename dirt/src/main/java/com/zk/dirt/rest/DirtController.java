@@ -210,7 +210,7 @@ public class DirtController {
 
     @PostMapping(value = "/dirt/getOptions", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取 动态 options")
-    public String getOptions(@RequestBody OptionReq req) throws JsonProcessingException {
+    public String getOptions(@RequestBody OptionReq req) throws JsonProcessingException, NoSuchFieldException, ClassNotFoundException {
         List<Option> options = dirtService.getOptions(req.entityName, req.subKey, req.args);
         return objectMapper.writeValueAsString(Result.success(options));
     }

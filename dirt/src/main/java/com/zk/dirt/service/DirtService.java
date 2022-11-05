@@ -2,6 +2,7 @@ package com.zk.dirt.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.conf.DirtQueryFilter;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.beans.IntrospectionException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -45,7 +47,7 @@ public class DirtService {
 
 
     @Transactional
-    public void action( String entityName, String actionName,  Long id, Map args) throws IllegalAccessException, InvocationTargetException, JsonProcessingException {
+    public void action(String entityName, String actionName, Long id, Map args) throws IllegalAccessException, InvocationTargetException, JsonProcessingException {
         Class classByName = dirtContext.getClassByName(entityName);
         Object o2 = persistProxy.getOne(classByName, id);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
@@ -57,10 +59,8 @@ public class DirtService {
     }
 
 
-
-
     @Transactional
-    public void create(  String entityName, Map body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
+    public void create(String entityName, Map body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         Class<? extends iID> entityClass = (Class<? extends iID>) Class.forName(entityName);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {
@@ -78,7 +78,7 @@ public class DirtService {
 
 
     @Transactional
-    public void update( String entityName,   Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
+    public void update(String entityName, Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         Class<? extends iID> entityClass = (Class<? extends iID>) Class.forName(entityName);
 
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
@@ -133,7 +133,7 @@ public class DirtService {
     public Object getById(String entityName, Long id) {
         Class<?> entityClass = Class.forName(entityName);
         Optional byId = persistProxy.findById(entityClass, id);
-        if(byId.isPresent())return byId.get();
+        if (byId.isPresent()) return byId.get();
         throw new RuntimeException("不存在的 id");
     }
 
@@ -155,22 +155,33 @@ public class DirtService {
 
 
     public DirtFieldType getDirtField(String entityName, String fieldName, Map args) throws JsonProcessingException {
-        return  dirtContext.getDirtEntity(entityName).getFieldType(fieldName, args);
+        return dirtContext.getDirtEntity(entityName).getFieldType(fieldName, args);
     }
 
 
+    public List<Option> getOptions(String entityName, String fieldName, Map args) throws ClassNotFoundException, NoSuchFieldException {
+        Class<?> aClass = Class.forName(entityName);
+        Field field = aClass.getDeclaredField(fieldName);
+        DirtField[] dirtFields = field.getDeclaredAnnotationsByType(DirtField.class);
+        if (dirtFields.length == 1) {
+            DirtDepends[] depends = dirtFields[0].depends();
+            if (depends.length == 1) {
+                DirtDepends depend = depends[0];
+                iDenpendsWithArgsDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
+                if(optionFunction!=null) {
+                    List<Option> source = optionFunction.getSource(depend, args);
+                    return source;
+                }
+            }
+        }
 
-    public List<Option> getOptions(String entityName, String fieldName, Map args){
-        ArrayList<Option> options = new ArrayList<>();
-        iDenpendsWithArgsDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
-        List<Option> source = optionFunction.getSource(args);
-        return  source;
+        return null;
     }
 
     public Object getByCode(String entityName, String code) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         Optional byId = persistProxy.findByCode(entityClass, code);
-        if(byId.isPresent())return byId.get();
+        if (byId.isPresent()) return byId.get();
         throw new RuntimeException("不存在的 code");
     }
 }

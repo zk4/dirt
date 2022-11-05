@@ -22,5 +22,4 @@ public @interface DirtSubmit {
     Class<? extends ColProps> colProps() default ColProps.class;//	ColProps	在开启 grid 模式时传递给 Col
     // 如果为 none，则利用 DirtField 的值
     eUIType valueType() default eUIType.none;
-    //DirtFomItemRule[] rules() default  {};
 }
