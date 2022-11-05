@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtSearch;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
 // UI 搜索组件信息
-@Data
+@Getter
+@Setter
 public class DirtSearchType {
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")

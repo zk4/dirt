@@ -5,14 +5,16 @@ import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
 // https://procomponents.ant.design/components/table#columns-%E5%88%97%E5%AE%9A%E4%B9%89
 // https://procomponents.ant.design/components/table?current=1&pageSize=5#valuetype-%E5%80%BC%E7%B1%BB%E5%9E%8B
 // https://ant.design/components/table-cn/#API
-@Data
+@Getter
+@Setter
 @ApiModel(value = "schema")
 public class DirtFieldType {
     @JsonIgnore
@@ -145,11 +147,19 @@ public class DirtFieldType {
 
     public Boolean getFilters() {
         if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany) return false;
+        // 优先元数据
+        if (metaType != null) {
+            return metaType.getSearch();
+        }
         return filters;
     }
 
     public Boolean getOnFilter() {
         if(relation == eDirtEntityRelation.OneToMany || relation == eDirtEntityRelation.ManyToMany) return false;
+        // 优先元数据
+        if (metaType != null) {
+            return metaType.getSearch();
+        }
         return onFilter;
     }
 
@@ -165,5 +175,8 @@ public class DirtFieldType {
         return title;
     }
 
+    public MetaType getMetaType() {
+        return metaType;
+    }
 }
 

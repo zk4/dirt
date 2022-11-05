@@ -248,7 +248,7 @@ public class DirtEntityType {
         Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
         DirtDepends[] dependDS = dirtField.depends();
         Map source = new HashMap();
-        Object initialValue = null;
+        Object initialValue = tableHeader.getInitialValue();
 
         // 1. 有参动态 datasource，联动
         if (dependDS.length > 0) {

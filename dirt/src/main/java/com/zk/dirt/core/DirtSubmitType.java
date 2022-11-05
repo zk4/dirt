@@ -2,10 +2,11 @@ package com.zk.dirt.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtSubmit;
+import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
-import com.zk.dirt.rule.DirtRules;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +15,9 @@ import java.util.Map;
 // https://procomponents.ant.design/components/table#columns-%E5%88%97%E5%AE%9A%E4%B9%89
 // https://procomponents.ant.design/components/table?current=1&pageSize=5#valuetype-%E5%80%BC%E7%B1%BB%E5%9E%8B
 // https://ant.design/components/table-cn/#API
-@Data
+@Getter
+@Setter
 public class DirtSubmitType {
-    //@JsonIgnore
-    //MetaType metaType;
     @JsonIgnore
     DirtFieldType fieldType;
 
@@ -30,7 +30,7 @@ public class DirtSubmitType {
     @ApiModelProperty(value = "占位符")
     String placeholder;
     @ApiModelProperty(value = "是否可提交")
-    Boolean submitable=false;
+    Boolean submitable = false;
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     String valueType;
@@ -44,7 +44,7 @@ public class DirtSubmitType {
     Map valueEnum;
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
-    Map formItemProps= new HashMap();
+    Map formItemProps;
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     ColProps colProps = new ColProps();
@@ -62,7 +62,7 @@ public class DirtSubmitType {
     @ApiModelProperty(value = "子节点名称")
     String subTreeName;
 
-    public DirtSubmitType(DirtFieldType fieldType,  DirtSubmit submitable, ArrayList<Map> rules ) {
+    public DirtSubmitType(DirtFieldType fieldType, DirtSubmit submitable, ArrayList<Map> rules) {
         this.fieldType = fieldType;
         //this.metaType = metaType;
         this.setSubmitable(true);
@@ -79,12 +79,12 @@ public class DirtSubmitType {
         this.setWidth(submitable.width().getValue());
         this.setIndex(submitable.index());
         this.setValueType(submitable.valueType().toString());
-        HashMap formItemProps = new HashMap();
-
+        formItemProps = new HashMap();
+        formItemProps.put("rules", new ArrayList<>());
         // 兼容部分 JSR 303
         if (rules != null && rules.size() > 0) {
             formItemProps.put("rules", rules);
-            this.setFormItemProps(formItemProps);
+            //this.setFormItemProps(formItemProps);
         }
 
         // 很重要，不然 ProForm 提交时拿不到值
@@ -97,19 +97,25 @@ public class DirtSubmitType {
     }
 
     public String getTitle() {
-        if ( fieldType != null && fieldType.metaType!=null) return fieldType.metaType.getTitle();
+        if (fieldType != null && fieldType.getMetaType() != null) return fieldType.getMetaType().getTitle();
         if (fieldType != null) return fieldType.getTitle();
         return title;
     }
 
     public Map getFormItemProps() {
-        if ( fieldType != null && fieldType.metaType!=null) {
-            Boolean mandate = fieldType.metaType.getMandate();
-            if(mandate){
-                Map notEmpty = DirtRules.createNotEmpty(getKey() + "不可为空");
-                ArrayList<Map> objects = new ArrayList<>();
-                objects.add(notEmpty);
-                formItemProps.put("rules", objects);
+        if (fieldType != null && fieldType.getMetaType() != null) {
+            MetaType metaType = fieldType.getMetaType();
+            if (metaType != null) {
+                Boolean mandate = metaType.getMandate();
+                System.out.println(mandate);
+
+                if (mandate) {
+                    System.out.println(mandate);
+                //    Map notEmpty = DirtRules.createNotEmpty(getKey() + "不可为空");
+                //    ArrayList<Map> objects = new ArrayList<>();
+                //    objects.add(notEmpty);
+                //    _formItemProps.put("rules", objects);
+                }
             }
         }
         return formItemProps;
@@ -129,13 +135,15 @@ public class DirtSubmitType {
         }
         return tooltip;
     }
+
     public Map getValueEnum() {
         if (this.valueEnum == null && this.fieldType != null) {
             return this.fieldType.valueEnum;
         }
         return valueEnum;
     }
-        public String getValueType() {
+
+    public String getValueType() {
         if (this.valueType == null && this.fieldType != null) {
             return this.fieldType.valueType;
         }
@@ -148,8 +156,9 @@ public class DirtSubmitType {
         }
         return subTreeName;
     }
+
     public String getDependColumn() {
-        if (  this.fieldType != null) {
+        if (this.fieldType != null) {
             return this.fieldType.dependColumn;
         }
         return null;

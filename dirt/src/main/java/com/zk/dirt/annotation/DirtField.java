@@ -103,5 +103,5 @@ public @interface DirtField {
 
     // @Dprecated，使用 provider 类，
     // 原因： 1 注解的返回值限制较多，2. 有可能返回数组，3 要与下拉匹配
-    // int initialValue() default 0;
+    int initialValue() default 0;
 }

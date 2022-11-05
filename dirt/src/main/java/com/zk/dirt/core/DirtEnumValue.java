@@ -1,8 +1,11 @@
 package com.zk.dirt.core;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class DirtEnumValue<K,T> {
     private K text;
     private T status;

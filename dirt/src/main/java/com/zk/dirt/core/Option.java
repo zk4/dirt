@@ -1,10 +1,9 @@
 package com.zk.dirt.core;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class Option {
     String label;

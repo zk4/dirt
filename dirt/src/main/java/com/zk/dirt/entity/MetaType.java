@@ -15,8 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -27,8 +25,8 @@ import javax.persistence.*;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "metatype", uniqueConstraints = {@UniqueConstraint(columnNames = {"tableName", "columnName","deleted"})})
-@SQLDelete(sql = "UPDATE metatype SET deleted = true WHERE id=?  and version=? ")
-@Where(clause = "deleted=false")
+//@SQLDelete(sql = "UPDATE metatype SET deleted = true WHERE id=?  and version=? ")
+//@Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class MetaType extends DirtBaseIdEntity {
 
@@ -48,12 +46,15 @@ public class MetaType extends DirtBaseIdEntity {
     String title;
 
     @DirtField(title = "是否可搜索")
+    //@Column(nullable = false,columnDefinition="bit default false COMMENT '是否可搜索, false: 不可 true: 可'")
     Boolean search;
 
-    @DirtField(title = "是否启用")
+    @DirtField(title = "是否启用",initialValue = 1)
+    //@Column(nullable = false,columnDefinition="bit default true COMMENT '是否启用, false: 不可 true: 可'")
     Boolean enable;
 
     @DirtField(title = "是否必须存在")
+    //@Column(nullable = false,columnDefinition="bit default false COMMENT '是否必须存在, false: 不可 true: 可'")
     Boolean mandate;
 
     @DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, dataSource = MetaGroupProvider.class )
@@ -61,6 +62,7 @@ public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(title = "分组排序")
     Integer groupIndex;
+
 
     @DirtAction(text = "详情")
     public void detail() {
@@ -86,6 +88,7 @@ public class MetaType extends DirtBaseIdEntity {
     @PrePersist
     @PreUpdate
     public void pre() {
+
         // FIXME:  以下代码有环调用，再说吧。
         //DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
         //DirtEntityType dirtEntity = dirtContext.getDirtEntity(this.tableName);
