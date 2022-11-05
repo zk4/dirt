@@ -4,7 +4,7 @@ import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.intef.*;
-import com.zk.dirt.rule.DirtRuleAnnotationConvertor;
+import com.zk.dirt.rule.DirtRules;
 import com.zk.dirt.util.ExceptionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -350,8 +350,8 @@ public class DirtEntityType {
         if (submitables.length != 0) {
             DirtSubmit submitable = submitables[0];
 
-            ArrayList<Map> rules = DirtRuleAnnotationConvertor.parseRules(field);
-            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader, metaType, submitable, rules);
+            ArrayList<Map> rules = DirtRules.parseRules(field);
+            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader, submitable, rules);
             tableHeader.setSubmitType(dirtSubmitType);
 
 

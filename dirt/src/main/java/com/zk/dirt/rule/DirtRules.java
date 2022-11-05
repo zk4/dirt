@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class DirtRuleAnnotationConvertor {
+public class DirtRules {
 
     public static ArrayList<Map> parseRules(Field field) {
         ArrayList<Map> dirtRuleTypes = new ArrayList<Map>();
@@ -82,7 +82,7 @@ public class DirtRuleAnnotationConvertor {
 
     }
 
-    private static Map createEmail(String name, String msg) {
+    public static Map createEmail(String name, String msg) {
         Map map = new HashMap();
         map.put("type", "email");
 
@@ -93,7 +93,7 @@ public class DirtRuleAnnotationConvertor {
         return map;
     }
 
-    private static Map createMin(String name, String msg, long value) {
+    public static Map createMin(String name, String msg, long value) {
         Map map = new HashMap();
         map.put("type", "number");
         map.put("min", value);
@@ -107,7 +107,7 @@ public class DirtRuleAnnotationConvertor {
         return map;
     }
 
-    private static Map createMax(String name, long value, String msg) {
+    public static Map createMax(String name, long value, String msg) {
         Map map = new HashMap();
         map.put("type", "number");
         map.put("max", value);
@@ -121,7 +121,7 @@ public class DirtRuleAnnotationConvertor {
         return map;
     }
 
-    private static Map createSize(String name, int min, int max, String msg) {
+    public static Map createSize(String name, int min, int max, String msg) {
         Map map = new HashMap();
         map.put("min", min);
         map.put("max", max);
@@ -138,7 +138,7 @@ public class DirtRuleAnnotationConvertor {
         return map;
     }
 
-    private static Map createNotEmpty(String msg) {
+    public static Map createNotEmpty(String msg) {
         Map map = new HashMap();
         map.put("required",true);
 
@@ -150,7 +150,7 @@ public class DirtRuleAnnotationConvertor {
         return map;
     }
 
-    private static Map createRequired(String msg) {
+    public static Map createRequired(String msg) {
         Map map = new HashMap();
         map.put("required",true);
 

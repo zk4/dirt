@@ -2,8 +2,8 @@ package com.zk.dirt.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtSubmit;
-import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.experiment.ColProps;
+import com.zk.dirt.rule.DirtRules;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -16,8 +16,8 @@ import java.util.Map;
 // https://ant.design/components/table-cn/#API
 @Data
 public class DirtSubmitType {
-    @JsonIgnore
-    MetaType metaType;
+    //@JsonIgnore
+    //MetaType metaType;
     @JsonIgnore
     DirtFieldType fieldType;
 
@@ -44,7 +44,7 @@ public class DirtSubmitType {
     Map valueEnum;
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
-    Map formItemProps;
+    Map formItemProps= new HashMap();
 
     @ApiModelProperty(value = "见 dirtfieldType 定义，但具有高优先级")
     ColProps colProps = new ColProps();
@@ -62,9 +62,9 @@ public class DirtSubmitType {
     @ApiModelProperty(value = "子节点名称")
     String subTreeName;
 
-    public DirtSubmitType(DirtFieldType fieldType, MetaType metaType, DirtSubmit submitable, ArrayList<Map> rules ) {
+    public DirtSubmitType(DirtFieldType fieldType,  DirtSubmit submitable, ArrayList<Map> rules ) {
         this.fieldType = fieldType;
-        this.metaType = metaType;
+        //this.metaType = metaType;
         this.setSubmitable(true);
         try {
             ColProps colProps = submitable.colProps().newInstance();
@@ -82,41 +82,38 @@ public class DirtSubmitType {
         HashMap formItemProps = new HashMap();
 
         // 兼容部分 JSR 303
-        //
         if (rules != null && rules.size() > 0) {
             formItemProps.put("rules", rules);
             this.setFormItemProps(formItemProps);
         }
 
-        // 很重要，不然ProForm 提交时拿不到值
+        // 很重要，不然 ProForm 提交时拿不到值
         String name = fieldType.dataIndex;
         assert name != null && name.length() > 0;
         this.setKey(name);
-        //this.setTitle(fieldType.title);
-
-
-        //this.setTooltip(headerTooltip);
-
-        // WARNING. using dirtField title for submit label
-        //String submitlable = dirtField.title();
-        //if (submitlable.length() == 0) {
-        //    submitlable = name;
-        //}
-        //this.setTitle(submitlable);
-
-        //if (source != null)
-        //    this.setValueEnum(source);
 
         if (initialValue != null)
             this.setInitialValue(initialValue);
     }
 
     public String getTitle() {
-        if (metaType != null) return metaType.getTitle();
+        if ( fieldType != null && fieldType.metaType!=null) return fieldType.metaType.getTitle();
         if (fieldType != null) return fieldType.getTitle();
         return title;
     }
 
+    public Map getFormItemProps() {
+        if ( fieldType != null && fieldType.metaType!=null) {
+            Boolean mandate = fieldType.metaType.getMandate();
+            if(mandate){
+                Map notEmpty = DirtRules.createNotEmpty(getKey() + "不可为空");
+                ArrayList<Map> objects = new ArrayList<>();
+                objects.add(notEmpty);
+                formItemProps.put("rules", objects);
+            }
+        }
+        return formItemProps;
+    }
 
     public String getIdOfEntity() {
         return this.fieldType.getIdOfEntity();
