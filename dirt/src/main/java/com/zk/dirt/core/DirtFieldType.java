@@ -171,7 +171,7 @@ public class DirtFieldType {
 
 
     public String getTitle() {
-        if (metaType != null) return metaType.getTitle();
+        if (  metaType != null && metaType.getTitle()!=null && metaType.getTitle().length()!=0) return metaType.getTitle();
         return title;
     }
 
