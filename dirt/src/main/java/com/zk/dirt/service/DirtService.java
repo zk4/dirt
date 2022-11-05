@@ -163,7 +163,6 @@ public class DirtService {
     public List<Option> getOptions(String entityName, String fieldName, Map args){
         ArrayList<Option> options = new ArrayList<>();
         iWithArgDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
-        //List<Option> collect = dirtContext.getColumns(entityName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
         List<Option> source = optionFunction.getSource(args);
         return  source;
     }

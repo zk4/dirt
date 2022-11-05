@@ -40,6 +40,7 @@ public class DirtEntityType {
 
     private final Map<String, iWithArgDataSource> dependDataSources = new HashMap<>();
 
+    private final Map<String, MetaType> metaCache = new HashMap<>();
 
     ApplicationContext applicationContext;
 
@@ -188,7 +189,6 @@ public class DirtEntityType {
         tableHeader.setSorter(dirtField.sorter());
 
 
-
         // 设置　subTree　name，支持每个 field　都不一样的复杂模型
         String subTreeName = dirtField.subTreeName();
         if (subTreeName.length() > 0) {
@@ -272,13 +272,13 @@ public class DirtEntityType {
         Object initialValue = null;
 
         // 1. 有参动态 datasource，联动
-        if (dependDS.length > 0 ) {
+        if (dependDS.length > 0) {
             DirtDepends dependsAnnotation = dependDS[0];
             String onColumn = dependsAnnotation.onColumn();
             tableHeader.setDependColumn(onColumn);
             Class<? extends iWithArgDataSource> aClass = dependsAnnotation.dataSource();
             iWithArgDataSource ds = applicationContext.getBean(aClass);
-            dependDataSources.put(entityClass.getName()+"."+field.getName(), ds);
+            dependDataSources.put(entityClass.getName() + "." + field.getName(), ds);
         }
         // 2. 无参静态 datasource
         else if (dataSource.length > 0) {
@@ -294,7 +294,7 @@ public class DirtEntityType {
                 boolean assignableFrom = iEnumText.class.isAssignableFrom(fieldRetType);
                 //source = new LinkedHashMap();
                 if (assignableFrom) {
-                    Class<? extends iEnumText>  enumTextClass = fieldRetType.asSubclass(iEnumText.class);
+                    Class<? extends iEnumText> enumTextClass = fieldRetType.asSubclass(iEnumText.class);
                     try {
                         iEnumText[] enumConstants = enumTextClass.getEnumConstants();
 
@@ -305,7 +305,7 @@ public class DirtEntityType {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     Field[] fields = fieldRetType.getFields();
                     for (Field e : fields) {
                         String name = e.getName();
@@ -362,7 +362,7 @@ public class DirtEntityType {
         DirtSearch[] dirtSearches = dirtField.dirtSearch();
         if (dirtSearches.length != 0) {
             DirtSearch dirtSearch = dirtSearches[0];
-            DirtSearchType dirtSearchType = new DirtSearchType(tableHeader,dirtSearch);
+            DirtSearchType dirtSearchType = new DirtSearchType(tableHeader, dirtSearch);
             tableHeader.setSearchType(dirtSearchType);
         }
 
@@ -372,7 +372,7 @@ public class DirtEntityType {
             DirtSubmit submitable = submitables[0];
 
             ArrayList<Map> rules = DirtRuleAnnotationConvertor.parseRules(field);
-            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader,metaType,submitable,rules );
+            DirtSubmitType dirtSubmitType = new DirtSubmitType(tableHeader, metaType, submitable, rules);
             tableHeader.setSubmitType(dirtSubmitType);
 
 
@@ -390,22 +390,25 @@ public class DirtEntityType {
     }
 
     private MetaType getMetaType(Field field, DirtField dirtField) {
+        String name = field.getName();
+        boolean b = metaCache.containsKey(name);
         MetaType metaType = null;
+        if (b) {
+            return  metaCache.get(name);
+        }
         if (dirtField.metable()) {
             EntityManager em = applicationContext.getBean(EntityManager.class);
 
             List<MetaType> resultList = em
                     .createQuery("SELECT m from MetaType as m where m.columnName = ?1", MetaType.class)
-                    .setParameter(1, field.getName())
+                    .setParameter(1, name)
                     .getResultList();
-            if (resultList == null || resultList.size() == 0) {
-                return null;
-            } else {
+            if (resultList != null && resultList.size() != 0) {
                 metaType = resultList.get(0);
             }
 
         }
-
+        metaCache.put(name, metaType);
         return metaType;
     }
 
@@ -512,9 +515,13 @@ public class DirtEntityType {
             }
         });
     }
-    public iWithArgDataSource getOptionFunction(String key){
+
+    public iWithArgDataSource getOptionFunction(String key) {
         iWithArgDataSource iWithArgDataSource = dependDataSources.get(key);
         return iWithArgDataSource;
+    }
+    public void  removeOptionFunctionKey(String key) {
+        metaCache.remove(key);
     }
 
 }

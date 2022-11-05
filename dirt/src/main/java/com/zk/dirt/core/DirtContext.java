@@ -148,4 +148,10 @@ public class DirtContext {
         return optionFunction;
     }
 
+    public void removeOptionFunctionKey(String entityName,String subKey) {
+        DirtEntityType dirtEntityType = nameDirtEntityMap.get(entityName);
+        if(dirtEntityType!=null){
+            dirtEntityType.removeOptionFunctionKey(subKey);
+        }
+    }
 }

@@ -8,7 +8,9 @@ import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.eUIType;
+import com.zk.dirt.util.SpringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -24,7 +26,7 @@ import javax.persistence.*;
 @DirtEntity("元数据")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "metatype", uniqueConstraints = {@UniqueConstraint(columnNames = {"tableName", "columnName"})})
+@Table(name = "metatype", uniqueConstraints = {@UniqueConstraint(columnNames = {"tableName", "columnName","deleted"})})
 @SQLDelete(sql = "UPDATE metatype SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
@@ -72,9 +74,17 @@ public class MetaType extends DirtBaseIdEntity {
     }
 
 
+    @PostRemove
+    @PostPersist
+    @PostUpdate
+    public void post(){
+        DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
+        dirtContext.removeOptionFunctionKey(tableName,columnName);
+    }
+
     @PrePersist
     @PreUpdate
-    public void prePersist() {
+    public void pre() {
         // FIXME:  以下代码有环调用，再说吧。
         //DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
         //DirtEntityType dirtEntity = dirtContext.getDirtEntity(this.tableName);
@@ -82,6 +92,7 @@ public class MetaType extends DirtBaseIdEntity {
         //if(dirtField==null){
         //    throw new RuntimeException("无此字段");
         //}
+
         //if (!dirtField.metable())
         //    throw new RuntimeException("未在 DirtField 注解里开启 metable 属性。如果以前可以，可以由于版本更新去除了" +
         //            this.tableName + "." + this.columnName+
