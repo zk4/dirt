@@ -187,6 +187,8 @@ public class DirtEntityType {
         tableHeader.setHideInTable(dirtField.hideInTable());
         tableHeader.setSorter(dirtField.sorter());
 
+
+
         // 设置　subTree　name，支持每个 field　都不一样的复杂模型
         String subTreeName = dirtField.subTreeName();
         if (subTreeName.length() > 0) {
@@ -273,6 +275,7 @@ public class DirtEntityType {
         if (dependDS.length > 0 ) {
             DirtDepends dependsAnnotation = dependDS[0];
             String onColumn = dependsAnnotation.onColumn();
+            tableHeader.setDependColumn(onColumn);
             Class<? extends iWithArgDataSource> aClass = dependsAnnotation.dataSource();
             iWithArgDataSource ds = applicationContext.getBean(aClass);
             dependDataSources.put(entityClass.getName()+"."+field.getName(), ds);

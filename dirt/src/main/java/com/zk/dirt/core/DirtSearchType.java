@@ -62,4 +62,10 @@ public class DirtSearchType {
         }
         return formItemProps;
     }
+    public String getDependColumn() {
+        if (  this.fieldType != null) {
+            return this.fieldType.dependColumn;
+        }
+        return null;
+    }
 }

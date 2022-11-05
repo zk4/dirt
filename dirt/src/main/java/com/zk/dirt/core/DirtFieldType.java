@@ -102,7 +102,7 @@ public class DirtFieldType {
     String fixed;
 
     @ApiModelProperty(value = "依赖列，当列改变时，应该重新获取 feild 的 schema 数据")
-    String[] dependColumns;
+    String dependColumn;
 
     @ApiModelProperty(value = "在构造提交表单时的属性")
     DirtSubmitType submitType;
@@ -179,5 +179,10 @@ public class DirtFieldType {
     //    if (metaType != null) return metaType.getHideInForm();
     //    return hideInForm;
     //}
+
+
+    public String getDependColumn() {
+        return dependColumn;
+    }
 }
 

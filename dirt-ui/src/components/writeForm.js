@@ -59,14 +59,14 @@ export default (props) => {
   // },[fieldName])
 
   let createColumns = columns.map(column => {
-    const {key: columnKey, idOfEntity, relation} = column
+    const {key: columnKey, idOfEntity, relation,dependColumn} = column
     // 自定义创建 formItem
     if (column.valueType === UIConsts.selectSearhInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
         return <SelectSearhInput.WriteView fetchOptions={
           async (username) => {
-            const dependsName = 'tableName'
+            const dependsName = dependColumn
             const arg = form.getFieldValue(dependsName)
             // debugger
             return network.getOptionsAsync({entityName, subKey:columnKey,args:{[dependsName]:arg}});
