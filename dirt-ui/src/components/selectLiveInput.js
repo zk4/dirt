@@ -44,7 +44,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 100, ...props }) {
 // Usage of DebounceSelect
 
 const SearchView = (props) => {
-  const [value, setValue] = useState([]);
+  const [value, setValue] = useState(props.value || []);
   return (
     <DebounceSelect
       mode="tags"

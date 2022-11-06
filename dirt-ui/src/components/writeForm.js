@@ -36,7 +36,8 @@ export default (props) => {
     // 自定义创建 formItem
     if (column.valueType === UIConsts.selectLiveInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        return <SelectLiveInput.WriteView fetchOptions={
+        return <SelectLiveInput.WriteView 
+        fetchOptions={
           async (username) => {
             const dependsName = dependColumn
             const arg = form.getFieldValue(dependsName)
