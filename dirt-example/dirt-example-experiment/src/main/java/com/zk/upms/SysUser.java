@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
@@ -34,36 +35,31 @@ import java.util.Set;
 @JsonIdentityInfo(scope = SysUser.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class SysUser extends MyBaseIdEntity {
 
-    /**
-     * 部门ID
-     */
+
     @DirtField(title = "部门")
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private SysDept dept;
 
-    /**
-     * 用户账号
-     */
+    @DirtField(
+            title = "角色权限",
+            uiType = eUIType.selectLiveInput,
+            depends = @DirtDepends(onEntity =SysRole.class , onColumn = "roleKey")
+    )
+    private String roleKey;
+
+
     @DirtField(title = "用户账号")
     private String userName;
 
-    /**
-     * 用户昵称
-     */
     @DirtField(title = "用户昵称")
     private String nickName;
 
-    /**
-     * 用户邮箱
-     */
     @DirtField(title = "用户邮箱")
     @Email
     private String email;
 
-    /**
-     * 手机号码
-     */
+
     @DirtField(title = "手机号码")
     private String phonenumber;
 
@@ -83,21 +79,13 @@ public class SysUser extends MyBaseIdEntity {
         }
     }
 
-    /**
-     * 用户性别
-     */
     @DirtField(title = "用户性别")
     private eGender sex;
 
-    /**
-     * 用户头像
-     */
+
     @DirtField(title = "用户头像",uiType = eUIType.avatar)
     private String avatar;
 
-    /**
-     * 密码
-     */
     @DirtField(title = "密码",uiType = eUIType.password)
     private String password;
 

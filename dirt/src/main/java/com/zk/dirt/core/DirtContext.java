@@ -35,6 +35,7 @@ public class DirtContext {
     private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class, SimpleJpaRepository>();
     private final static Map<String, DirtViewType> nameEntityMap = new HashMap<String, DirtViewType>();
     private final static Map<String, List<String>> nameColumns = new HashMap<String, List<String>>();
+    private final static Map<String, iDenpendsWithArgsDataSource> dependDataSources = new HashMap<>();
 
 
     public DirtContext() {
@@ -136,17 +137,22 @@ public class DirtContext {
         return nameEntityMap;
     }
 
+    static public String getOptionKey(String entityName, String subKey){
+        return entityName+"."+subKey;
+    }
     public iDenpendsWithArgsDataSource getOptionFunction(String entityName, String subKey){
-        DirtEntityType dirtEntityType = nameDirtEntityMap.get(entityName);
-        String key = entityName+"."+subKey;
-        iDenpendsWithArgsDataSource optionFunction = dirtEntityType.getOptionFunction(key);
+        String optionKey = getOptionKey(entityName, subKey);
+        iDenpendsWithArgsDataSource optionFunction = dependDataSources.get(optionKey);
         return optionFunction;
     }
 
     public void removeOptionFunctionKey(String entityName,String subKey) {
         DirtEntityType dirtEntityType = nameDirtEntityMap.get(entityName);
         if(dirtEntityType!=null){
-            dirtEntityType.removeOptionFunctionKey(subKey);
+            dependDataSources.remove(subKey);
         }
+    }
+    public void addOptionFunction   (String key, iDenpendsWithArgsDataSource denpendsWithArgsDataSource){
+        dependDataSources.put(key, denpendsWithArgsDataSource);
     }
 }

@@ -38,7 +38,6 @@ public class DirtEntityType {
 
     private final Map<String, Class> idOfEntityMap = new HashMap<>();
 
-    private final Map<String, iDenpendsWithArgsDataSource> dependDataSources = new HashMap<>();
 
     private final Map<String, MetaType> metaCache = new HashMap<>();
 
@@ -258,11 +257,13 @@ public class DirtEntityType {
             Class<? extends iDenpendsWithArgsDataSource> aClass = dependsAnnotation.dataSource();
             iDenpendsWithArgsDataSource ds = applicationContext.getBean(aClass);
             String name = entityClass.getName();
-            if(dependsAnnotation.onEntity().length>0){
-                if(dependsAnnotation.onEntity().length>1) throw new RuntimeException("只允许一个 class");
-                name = dependsAnnotation.onEntity()[0].getName();
-            }
-            dependDataSources.put(name + "." + field.getName(), ds);
+            //if(dependsAnnotation.onEntity().length>0){
+            //    if(dependsAnnotation.onEntity().length>1) throw new RuntimeException("只允许一个 class");
+            //    name = dependsAnnotation.onEntity()[0].getName();
+            //}
+            String s = DirtContext.getOptionKey(name, field.getName());
+            //dependDataSources.put(s, ds);
+            dirtContext.addOptionFunction(s,ds);
         }
         // 2. 无参静态 datasource
         else if (dataSource.length > 0) {
@@ -500,12 +501,12 @@ public class DirtEntityType {
         });
     }
 
-    public iDenpendsWithArgsDataSource getOptionFunction(String key) {
-        iDenpendsWithArgsDataSource iWithArgDataSource = dependDataSources.get(key);
-        return iWithArgDataSource;
-    }
-    public void  removeOptionFunctionKey(String key) {
-        metaCache.remove(key);
-    }
+    //public iDenpendsWithArgsDataSource getOptionFunction(String key) {
+    //    iDenpendsWithArgsDataSource iWithArgDataSource = dependDataSources.get(key);
+    //    return iWithArgDataSource;
+    //}
+    //public void  removeOptionFunctionKey(String key) {
+    //    metaCache.remove(key);
+    //}
 
 }
