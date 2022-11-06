@@ -37,6 +37,7 @@ export default (props) => {
     if (column.valueType === UIConsts.selectLiveInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         return <SelectLiveInput.WriteView 
+        size={1}
         fetchOptions={
           async (username) => {
             const arg = form.getFieldValue(dependColumn)

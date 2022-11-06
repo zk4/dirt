@@ -1,6 +1,6 @@
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState,useCallback } from 'react';
 function DebounceSelect({ fetchOptions, debounceTimeout = 100, ...props }) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState([]);
@@ -46,16 +46,27 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 100, ...props }) {
 
 const SearchView = (props) => {
   const [value, setValue] = useState(props.value || []);
+  let func= useCallback((e)=>{
+  let a = e;
+  // debugger
+  if(props.size){
+    if(props.size < e.length)
+    {
+      // message.error('超出可输大小');
+      a = a.splice(a.length-props.size,props.size)
+    }
+  }
+    setValue(a)
+    props.onChange(a)
+})
+
   return (
     <DebounceSelect
       mode="tags"
       value={value}
       placeholder="Select users"
       fetchOptions={props.fetchOptions}
-      onChange={(newValue) => {
-        setValue(newValue)
-        props.onChange(newValue);
-      }}
+      onChange={func}
       style={{
         width: '100%',
       }}
