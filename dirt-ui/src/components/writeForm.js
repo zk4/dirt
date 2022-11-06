@@ -66,10 +66,8 @@ export default (props) => {
         let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
         return <SelectLiveInput.WriteView fetchOptions={
           async (username) => {
-            const dependsName = dependColumn
-            const arg = form.getFieldValue(dependsName)
-            // debugger
-            return network.getOptionsAsync({entityName, subKey:columnKey,args:{[dependsName]:arg}});
+            const arg = form.getFieldValue(dependColumn)
+            return network.getOptionsAsync({entityName, subKey:columnKey,args:{[dependColumn]:arg}});
           }
         }
           onChange={

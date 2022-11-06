@@ -152,7 +152,7 @@ public class DirtContext {
             dependDataSources.remove(subKey);
         }
     }
-    public void addOptionFunction   (String key, iDenpendsWithArgsDataSource denpendsWithArgsDataSource){
+    public void addOptionFunction(String key, iDenpendsWithArgsDataSource denpendsWithArgsDataSource){
         dependDataSources.put(key, denpendsWithArgsDataSource);
     }
 }

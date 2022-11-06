@@ -38,7 +38,6 @@ public class DirtEntityType {
 
     private final Map<String, Class> idOfEntityMap = new HashMap<>();
 
-
     private final Map<String, MetaType> metaCache = new HashMap<>();
 
     ApplicationContext applicationContext;
@@ -51,10 +50,11 @@ public class DirtEntityType {
         this.dirtContext = context;
         this.applicationContext = applicationContext;
         this.entityClass = classAnnotationClass;
+        lazyInit();
     }
 
     public List<DirtFieldType> getHeads() {
-        lazyInit();
+
         return heads;
     }
 
@@ -250,6 +250,7 @@ public class DirtEntityType {
         Object initialValue = tableHeader.getInitialValue();
 
         // 1. 有参动态 datasource，联动
+        // TODO: OptionFunction 需要及时动态生成，不能依赖与当前调用条件。
         if (dependDS.length > 0) {
             DirtDepends dependsAnnotation = dependDS[0];
             String onColumn = dependsAnnotation.onColumn();
@@ -257,12 +258,7 @@ public class DirtEntityType {
             Class<? extends iDenpendsWithArgsDataSource> aClass = dependsAnnotation.dataSource();
             iDenpendsWithArgsDataSource ds = applicationContext.getBean(aClass);
             String name = entityClass.getName();
-            //if(dependsAnnotation.onEntity().length>0){
-            //    if(dependsAnnotation.onEntity().length>1) throw new RuntimeException("只允许一个 class");
-            //    name = dependsAnnotation.onEntity()[0].getName();
-            //}
             String s = DirtContext.getOptionKey(name, field.getName());
-            //dependDataSources.put(s, ds);
             dirtContext.addOptionFunction(s,ds);
         }
         // 2. 无参静态 datasource
@@ -476,14 +472,14 @@ public class DirtEntityType {
     }
 
     public DirtActionType getAction(String name) {
-        lazyInit();
+
         DirtActionType dirtActionType = this.actionMap.get(name);
         if (dirtActionType == null) throw new RuntimeException("DirtActionType" + name + "不存在");
         return dirtActionType;
     }
 
     public DirtField getDirtField(String filedName) {
-        lazyInit();
+
         return this.dirtFieldMap.get(filedName);
     }
 
