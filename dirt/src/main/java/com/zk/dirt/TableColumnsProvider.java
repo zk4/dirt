@@ -1,6 +1,5 @@
 package com.zk.dirt;
 
-import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.DirtEnumValue;
 import com.zk.dirt.core.Option;
@@ -22,7 +21,7 @@ public class TableColumnsProvider implements iDenpendsWithArgsDataSource<String,
     @Autowired
     DirtContext dirtContext;
     @Override
-    public List<Option> getSource(DirtDepends depends,  Map<String,Object> args) {
+    public List<Option> getSource(String dependsEnityName,String dependsFiledName,  Map<String,Object> args) {
         String  tableName = (String)args.get("tableName");
         List<Option> collect = dirtContext.getColumns(tableName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
         return collect;

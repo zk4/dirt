@@ -169,7 +169,9 @@ public class DirtService {
                 DirtDepends depend = depends[0];
                 iDenpendsWithArgsDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
                 if(optionFunction!=null) {
-                    List<Option> source = optionFunction.getSource(depend, args);
+                    String  tableName = depend.onEntity()[0].getSimpleName();
+                    String column =depend.onColumn();
+                    List<Option> source = optionFunction.getSource(tableName,column, args);
                     return source;
                 }
             }

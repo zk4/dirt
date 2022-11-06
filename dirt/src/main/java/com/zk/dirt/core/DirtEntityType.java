@@ -54,7 +54,7 @@ public class DirtEntityType {
     }
 
     public List<DirtFieldType> getHeads() {
-
+        lazyInit();
         return heads;
     }
 
@@ -472,14 +472,14 @@ public class DirtEntityType {
     }
 
     public DirtActionType getAction(String name) {
-
+        lazyInit();
         DirtActionType dirtActionType = this.actionMap.get(name);
         if (dirtActionType == null) throw new RuntimeException("DirtActionType" + name + "不存在");
         return dirtActionType;
     }
 
     public DirtField getDirtField(String filedName) {
-
+        lazyInit();
         return this.dirtFieldMap.get(filedName);
     }
 

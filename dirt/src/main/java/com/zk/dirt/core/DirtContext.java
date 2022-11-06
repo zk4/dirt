@@ -95,6 +95,7 @@ public class DirtContext {
     public List<String>  getColumns(String className){
         return nameColumns.get(className);
     }
+
     public Class getClassByName(String name) {
         Class aClass = nameClassMap.get(name);
         ;

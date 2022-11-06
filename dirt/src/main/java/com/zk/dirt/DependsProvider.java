@@ -1,6 +1,5 @@
 package com.zk.dirt;
 
-import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.DirtEnumValue;
 import com.zk.dirt.core.Option;
@@ -23,10 +22,10 @@ public class DependsProvider implements iDenpendsWithArgsDataSource<String, Dirt
     @Autowired
     DirtContext dirtContext;
     @Override
-    public List<Option> getSource(DirtDepends depends, Map<String,Object> args) {
-        String  tableName = depends.onEntity()[0].getSimpleName();
-        String column =depends.onColumn();
-        Query query = entityManager.createQuery("select DISTINCT "+ column +" from  "+tableName);
+    public List<Option> getSource(String dependsEnityName,String dependsFiledName, Map<String,Object> args) {
+        //String  tableName = depends.onEntity()[0].getSimpleName();
+        //String column =depends.onColumn();
+        Query query = entityManager.createQuery("select DISTINCT "+ dependsFiledName +" from  "+dependsEnityName);
         List<String> resultList = query.getResultList();
         List<Option> collect = resultList.stream().map(s -> new Option(s, s)).collect(Collectors.toList());
         return collect;
