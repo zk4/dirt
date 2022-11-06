@@ -6,10 +6,12 @@ import com.zk.dirt.intef.iDenpendsWithArgsDataSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class DirtContextTest {
 
     @Autowired
-    DirtContext dirtContext;
+    DirtContext dirtContext ;
+
 
 
     @Test
@@ -52,34 +55,46 @@ class DirtContextTest {
         for (DirtFieldType head : heads) {
             if(head.getTitle().equals("实体全名")){
                 Map valueEnum = head.getValueEnum();
-                assertEquals(valueEnum.size(), 1);
+                assertEquals(1,valueEnum.size());
             }
         }
-        System.out.println(heads);
+        assertEquals(9,heads.size());
     }
 
     @Test
     void getRepoByType() {
+        SimpleJpaRepository repoByType = dirtContext.getRepoByType(MetaType.class);
+        assertNotNull(repoByType);
     }
 
     @Test
     void getRepo() {
+        SimpleJpaRepository repo = dirtContext.getRepo(MetaType.class.getName());
+        assertNotNull(repo);
     }
 
     @Test
     void getAllEntityNames() {
+        Set<String> allEntityNames = dirtContext.getAllEntityNames();
+        assertEquals(1, allEntityNames.size());
     }
 
     @Test
     void getNameEntityMap() {
+        Map<String, DirtViewType> nameEntityMap = dirtContext.getNameEntityMap();
+
     }
 
     @Test
     void getOptionKey() {
+        String columnName = DirtContext.getOptionKey(MetaType.class.getName(), "columnName");
+        assertEquals("com.zk.dirt.entity.MetaType.columnName", columnName);
     }
 
     @Test
     void getOptionFunction() {
+        iDenpendsWithArgsDataSource columnName = dirtContext.getOptionFunction(MetaType.class.getName(), "columnName");
+        assertNotNull(columnName);
     }
 
     @Test
