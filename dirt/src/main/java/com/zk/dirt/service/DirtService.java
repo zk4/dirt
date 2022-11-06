@@ -154,8 +154,8 @@ public class DirtService {
     }
 
 
-    public DirtFieldType getDirtField(String entityName, String fieldName, Map args) throws JsonProcessingException {
-        return dirtContext.getDirtEntity(entityName).getFieldType(fieldName, args);
+    public DirtFieldType getDirtField(String entityName, String fieldName) throws JsonProcessingException {
+        return dirtContext.getDirtEntity(entityName).getFieldType(fieldName);
     }
 
 

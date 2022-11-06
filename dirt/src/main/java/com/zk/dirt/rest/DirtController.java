@@ -190,7 +190,7 @@ public class DirtController {
     @PostMapping(value = "/dirt/getDirtFieldType", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取 DirtFieldType")
     public String getDirtField(@RequestBody GetDirtFieldReq req) throws JsonProcessingException {
-        DirtFieldType dirtField = dirtService.getDirtField(req.entityName, req.fieldName, req.args);
+        DirtFieldType dirtField = dirtService.getDirtField(req.entityName, req.fieldName);
         Result<DirtFieldType> success = Result.success(dirtField);
         return objectMapper.writeValueAsString(success);
     }

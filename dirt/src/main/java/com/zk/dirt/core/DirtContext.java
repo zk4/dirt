@@ -141,6 +141,7 @@ public class DirtContext {
     static public String getOptionKey(String entityName, String subKey){
         return entityName+"."+subKey;
     }
+
     public iDenpendsWithArgsDataSource getOptionFunction(String entityName, String subKey){
         String optionKey = getOptionKey(entityName, subKey);
         iDenpendsWithArgsDataSource optionFunction = dependDataSources.get(optionKey);
@@ -148,10 +149,11 @@ public class DirtContext {
     }
 
     public void removeOptionFunctionKey(String entityName,String subKey) {
-        DirtEntityType dirtEntityType = nameDirtEntityMap.get(entityName);
-        if(dirtEntityType!=null){
-            dependDataSources.remove(subKey);
-        }
+        String optionKey = getOptionKey(entityName, subKey);
+        //DirtEntityType dirtEntityType = nameDirtEntityMap.get(entityName);
+        //if(dirtEntityType!=null){
+        dependDataSources.remove(optionKey);
+        //}
     }
     public void addOptionFunction(String key, iDenpendsWithArgsDataSource denpendsWithArgsDataSource){
         dependDataSources.put(key, denpendsWithArgsDataSource);

@@ -54,7 +54,7 @@ public class DirtEntityType {
     }
 
     public List<DirtFieldType> getHeads() {
-        lazyInit();
+        //lazyInit();
         return heads;
     }
 
@@ -92,7 +92,7 @@ public class DirtEntityType {
                     // 为 null，则放过，使用默认 column 信息
                     return true;
                 })
-                .map((Field field1) -> getFieldType(field1, null))
+                .map((Field field1) -> getFieldType(field1))
                 .collect(Collectors.toList());
 
         if (this.actionMap.size() > 0) {
@@ -119,23 +119,23 @@ public class DirtEntityType {
         this.heads.sort(Comparator.comparingInt(DirtFieldType::getIndex));
     }
 
-    public DirtFieldType getFieldType(String fieldName, Map<String, Object> args) {
+    public DirtFieldType getFieldType(String fieldName) {
         //TODO: duplicated code, optimize
         List<Field> fields = new ArrayList<>();
         fields = getAllFields(fields, entityClass);
         for (Field field : fields) {
             if (field.getName().equals(fieldName))
-                return getFieldType(field, args);
+                return getFieldType(field);
         }
         throw new RuntimeException("why here");
     }
 
     /**
      * @param field entity 的字段
-     * @deprecated  @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
+     //* @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
      * @return
      */
-    public DirtFieldType getFieldType(Field field, Map<String, Object> args) {
+    public DirtFieldType getFieldType(Field field) {
         DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
 
         MetaType metaType = getMetaType(field, dirtField);
@@ -147,8 +147,6 @@ public class DirtEntityType {
         } else {
             tableHeader.setTitle(dirtField.title());
         }
-
-
         OneToMany oneToMany = field.getAnnotation(OneToMany.class);
         ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
         OneToOne oneToOne = field.getAnnotation(OneToOne.class);
@@ -158,9 +156,7 @@ public class DirtEntityType {
         tableHeader.setFixed(dirtField.fixed().getText());
         tableHeader.setEllipsis(dirtField.ellipsis());
         tableHeader.setCopyable(dirtField.copyable());
-
         tableHeader.setSearch(dirtField.search());
-
         tableHeader.setOnFilter(dirtField.onFilter());
         tableHeader.setFilters(dirtField.filters());
         tableHeader.setHideInTable(dirtField.hideInTable());
@@ -182,14 +178,9 @@ public class DirtEntityType {
             tableHeader.setIdOfEntity(simpleName);
         } else {
             //deduce Entity Type from Return Type if there is relations
-
-
             if (manyToOne != null || oneToOne != null) {
-                // 1 is from BaseEntity2
                 tableHeader.setIdOfEntity(field.getType().getName());
             } else if (manyToMany != null || oneToMany != null) {
-                // 2 is element container, like list<>  set<>,  maby map<?,?>
-                // TODO: parse Map
                 ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
                 Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
                 if (actualTypeArguments.length == 1) {
@@ -204,32 +195,24 @@ public class DirtEntityType {
             }
         }
 
-
         // set uiType  if value
         if (uiType == eUIType.auto) {
-            // 设置  uiType by rettype if uiType is not set
-            Class<?> type = fieldRetType;
-
-
-            // 自动修改类型
-            // TODO: 如果 idOfEntity 不为 null，则不自动生成 uiType? 但好像也可以生成
+            // 根据返回值自动推导类型
             if (tableHeader.idOfEntity == null) {
-                if (type.isAssignableFrom(LocalDateTime.class)) uiType = eUIType.dateTime;
-                else if (type.isAssignableFrom(LocalDate.class)) uiType = eUIType.date;
-                else if (type.isAssignableFrom(Long.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(long.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(Integer.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(int.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(Float.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(float.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(Double.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(double.class)) uiType = eUIType.digit;
-                else if (type.isAssignableFrom(BigDecimal.class)) uiType = eUIType.money;
-                else if (type.isAssignableFrom(Boolean.class)) uiType = eUIType.switching;
-                else if (type.isAssignableFrom(boolean.class)) uiType = eUIType.switching;
+                if (fieldRetType.isAssignableFrom(LocalDateTime.class)) uiType = eUIType.dateTime;
+                else if (fieldRetType.isAssignableFrom(LocalDate.class)) uiType = eUIType.date;
+                else if (fieldRetType.isAssignableFrom(Long.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(long.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(Integer.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(int.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(Float.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(float.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(Double.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(double.class)) uiType = eUIType.digit;
+                else if (fieldRetType.isAssignableFrom(BigDecimal.class)) uiType = eUIType.money;
+                else if (fieldRetType.isAssignableFrom(Boolean.class)) uiType = eUIType.switching;
+                else if (fieldRetType.isAssignableFrom(boolean.class)) uiType = eUIType.switching;
             }
-
-
         }
         tableHeader.setValueType(uiType.toString());
         // 判断是否为枚举
@@ -240,16 +223,16 @@ public class DirtEntityType {
         //-----------------------------------------
         // 设置 valueEnum, initialValue
         // 优先级：
-        // 1. 有参动态 datasource
-        // 2. 无参静态 datasource
+        // 1. 有参 datasource
+        // 2. 无参 datasource
         // 3. 枚举列表
 
         Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
         DirtDepends[] dependDS = dirtField.depends();
-        Map source = new HashMap();
+        Map source = null;
         Object initialValue = tableHeader.getInitialValue();
 
-        // 1. 有参动态 datasource，联动
+        // 1. 有参 datasource
         // TODO: OptionFunction 需要及时动态生成，不能依赖与当前调用条件。
         if (dependDS.length > 0) {
             DirtDepends dependsAnnotation = dependDS[0];
@@ -261,7 +244,7 @@ public class DirtEntityType {
             String s = DirtContext.getOptionKey(name, field.getName());
             dirtContext.addOptionFunction(s,ds);
         }
-        // 2. 无参静态 datasource
+        // 2. 无参 datasource
         else if (dataSource.length > 0) {
             Class<? extends iDataSource> ds = dataSource[0];
             if (iNoArgDatasource.class.isAssignableFrom(ds)) {
@@ -278,11 +261,9 @@ public class DirtEntityType {
                     Class<? extends iEnumText> enumTextClass = fieldRetType.asSubclass(iEnumText.class);
                     try {
                         iEnumText[] enumConstants = enumTextClass.getEnumConstants();
-
                         for (iEnumText value : enumConstants) {
                             source.put(value, new DirtEnumValue(value.getText(), value.toString(), ""));
                         }
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -496,13 +477,5 @@ public class DirtEntityType {
             }
         });
     }
-
-    //public iDenpendsWithArgsDataSource getOptionFunction(String key) {
-    //    iDenpendsWithArgsDataSource iWithArgDataSource = dependDataSources.get(key);
-    //    return iWithArgDataSource;
-    //}
-    //public void  removeOptionFunctionKey(String key) {
-    //    metaCache.remove(key);
-    //}
 
 }
