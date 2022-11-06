@@ -30,6 +30,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 100, ...props }) {
   return (
     <Select
       labelInValue
+      showArrow
       loading={loading}
       onFocus={debounceFetcher}
       filterOption={false}

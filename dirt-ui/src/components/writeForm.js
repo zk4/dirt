@@ -39,9 +39,8 @@ export default (props) => {
         return <SelectLiveInput.WriteView 
         fetchOptions={
           async (username) => {
-            const dependsName = dependColumn
-            const arg = form.getFieldValue(dependsName)
-            return network.getOptionsAsync({entityName, subKey: columnKey, args: {[dependsName]: arg}});
+            const arg = form.getFieldValue(dependColumn)
+            return network.getOptionsAsync({entityName, subKey: columnKey, args: {[dependColumn]: arg}});
           }
         }
           onChange={
