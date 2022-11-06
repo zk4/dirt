@@ -7,9 +7,7 @@ import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.core.eUIType;
-import com.zk.dirt.util.SpringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -30,7 +28,10 @@ import javax.persistence.*;
 public class MetaType extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "实体全名",tooltip = "影响的实体名", uiType = eUIType.select, fixed = DirtField.eFixedType.LEFT,dataSource = MetaTableProvider.class)
+    @DirtField(title = "实体全名",tooltip = "影响的实体名",
+            uiType = eUIType.selectLiveInput, fixed = DirtField.eFixedType.LEFT,
+            depends = @DirtDepends(onColumn = "tableName", dataSource = MetaTableProvider.class)
+    )
     String tableName;
 
     @DirtField(
@@ -91,8 +92,8 @@ public class MetaType extends DirtBaseIdEntity {
     @PostPersist
     @PostUpdate
     public void post(){
-        DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
-        dirtContext.removeOptionFunctionKey(tableName,columnName);
+        //DirtContext dirtContext = SpringUtil.getApplicationContext().getBean(DirtContext.class);
+        //dirtContext.removeOptionFunctionKey(tableName,columnName);
     }
 
     @PrePersist

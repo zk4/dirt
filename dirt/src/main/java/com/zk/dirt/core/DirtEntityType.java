@@ -70,6 +70,34 @@ public class DirtEntityType {
         }
     }
 
+    private void initDataSource(String dsKey, Class<? extends iDataSource> aClass) {
+
+        //Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
+        //DirtDepends[] dependDS = dirtField.depends();
+        // 1. 有参 datasource
+        // TODO: OptionFunction 需要及时动态生成，不能依赖与当前调用条件。
+        //if (dependDS.length > 0) {
+        //    DirtDepends dependsAnnotation = dependDS[0];
+        //    String onColumn = dependsAnnotation.onColumn();
+            //tableHeader.setDependColumn(onColumn);
+            //Class<? extends iDataSource> aClass = dependsAnnotation.dataSource();
+            //iDataSource ds = applicationContext.getBean(aClass);
+            //String name = entityClass.getName();
+            //String s = DirtContext.getOptionKey(name, field.getName());
+            //dirtContext.addOptionFunction(dsKey, ds);
+        //}
+        // 2. 无参 datasource
+        //else if (dataSource.length > 0) {
+        //    Class<? extends iDataSource> ds = dataSource[0];
+        //
+        //    iDataSource enumProvider = applicationContext.getBean(ds);
+        //    //source = enumProvider.getSource();
+        //    //initialValue = enumProvider.initialValue();
+        //    dirtContext.addOptionFunction(dsKey, enumProvider);
+        //
+        //}
+    }
+
     private void initSchema() {
 
         List<Field> fields = new ArrayList<>();
@@ -92,7 +120,7 @@ public class DirtEntityType {
                     // 为 null，则放过，使用默认 column 信息
                     return true;
                 })
-                .map((Field field1) -> getFieldType(field1))
+                .map(this::getFieldType)
                 .collect(Collectors.toList());
 
         if (this.actionMap.size() > 0) {
@@ -132,7 +160,7 @@ public class DirtEntityType {
 
     /**
      * @param field entity 的字段
-     //* @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
+     *              //* @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
      * @return
      */
     public DirtFieldType getFieldType(Field field) {
@@ -167,6 +195,13 @@ public class DirtEntityType {
         String subTreeName = dirtField.subTreeName();
         if (subTreeName.length() > 0) {
             tableHeader.setSubTreeName(subTreeName);
+        }
+
+        DirtDepends[] depends = dirtField.depends();
+        if(depends.length>0){
+            DirtDepends depend = depends[0];
+            String onColumn = depend.onColumn();
+            tableHeader.setDependColumn(onColumn);
         }
 
         eUIType uiType = dirtField.uiType();
@@ -222,60 +257,35 @@ public class DirtEntityType {
         }
         //-----------------------------------------
         // 设置 valueEnum, initialValue
-        // 优先级：
-        // 1. 有参 datasource
-        // 2. 无参 datasource
-        // 3. 枚举列表
-
-        Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
-        DirtDepends[] dependDS = dirtField.depends();
-        Map source = null;
+        // 只关心 enum 类型
+        Map source = new HashMap();
         Object initialValue = tableHeader.getInitialValue();
 
-        // 1. 有参 datasource
-        // TODO: OptionFunction 需要及时动态生成，不能依赖与当前调用条件。
-        if (dependDS.length > 0) {
-            DirtDepends dependsAnnotation = dependDS[0];
-            String onColumn = dependsAnnotation.onColumn();
-            tableHeader.setDependColumn(onColumn);
-            Class<? extends iDenpendsWithArgsDataSource> aClass = dependsAnnotation.dataSource();
-            iDenpendsWithArgsDataSource ds = applicationContext.getBean(aClass);
-            String name = entityClass.getName();
-            String s = DirtContext.getOptionKey(name, field.getName());
-            dirtContext.addOptionFunction(s,ds);
-        }
-        // 2. 无参 datasource
-        else if (dataSource.length > 0) {
-            Class<? extends iDataSource> ds = dataSource[0];
-            if (iNoArgDatasource.class.isAssignableFrom(ds)) {
-                iNoArgDatasource enumProvider = (iNoArgDatasource) applicationContext.getBean(ds);
-                source = enumProvider.getSource();
-                initialValue = enumProvider.initialValue();
-            }
-        } else {
-            // 如果没有提供 provider, 但又是枚举类型，且实现了 iDirtListable 接口，构造 source
-            if (enumConstant) {
-                boolean assignableFrom = iEnumText.class.isAssignableFrom(fieldRetType);
-                //source = new LinkedHashMap();
-                if (assignableFrom) {
-                    Class<? extends iEnumText> enumTextClass = fieldRetType.asSubclass(iEnumText.class);
-                    try {
-                        iEnumText[] enumConstants = enumTextClass.getEnumConstants();
-                        for (iEnumText value : enumConstants) {
-                            source.put(value, new DirtEnumValue(value.getText(), value.toString(), ""));
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        // 枚举类型
+        if (enumConstant) {
+            boolean assignableFrom = iEnumText.class.isAssignableFrom(fieldRetType);
+            // 实现了 iDirtListable 接口的枚举
+            if (assignableFrom) {
+                Class<? extends iEnumText> enumTextClass = fieldRetType.asSubclass(iEnumText.class);
+                try {
+                    iEnumText[] enumConstants = enumTextClass.getEnumConstants();
+                    for (iEnumText value : enumConstants) {
+                        source.put(value, new DirtEnumValue(value.getText(), value.toString(), ""));
                     }
-                } else {
-                    Field[] fields = fieldRetType.getFields();
-                    for (Field e : fields) {
-                        String name = e.getName();
-                        System.out.println(name);
-                        source.put(name, new DirtEnumValue(name, name, ""));
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+            // 纯枚举
+            else {
+                Field[] fields = fieldRetType.getFields();
+                for (Field e : fields) {
+                    String name = e.getName();
+                    System.out.println(name);
+                    source.put(name, new DirtEnumValue(name, name, ""));
+                }
+            }
+
 
             DirtHQLSource[] dirtSources = dirtField.sourceProvider();
             if (dirtSources.length > 0) {
@@ -356,7 +366,7 @@ public class DirtEntityType {
         boolean b = metaCache.containsKey(name);
         MetaType metaType = null;
         if (b) {
-            return  metaCache.get(name);
+            return metaCache.get(name);
         }
         if (dirtField.metable()) {
             EntityManager em = applicationContext.getBean(EntityManager.class);

@@ -31,49 +31,20 @@ export default (props) => {
     setIsModalOpen(s => {return {...s, [name]: false}});
   };
 
-  // TODO: do not work 
-  // useEffect(()=>{
-  //   (async ()=>{
-  //     let d = await network.getDirtFieldTypeAsync({
-  //       "args": {"tableName": "com.zk.experiment.Card"},
-  //       "fieldName": "columnName",
-  //       "entityName": "com.zk.dirt.entity.MetaType"
-  //     })
-  //     //TODO: 组织创建表单的联动js 逻辑
-  //     let old = Object.assign({}, columns[columns.findIndex(c => c.key === 'columnName')])
-  //     columns[columns.findIndex(c => c.key === 'columnName')] = {
-  //       valueType: 'dependency',
-  //       name: ['tableName'],
-  //       columns: (obj) => {
-  //         let type = obj.tableName
-  //         setFieldName(type)
-  //         debugger
-  //         return [
-  //           d
-  //         ];
-  //
-  //         // return [];
-  //       },
-  //     }
-  //   })()
-  // },[fieldName])
-
   let createColumns = columns.map(column => {
-    const {key: columnKey, idOfEntity, relation,dependColumn} = column
+    const {key: columnKey, idOfEntity, relation, dependColumn} = column
     // 自定义创建 formItem
     if (column.valueType === UIConsts.selectLiveInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
         return <SelectLiveInput.WriteView fetchOptions={
           async (username) => {
             const dependsName = dependColumn
             const arg = form.getFieldValue(dependsName)
-            return network.getOptionsAsync({entityName, subKey:columnKey,args:{[dependsName]:arg}});
+            return network.getOptionsAsync({entityName, subKey: columnKey, args: {[dependsName]: arg}});
           }
         }
           onChange={
             (e) => {
-              // debugger
               form.setFieldValue(columnKey, e?.[0]?.value)
             }
           }

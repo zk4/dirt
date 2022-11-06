@@ -1,9 +1,8 @@
 package com.zk.dirt;
 
 import com.zk.dirt.core.DirtContext;
-import com.zk.dirt.core.DirtEnumValue;
 import com.zk.dirt.core.Option;
-import com.zk.dirt.intef.iDenpendsWithArgsDataSource;
+import com.zk.dirt.intef.iDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class DependsProvider implements iDenpendsWithArgsDataSource<String, DirtEnumValue> {
+public class DependsProvider implements iDataSource<String,Option> {
 
     @Autowired
     EntityManager entityManager;

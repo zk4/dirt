@@ -1,9 +1,11 @@
 package com.zk.dirt.core;
 
 
+import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
+import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtScan;
-import com.zk.dirt.intef.iDenpendsWithArgsDataSource;
+import com.zk.dirt.intef.iDataSource;
 import com.zk.dirt.util.PackageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
@@ -17,6 +19,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Component
@@ -29,13 +32,14 @@ public class DirtContext {
     @Autowired
     EntityManager entityManager;
 
-    private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
+    //private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
+    private final static LinkedHashMap<String, Supplier<DirtEntityType>> nameLambdaDirtEntityMap = new LinkedHashMap<>();
     private final static Map<String, Class> nameClassMap = new HashMap<String, Class>();
     private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String, SimpleJpaRepository>();
     private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class, SimpleJpaRepository>();
     private final static Map<String, DirtViewType> nameEntityMap = new HashMap<String, DirtViewType>();
     private final static Map<String, List<String>> nameColumns = new HashMap<String, List<String>>();
-    private final static Map<String, iDenpendsWithArgsDataSource> dependDataSources = new HashMap<>();
+    private static Map<String, iDataSource> dependDataSources = new HashMap<>();
 
 
     public DirtContext() {
@@ -55,15 +59,20 @@ public class DirtContext {
         }
         log.info("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
 
+        dependDataSources = applicationContext.getBeansOfType(iDataSource.class);
+        //System.out.println(beansOfType);
+
         for (String packagePath : scanPackages) {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
             for (Class classAnnotationClass : classAnnotationClasses) {
                 String simpleName = classAnnotationClass.getName();
-                if (nameDirtEntityMap.get(simpleName) != null) {
+                if (nameLambdaDirtEntityMap.get(simpleName) != null) {
                     throw new RuntimeException("重复的 DirtEntity " + simpleName);
                 }
 
-                nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
+                //nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
+                nameLambdaDirtEntityMap.put(simpleName, () -> new DirtEntityType(this, applicationContext, classAnnotationClass));
+
                 nameClassMap.put(simpleName, classAnnotationClass);
 
                 if (classAnnotationClass.getAnnotation(Entity.class) != null) {
@@ -89,7 +98,7 @@ public class DirtContext {
                 nameColumns.put(simpleName, columns);
             }
         }
-       log.info(nameDirtEntityMap.toString());
+       //log.info(nameDirtEntityMap.toString());
     }
 
     public List<String>  getColumns(String className){
@@ -106,9 +115,9 @@ public class DirtContext {
     }
 
     public DirtEntityType getDirtEntity(String name) {
-        DirtEntityType dirtEntity = nameDirtEntityMap.get(name);
+        DirtEntityType dirtEntity = nameLambdaDirtEntityMap.get(name).get();
         if (dirtEntity == null) {
-            log.info(nameDirtEntityMap.toString());
+            //log.info(nameDirtEntityMap.toString());
             throw new RuntimeException("不存在 " + name);
         }
         return dirtEntity;
@@ -142,20 +151,32 @@ public class DirtContext {
         return entityName+"."+subKey;
     }
 
-    public iDenpendsWithArgsDataSource getOptionFunction(String entityName, String subKey){
-        String optionKey = getOptionKey(entityName, subKey);
-        iDenpendsWithArgsDataSource optionFunction = dependDataSources.get(optionKey);
-        return optionFunction;
+    public iDataSource getOptionFunction(String entityName, String subKey){
+        //String optionKey = getOptionKey(entityName, subKey);
+        try {
+            Field field = Class.forName(entityName).getDeclaredField(subKey);
+            DirtField declaredAnnotation = field.getDeclaredAnnotation(DirtField.class);
+            if(declaredAnnotation!=null) {
+                DirtDepends[] depends = declaredAnnotation.depends();
+                if(depends.length>0){
+                    DirtDepends depend = depends[0];
+                    Class<? extends iDataSource> aClass = depend.dataSource();
+                    return applicationContext.getBean(aClass);
+                }
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void removeOptionFunctionKey(String entityName,String subKey) {
-        String optionKey = getOptionKey(entityName, subKey);
-        //DirtEntityType dirtEntityType = nameDirtEntityMap.get(entityName);
-        //if(dirtEntityType!=null){
-        dependDataSources.remove(optionKey);
-        //}
-    }
-    public void addOptionFunction(String key, iDenpendsWithArgsDataSource denpendsWithArgsDataSource){
-        dependDataSources.put(key, denpendsWithArgsDataSource);
-    }
+    //public void removeOptionFunctionKey(String entityName,String subKey) {
+    //    String optionKey = getOptionKey(entityName, subKey);
+    //    dependDataSources.remove(optionKey);
+    //}
+    //public void addOptionFunction(String key, iDataSource denpendsWithArgsDataSource){
+    //    dependDataSources.put(key, denpendsWithArgsDataSource);
+    //}
 }

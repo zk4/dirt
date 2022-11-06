@@ -8,9 +8,9 @@ import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.conf.DirtQueryFilter;
 import com.zk.dirt.core.*;
 import com.zk.dirt.entity.iID;
+import com.zk.dirt.intef.iDataSource;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
-import com.zk.dirt.intef.iDenpendsWithArgsDataSource;
 import com.zk.dirt.util.ArgsUtil;
 import com.zk.dirt.wrapper.Result;
 import lombok.SneakyThrows;
@@ -25,7 +25,10 @@ import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -167,11 +170,14 @@ public class DirtService {
             DirtDepends[] depends = dirtFields[0].depends();
             if (depends.length == 1) {
                 DirtDepends depend = depends[0];
-                iDenpendsWithArgsDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
-                if(optionFunction!=null) {
-                    String  tableName = depend.onEntity()[0].getSimpleName();
-                    String column =depend.onColumn();
-                    List<Option> source = optionFunction.getSource(tableName,column, args);
+                iDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
+                if (optionFunction != null) {
+                    String tableName=null;
+                    if(depend.onEntity().length>0){
+                        tableName = depend.onEntity()[0].getSimpleName();
+                    }
+                    String column = depend.onColumn();
+                    List<Option> source = optionFunction.getSource(tableName, column, args);
                     return source;
                 }
             }
