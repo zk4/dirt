@@ -8,6 +8,7 @@ import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
+import com.zk.dirt.intef.iEnumText;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -30,7 +31,7 @@ public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(title = "实体全名",tooltip = "影响的实体名",
             uiType = eUIType.selectLiveInput, fixed = DirtField.eFixedType.LEFT,
-            depends = @DirtDepends(onColumn = "tableName", dataSource = MetaTableProvider.class)
+            depends = @DirtDepends(dataSource = MetaTableProvider.class)
     )
     String tableName;
 
@@ -55,9 +56,31 @@ public class MetaType extends DirtBaseIdEntity {
     @Column(nullable = false,columnDefinition="bit  COMMENT '是否启用, false: 不可 true: 可'")
     Boolean enable;
 
-    @DirtField(title = "是否必须存在",tooltip = "是否不可为 null, 默认可为 null, 在已运行的系统里切换此属性要非常慎重！")
-    @Column(nullable = false,columnDefinition="bit  COMMENT '是否必须存在, false: 不可 true: 可'")
-    Boolean mandate;
+
+    public enum eConstrain implements iEnumText {
+        NONE("不约束"),
+        EMAIL("邮箱格式"),
+        NOTNULLOREMPTY("非null 且不为空串")
+        ;
+
+        String text;
+
+        eConstrain(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public Object getText() {
+            return text;
+        }
+    }
+
+    @DirtField(title = "约束条件")
+    eConstrain constrainType;
+
+    //@DirtField(title = "是否必须存在",tooltip = "是否不可为 null, 默认可为 null, 在已运行的系统里切换此属性要非常慎重！")
+    //@Column(nullable = false,columnDefinition="bit  COMMENT '是否必须存在, false: 不可 true: 可'")
+    //Boolean mandate;
 
     //@DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, dataSource = MetaGroupProvider.class )
     //String groupName;

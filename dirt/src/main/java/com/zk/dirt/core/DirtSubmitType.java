@@ -107,11 +107,17 @@ public class DirtSubmitType {
         if (fieldType != null && fieldType.getMetaType() != null) {
             MetaType metaType = fieldType.getMetaType();
             if (metaType != null) {
-                Boolean mandate = metaType.getMandate();
-                if (mandate) {
+                MetaType.eConstrain constrainType = metaType.getConstrainType();
+                if (constrainType == MetaType.eConstrain.NOTNULLOREMPTY) {
                     Map notEmpty = DirtRules.createNotEmpty(getKey() + "不可为空");
                     ArrayList<Map> objects = new ArrayList<>();
                     objects.add(notEmpty);
+                    formItemProps.put("rules", objects);
+                }
+                if (constrainType == MetaType.eConstrain.EMAIL) {
+                    Map email = DirtRules.createEmail(getKey(), "必须为邮箱格式");
+                    ArrayList<Map> objects = new ArrayList<>();
+                    objects.add(email);
                     formItemProps.put("rules", objects);
                 }
             }
