@@ -7,7 +7,6 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.util.SpringUtil;
-import com.zk.mall.entity.Menu;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,24 +39,13 @@ import java.util.Set;
 public class Member extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "真实姓名",metable = true)
-    @NotEmpty
-    @Size(min = 2, max = 30)
+    @DirtField(title = "真实姓名")
     String name;
 
-    @DirtField(title =  "目录级",subTreeName = "subMenus", uiType = eUIType.text,dirtSearch = @DirtSearch(uiType = eUIType.cascader))
-    @ManyToOne
-    @JsonIdentityReference(alwaysAsId = true)
-    private Menu menu;
-
     @DirtField(title = "会员昵称" )
-    @NotEmpty
-    @Size(min = 2, max = 30)
     String nickname;
 
     @DirtField(title = "手机号")
-    @NotEmpty
-    @Size(max = 16)
     String phoneNumber;
 
     enum  eGender implements  iEnumText{
