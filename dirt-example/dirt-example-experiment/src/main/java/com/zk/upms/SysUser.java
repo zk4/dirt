@@ -38,7 +38,6 @@ public class SysUser extends MyBaseIdEntity {
 
 
     @DirtField(title = "部门",subTreeName = "subDepts", uiType = eUIType.cascader,dirtSearch = @DirtSearch(uiType = eUIType.cascader))
-    @ManyToMany
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private SysDept dept;
