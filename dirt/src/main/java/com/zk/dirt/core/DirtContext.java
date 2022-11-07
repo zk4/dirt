@@ -115,12 +115,15 @@ public class DirtContext {
     }
 
     public DirtEntityType getDirtEntity(String name) {
-        DirtEntityType dirtEntity = nameLambdaDirtEntityMap.get(name).get();
-        if (dirtEntity == null) {
-            //log.info(nameDirtEntityMap.toString());
-            throw new RuntimeException("不存在 " + name);
+        Supplier<DirtEntityType> dirtEntityTypeSupplier = nameLambdaDirtEntityMap.get(name);
+        if(dirtEntityTypeSupplier!=null) {
+            DirtEntityType dirtEntity = dirtEntityTypeSupplier.get();
+            if (dirtEntity == null) {
+                throw new RuntimeException("不存在 " + name);
+            }
+            return dirtEntity;
         }
-        return dirtEntity;
+        return null;
     }
 
     public SimpleJpaRepository getRepoByType(Class type) {

@@ -5,6 +5,6 @@ import com.zk.dirt.intef.iDataSource;
 
 public @interface DirtDepends {
     Class[] onEntity() default {};
-    String onColumn();
+    String onColumn() default  "";
     Class<? extends iDataSource> dataSource() default DependsProvider.class;
 }

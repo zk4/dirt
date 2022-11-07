@@ -21,7 +21,7 @@ public class TableColumnsProvider implements iDataSource<String,Option > {
     DirtContext dirtContext;
     @Override
     public List<Option> getSource(String dependsEnityName,String dependsFiledName,  Map<String,Object> args) {
-        String  tableName = (String)args.get("tableName");
+        String  tableName = (String)args.get(dependsFiledName);
         List<Option> collect = dirtContext.getColumns(tableName).stream().map(s -> new Option(s, s)).collect(Collectors.toList());
         return collect;
     }
