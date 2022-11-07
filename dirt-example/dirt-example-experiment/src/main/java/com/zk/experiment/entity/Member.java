@@ -11,12 +11,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -240,8 +240,11 @@ public class Member extends DirtBaseIdEntity {
     // dynamic action metaData
     // treat method as field, getter function returning boolean decide if action name show
     @JsonProperty
+    @DirtActionSwitch("withArgs")
     public Boolean getWithArgs() {
+        if(this.name!=null)
         return this.name.length()>2;
+        return false;
     }
 
     @DirtAction(text = "短名")
@@ -255,7 +258,9 @@ public class Member extends DirtBaseIdEntity {
     // treat method as field, getter function returning boolean decide if action name show
     @JsonProperty
     public Boolean getWithArgs2() {
+        if(this.name!=null)
         return this.name.length()<=2;
+        return false;
     }
 
     @DirtAction(text = "长名")
