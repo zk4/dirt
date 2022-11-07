@@ -67,7 +67,7 @@ public class Coupon extends DirtBaseIdEntity {
             uiType = eUIType.dateTime,
             dirtSearch = @DirtSearch(
                     title = "生效时间",
-                    valueType = eUIType.dateTimeRange
+                    uiType = eUIType.dateTimeRange
             )
     )
     protected LocalDateTime startTime;
@@ -78,7 +78,7 @@ public class Coupon extends DirtBaseIdEntity {
             uiType = eUIType.dateTime,
             dirtSearch = @DirtSearch(
                     title = "失效时间",
-                    valueType = eUIType.dateTimeRange
+                    uiType = eUIType.dateTimeRange
             )
     )
     protected LocalDateTime endTime;

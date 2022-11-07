@@ -27,7 +27,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE sys_Dept SET deleted = true WHERE id=?  and version=? ")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = SysDept.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = SysDept.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idNameObj")
 public class SysDept extends MyBaseIdEntity {
     @Override
     public String genCode() {
@@ -45,8 +45,8 @@ public class SysDept extends MyBaseIdEntity {
     @Transient
     SysResource.IdNameObj idNameObj;
 
-    public SysResource.IdNameObj getIdNameObj() {
-        return new SysResource.IdNameObj(this.id,this.name,this.isLeaf);
+    public IdNameObj getIdNameObj() {
+        return new IdNameObj(this.id,this.name,this.isLeaf);
     }
 
     Boolean isLeaf;

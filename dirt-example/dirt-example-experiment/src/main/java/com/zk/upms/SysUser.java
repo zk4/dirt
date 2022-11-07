@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtDepends;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.annotation.DirtSearch;
 import com.zk.dirt.core.eUIType;
 import com.zk.dirt.intef.iEnumText;
 import lombok.Getter;
@@ -36,7 +37,8 @@ import java.util.Set;
 public class SysUser extends MyBaseIdEntity {
 
 
-    @DirtField(title = "部门")
+    @DirtField(title = "部门",subTreeName = "subDepts", uiType = eUIType.cascader,dirtSearch = @DirtSearch(uiType = eUIType.cascader))
+    @ManyToMany
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private SysDept dept;
