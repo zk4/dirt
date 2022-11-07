@@ -39,7 +39,7 @@ class DirtContextTest {
         args.put("tableName", MetaType.class.getName());
         List tableName = ds.getSource(MetaType.class.getName(), "tableName", args);
         System.out.println(tableName);
-        assertEquals(7, tableName.size());
+        assertEquals(6, tableName.size());
     }
 
     @Test
@@ -61,7 +61,7 @@ class DirtContextTest {
                 //assertEquals(1,valueEnum.size());
             }
         }
-        assertEquals(9,heads.size());
+        assertEquals(8,heads.size());
     }
 
     @Test
