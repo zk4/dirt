@@ -10,6 +10,8 @@
     "@formily/core": "^2.2.10",
     "@formily/react": "^2.2.10",
     "@formily/reactive": "^2.2.2",
+    "@logicflow/core": "^1.1.30",
+    "@logicflow/extension": "^1.1.30",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
