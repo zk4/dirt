@@ -49,11 +49,11 @@ public class MetaType extends DirtBaseIdEntity {
     String title;
 
     @DirtField(title = "是否可搜索",tooltip = "是否在搜索表单里显示")
-    @Column(nullable = false,columnDefinition="bit  COMMENT '是否可搜索, false: 不可 true: 可'")
+    @Column(nullable = false,columnDefinition="bit default false COMMENT '是否可搜索, false: 不可 true: 可'")
     Boolean search;
 
     @DirtField(title = "是否启用",initialValue = 1,tooltip = "是否启用, 默认启用")
-    @Column(nullable = false,columnDefinition="bit  COMMENT '是否启用, false: 不可 true: 可'")
+    @Column(nullable = false,columnDefinition="bit default false COMMENT '是否启用, false: 不可 true: 可'")
     Boolean enable;
 
 
