@@ -47,7 +47,7 @@ public class DirtController {
 
     @PostMapping(value = "/dirt/action", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "执行动作")
-
+    @Transactional
     public String action(@RequestBody ActionReq req) throws IllegalAccessException, InvocationTargetException, JsonProcessingException {
         String entityName = req.entityName;
         Long id = req.id;
@@ -73,13 +73,15 @@ public class DirtController {
 
     @PostMapping(value = "/dirt/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "创建数据")
-        public String create(@RequestParam(name = "entityName") String entityName, @RequestBody Map body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
+    @Transactional
+    public String create(@RequestParam(name = "entityName") String entityName, @RequestBody Map body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         dirtService.create(entityName, body);
         return objectMapper.writeValueAsString(Result.ok());
     }
 
     @PostMapping(value = "/dirt/update", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新数据")
+    @Transactional
     public String update(@RequestParam(name = "entityName") String entityName, @RequestBody Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
         dirtService.update(entityName, body);
         return objectMapper.writeValueAsString(Result.ok());
@@ -87,6 +89,7 @@ public class DirtController {
 
     @PostMapping(value = "/dirt/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据 id 删除")
+    @Transactional
     public String deleteByid(@RequestBody DeleteByIdReq req) throws ClassNotFoundException, JsonProcessingException {
         String entityName = req.entityName;
         Long id = req.id;
@@ -125,6 +128,7 @@ public class DirtController {
 
     @PostMapping(value = "/dirt/getDatas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取分页数据")
+    @Transactional(readOnly = true)
     public String page(@RequestBody DirtQueryFilter reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
         Page<Object> page = dirtService.page(reqFilter, entityName, pageable);
         return objectMapper.writeValueAsString(Result.success(page));
@@ -132,6 +136,7 @@ public class DirtController {
 
     @PostMapping(value = "/dirt/getFullDatas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取全量数据")
+    @Transactional(readOnly = true)
     public String fullData(@RequestBody DirtQueryFilter reqFilter, @RequestParam(name = "entityName") String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
         List<Object> objects = dirtService.fullData(reqFilter, entityName, pageable);
         Result<List<Object>> success = Result.success(objects);
@@ -142,6 +147,8 @@ public class DirtController {
     @GetMapping(value = "/dirt/getDataByCode", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据 code 获取单条数据")
     @SneakyThrows
+    @Transactional(readOnly = true)
+
     public String getByCode(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "code") String code) {
         Object byId = dirtService.getByCode(entityName, code);
         Result<Object> success = Result.success(byId);
@@ -152,8 +159,8 @@ public class DirtController {
 
     @GetMapping(value = "/dirt/getData", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据 id 获取单条数据")
-    @SneakyThrows
-    public String getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) {
+    @Transactional(readOnly = true)
+    public String getById(@RequestParam(name = "entityName") String entityName, @RequestParam(name = "id") Long id) throws JsonProcessingException {
         Object byId = dirtService.getById(entityName, id);
         Result<Object> success = Result.success(byId);
         return objectMapper.writeValueAsString(success);
