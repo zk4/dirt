@@ -7,6 +7,7 @@ import com.zk.dirt.aop.DirtActionAspect;
 import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.rest.DirtController;
+import com.zk.dirt.service.DirtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -14,7 +15,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
@@ -31,6 +31,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableConfigurationProperties({DirtProperties.class})
 @ConditionalOnProperty(name = "dirt.enable",havingValue = "true")
 @Import({
+        DirtService.class,
         DirtContext.class,
         DirtActionAspect.class,
         JPAPersistProxyImp.class,
@@ -50,16 +51,16 @@ public class DirtAutoConfiguration {
         this.environment = environment;
     }
 
-
-    @ComponentScan(
-            basePackages = {
-                    "com.zk.dirt",
-
-            }
-    )
-    public class DirtEnhanceAutoConfiguration{
-
-    }
+    //
+    //@ComponentScan(
+    //        basePackages = {
+    //                "com.zk.dirt",
+    //
+    //        }
+    //)
+    //public class DirtEnhanceAutoConfiguration{
+    //
+    //}
 
     /**
      * Configuration CorsFilter
