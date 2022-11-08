@@ -7,17 +7,16 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.util.SpringUtil;
-import com.zk.mall.entity.Menu;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,24 +39,13 @@ import java.util.Set;
 public class Member extends DirtBaseIdEntity {
 
 
-    @DirtField(title = "真实姓名",metable = true)
-    @NotEmpty
-    @Size(min = 2, max = 30)
+    @DirtField(title = "真实姓名")
     String name;
 
-    @DirtField(title =  "目录级",subTreeName = "subMenus", uiType = eUIType.text,dirtSearch = @DirtSearch(uiType = eUIType.cascader))
-    @ManyToOne
-    @JsonIdentityReference(alwaysAsId = true)
-    private Menu menu;
-
     @DirtField(title = "会员昵称" )
-    @NotEmpty
-    @Size(min = 2, max = 30)
     String nickname;
 
     @DirtField(title = "手机号")
-    @NotEmpty
-    @Size(max = 16)
     String phoneNumber;
 
     enum  eGender implements  iEnumText{
@@ -252,8 +240,11 @@ public class Member extends DirtBaseIdEntity {
     // dynamic action metaData
     // treat method as field, getter function returning boolean decide if action name show
     @JsonProperty
+    @DirtActionSwitch("withArgs")
     public Boolean getWithArgs() {
+        if(this.name!=null)
         return this.name.length()>2;
+        return false;
     }
 
     @DirtAction(text = "短名")
@@ -267,7 +258,9 @@ public class Member extends DirtBaseIdEntity {
     // treat method as field, getter function returning boolean decide if action name show
     @JsonProperty
     public Boolean getWithArgs2() {
+        if(this.name!=null)
         return this.name.length()<=2;
+        return false;
     }
 
     @DirtAction(text = "长名")
