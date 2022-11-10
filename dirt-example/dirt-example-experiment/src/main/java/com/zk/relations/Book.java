@@ -12,42 +12,34 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@DirtEntity(value = "老师")
+@DirtEntity(value = "书")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "t_Teacher")
-@SQLDelete(sql = "UPDATE t_Teacher SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
+@Table(name = "t_book")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Teacher.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
-public class Teacher extends DirtBaseIdEntity {
+@JsonIdentityInfo(scope = Book.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 
+ public class Book extends DirtBaseIdEntity {
 
-    @DirtField(title = "名字",metable = true)
-    private String name;
+     @DirtField(title = "名字")
+     private String name;
 
-    @DirtField(title = "年龄",metable = true)
-    private int age;
-
-    @DirtField(title = "关系表")
-    @OneToMany
-    // 允许只生成两张表的情况下，双向更新
-    @JoinColumn(name = "teacher")
+    @DirtField(title = "书拥有者")
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private Set<TeacherStudent> teacherStudents;
 
+    //@JoinTable(name="t_user_book_rel",
+    //        joinColumns={@JoinColumn(name="bookId")},
+    //        inverseJoinColumns={@JoinColumn(name="memberId")})
+    private Student student;
     ////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
     public void detail() {}
