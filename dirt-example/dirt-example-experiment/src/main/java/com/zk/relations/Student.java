@@ -15,10 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Getter
@@ -46,13 +43,15 @@ import java.util.Set;
      private Set<TeacherStudent> teacherStudents;
 
     @DirtField(title = "所有书")
-    @OneToMany
+    @OneToOne
     // 允许只生成两张表的情况下，双向更新
     // 指定 student_id，根据默认字段生成策略，下划线最好加上
-    @JoinColumn(name = "student_id")
-    @JsonIdentityReference(alwaysAsId = true)
 
-    private Set<Book> books;
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinTable(name="t_user_book_rel",
+            joinColumns={@JoinColumn(name="studentId")},
+            inverseJoinColumns={@JoinColumn(name="bookId")})
+    private Book  books;
     ////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
     public void detail() {}

@@ -13,9 +13,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -33,12 +31,11 @@ import javax.persistence.Table;
      private String name;
 
     @DirtField(title = "书拥有者")
-    @ManyToOne
+    @OneToOne
     @JsonIdentityReference(alwaysAsId = true)
-
-    //@JoinTable(name="t_user_book_rel",
-    //        joinColumns={@JoinColumn(name="bookId")},
-    //        inverseJoinColumns={@JoinColumn(name="memberId")})
+    @JoinTable(name="t_user_book_rel",
+            joinColumns={@JoinColumn(name="bookId")},
+            inverseJoinColumns={@JoinColumn(name="studentId")})
     private Student student;
     ////////////////////////// Action //////////////////////////
     @DirtAction(text = "详情")
