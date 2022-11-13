@@ -18,10 +18,10 @@ public class IntentionTask implements Delayed {
      */
     private final long NANO_ORIGIN = System.nanoTime();
     private final long executionTime;
-    private int intenionId;
+    private Long intenionId;
     private int repeatTimes;
 
-    public IntentionTask(int intenionId, long time, TimeUnit unit, int repeatTimes) {
+    public IntentionTask(Long intenionId, long time, TimeUnit unit, int repeatTimes) {
         this.intenionId = intenionId;
         this.repeatTimes = repeatTimes;
         this.executionTime = TimeUnit.NANOSECONDS.convert(time, unit);

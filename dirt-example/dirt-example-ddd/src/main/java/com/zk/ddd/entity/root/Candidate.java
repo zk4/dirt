@@ -1,5 +1,6 @@
 package com.zk.ddd.entity.root;
 
+import com.zk.ddd.entity.vo.Location;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtSimpleIdEntity;

@@ -1,4 +1,4 @@
-package com.zk.ddd.entity.root;
+package com.zk.ddd.entity.vo;
 
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
@@ -7,15 +7,18 @@ import lombok.Setter;
 
 import javax.persistence.Embeddable;
 
+
+@Embeddable
 @Setter
 @Getter
-@Embeddable
 @DirtEntity(visiable = false)
-public class Customer  {
-    @DirtField(title = "名字")
-    private String customerName;
+public class Driver  {
+    @DirtField(title = "司机 id")
+    private Long driverId;
+    @DirtField(title = "用户名")
+    private String userName;
     @DirtField(title = "手机")
-    private String customerMobile;
+    private String mobile;
     @DirtField(title = "类型")
-    private String userType;
+    private String type;
 }

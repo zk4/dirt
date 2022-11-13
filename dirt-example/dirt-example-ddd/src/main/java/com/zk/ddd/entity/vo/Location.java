@@ -1,4 +1,4 @@
-package com.zk.ddd.entity.root;
+package com.zk.ddd.entity.vo;
 
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;

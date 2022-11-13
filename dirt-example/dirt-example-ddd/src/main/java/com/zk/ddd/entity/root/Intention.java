@@ -1,11 +1,15 @@
 package com.zk.ddd.entity.root;
 
-import com.zk.ddd.types.eStatus;
+import com.zk.ddd.entity.vo.Customer;
+import com.zk.ddd.entity.vo.Driver;
+import com.zk.ddd.entity.vo.Location;
+import com.zk.ddd.types.eDriverStatus;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtSimpleIdEntity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -14,6 +18,7 @@ import static javax.persistence.EnumType.STRING;
 
 @Getter
 @Setter
+@Accessors(fluent = false, chain = true)
 @Entity
 @Table(name = "t_intention")
 @DirtEntity(value = "意向")
@@ -40,7 +45,7 @@ public class Intention  extends DirtSimpleIdEntity {
 
     @Enumerated(value = STRING)
     @DirtField
-    private eStatus status;
+    private eDriverStatus status;
 
     @Embedded
     @DirtField(title = "司机")
@@ -52,7 +57,7 @@ public class Intention  extends DirtSimpleIdEntity {
     private Set<Candidate> candidates  ;
 
     public boolean canMatchDriver() {
-        if (status.equals(eStatus.Inited)) {
+        if (status.equals(eDriverStatus.Inited)) {
             return true;
         } else {
             return false;
@@ -60,7 +65,7 @@ public class Intention  extends DirtSimpleIdEntity {
     }
 
     private boolean canConfirm() {
-        if (status.equals(eStatus.UnConfirmed)) {
+        if (status.equals(eDriverStatus.UnConfirmed)) {
             return true;
         } else {
             return false;
@@ -69,7 +74,7 @@ public class Intention  extends DirtSimpleIdEntity {
 
     public boolean waitingConfirm() {
         if (canMatchDriver()) {
-            this.status = eStatus.UnConfirmed;
+            this.status = eDriverStatus.UnConfirmed;
             return true;
         } else {
             return false;
@@ -77,8 +82,8 @@ public class Intention  extends DirtSimpleIdEntity {
     }
 
     public boolean fail() {
-        if (this.status == eStatus.Inited) {
-            this.status = eStatus.Failed;
+        if (this.status == eDriverStatus.Inited) {
+            this.status = eDriverStatus.Failed;
             return true;
         } else {
             return false;
@@ -105,7 +110,7 @@ public class Intention  extends DirtSimpleIdEntity {
         //将候选司机加入到列表中
         if (this.selectedDriver == null) {
             this.selectedDriver = driverVo;
-            this.status = eStatus.Confirmed;
+            this.status = eDriverStatus.Confirmed;
             return 0;
         } else {
             return -3;

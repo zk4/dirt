@@ -2,14 +2,14 @@ package com.zk.ddd.types;
 
 import com.zk.dirt.intef.iEnumText;
 
-public enum eStatus implements iEnumText {
+public enum eDriverStatus implements iEnumText {
 
 
     Inited("已创建"), UnConfirmed("未确认"), Confirmed("已确认"), Failed("失败");
 
     String text;
 
-    eStatus(String text) {
+    eDriverStatus(String text) {
         this.text = text;
     }
 
