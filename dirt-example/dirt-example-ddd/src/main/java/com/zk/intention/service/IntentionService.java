@@ -72,12 +72,12 @@ public class IntentionService {
     public void placeIntention(Long userId, Double startLongitude, Double startLatitude,
                                Double destLongitude, Double destLatitude) {
         Customer customer = userApi.findById(userId);
-        Intention intention = new Intention()
-                .setStartLocation(new Location(startLongitude,startLatitude))
-                .setDestLocation(new Location(destLongitude,destLatitude))
+        Intention intention = new Intention();
+        intention.setStartLocation(new Location(startLongitude, startLatitude));
+        intention.setDestLocation(new Location(destLongitude, destLatitude));
 
-                .setCustomer(customer)
-                .setStatus(eDriverStatus.Inited);
+        intention.setCustomer(customer);
+        intention.setStatus(eDriverStatus.Inited);
         intentionRepository.save(intention);
         IntentionTask task = new IntentionTask(intention.getId(), 2L, TimeUnit.SECONDS, 0);
 
@@ -101,26 +101,26 @@ public class IntentionService {
             lock = lockService.create(lockName);
             Intention intention = intentionRepository.findById(intentionId).orElse(null);
             Driver driverVo = userApi.findDriverById(driverId);
-            int ret = intention.confirmIntention(driverVo);
-            LOGGER.info("{}司机抢单{}结果为{}", driverId, intentionId, ret);
-            if (ret == 0) {
-                intentionRepository.save(intention);
-                IntentionVo intentionVo = new IntentionVo().setIntentionId(intention.getId())
-                        .setCustomerId(intention.getCustomer().getCustomerId())
-                        .setDestLat(intention.getDestLocation().getLatitude())
-                        .setDestLong(intention.getDestLocation().getLatitude())
-                        .setStartLong(intention.getStartLocation().getLongitude())
-                        .setStartLat(intention.getStartLocation().getLatitude())
-                        .setDriverId(intention.getSelectedDriver().getDriverId());
-                try {
-                    rabbitTemplate.convertAndSend("intention", objectMapper.writeValueAsString(intentionVo));
-                } catch (JsonProcessingException e) {
-                    LOGGER.error("convert message fail" + intentionVo, e);
-                }
-                return true;
-            } else {
-                return false;
+            intention.confirmIntention(driverVo);
+            //LOGGER.info("{}司机抢单{}结果为{}", driverId, intentionId, ret);
+
+            intentionRepository.save(intention);
+            IntentionVo intentionVo = new IntentionVo().setIntentionId(intention.getId())
+                    .setCustomerId(intention.getCustomer().getCustomerId())
+                    .setDestLat(intention.getDestLocation().getLatitude())
+                    .setDestLong(intention.getDestLocation().getLatitude())
+                    .setStartLong(intention.getStartLocation().getLongitude())
+                    .setStartLat(intention.getStartLocation().getLatitude())
+                    .setDriverId(intention.getSelectedDriver().getDriverId());
+            try {
+                rabbitTemplate.convertAndSend("intention", objectMapper.writeValueAsString(intentionVo));
+            } catch (JsonProcessingException e) {
+                LOGGER.error("convert message fail" + intentionVo, e);
             }
+            return true;
+            //} else {
+            //    return false;
+            //}
         } catch (LockException e) {
             LOGGER.error("try lock error ", e);
             return false;
@@ -148,9 +148,12 @@ public class IntentionService {
                     Intention intention = intentionRepository.findById(task.getIntenionId()).orElse(null);
                     if (intention.canMatchDriver()) {
                         //调用position服务匹配司机
-                        Collection<DriverStatusVo> result = positionApi.match(intention.getStartLocation().getLongitude(), intention.getStartLocation().getLatitude());
+                        Collection<DriverStatusVo> result = positionApi.match(intention.getStartLocation()
+                                .getLongitude(), intention.getStartLocation().getLatitude());
                         if (result.size() > 0) {
-                            List<String> names = result.stream().map(s -> s.getDriver().getUserName()).collect(toList());
+                            List<String> names = result.stream()
+                                    .map(s -> s.getDriver().getUserName())
+                                    .collect(toList());
                             LOGGER.info("匹配司机{}，将向他们发送抢单请求", names);
                             sendNotification(result, intention);
                         } else {

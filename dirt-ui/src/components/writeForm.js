@@ -196,21 +196,7 @@ let WriteForm = (props) => {
   })
 
   let wrapperOnFinish = useCallback((v) => {
-    // 转换 {a.b:1,a.d:2,e:3} ==> {a:{b:1,d:2},e:3}
-    // 主要用在 embeded 处理中
-    // embeded value 会带有. 
-    // 如 loation.lontitude   loation.lontitude
-    let newV = Object.entries(v).reduce((p, [k, v]) => {
-      let ks = k.split(".")
-      if (ks.length > 1)
-        p[ks[0]] = {[ks[1]]: v, ...p[ks[0]]}
-      else
-        p[k] = v
-
-      return p
-    }, {})
-
-    onFinish(newV);
+    onFinish(v);
   })
 
   const actionRef = useRef();

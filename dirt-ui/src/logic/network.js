@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {message} from 'antd';
 import {SpringFilterQueryBuilder as SFQB} from '../lib/query_builder';
-import {isObj,dot} from './util'
+import {isObj, dot} from './util'
 
 // respone拦截器
 
@@ -9,9 +9,9 @@ axios.defaults.baseURL = 'http://127.0.0.1:8081/dirt/'
 
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
-  if(res.status!=200){
-      message.error(res.statusText);
-      return Promise.reject(res.statusText);
+  if (res.status != 200) {
+    message.error(res.statusText);
+    return Promise.reject(res.statusText);
   }
   // compatiable with  wrapper response 
   if (isObj(res) && 'data' in res && isObj(res.data) && 'code' in res.data) {
@@ -19,12 +19,10 @@ axios.interceptors.response.use(function (res) {
       // message.success('成功');
       return res.data;
     } else {
-      let  reason  = ""
-      if('data' in res.data)
-      {
+      let reason = ""
+      if ('data' in res.data) {
         reason = Array.isArray(res.data.data) ? res.data.data.join(";") : res.data.data;
-      }else if('message' in res.data)
-      {
+      } else if ('message' in res.data) {
         reason = res.data.message
       }
       message.error(reason);
@@ -66,16 +64,32 @@ const deleteByIdsAsync = async (postData, success_cb) => {
   return ret.data;
 }
 
+const dot2Object = (values) => {
+
+  let newV = Object.entries(values).reduce((p, [k, v]) => {
+    let ks = k.split(".")
+    if (ks.length > 1)
+      p[ks[0]] = {[ks[1]]: v, ...p[ks[0]]}
+    else
+      p[k] = v
+
+    return p
+  }, {})
+  return newV;
+}
 
 const createAsync = async (entityName, values, success_cb) => {
-  const ret = await axios.post(`create?entityName=${entityName}`, {
-    ...values
-  })
+  // 转换 {a.b:1,a.d:2,e:3} ==> {a:{b:1,d:2},e:3}
+  // 主要用在 embeded 处理中
+  // embeded value 会带有. 
+  // 如 loation.lontitude   loation.lontitude
+
+  const ret = await axios.post(`create?entityName=${entityName}`, dot2Object(values))
   success_cb && success_cb();
   return ret.data;
 }
 const updateAsync = async (entityName, postData, success_cb) => {
-  const ret = await axios.post(`update?entityName=${entityName}`, postData)
+  const ret = await axios.post(`update?entityName=${entityName}`, dot2Object(postData))
   success_cb && success_cb();
   return ret.data;
 }
@@ -171,9 +185,9 @@ const getDatasAsync = async (entityName, columnKeyMap, params = {}, sort, filter
   let keys = Object.keys(columnKeyMap)
   const embeddedKeys = keys.filter(c => c.includes("."))
 
-  ret.data = ret.data.map(d =>{
-    for(const k of embeddedKeys){
-      const v= dot(d,k)
+  ret.data = ret.data.map(d => {
+    for (const k of embeddedKeys) {
+      const v = dot(d, k)
       d[k] = v;
     }
     return d;
@@ -190,8 +204,8 @@ const getDatasAsync = async (entityName, columnKeyMap, params = {}, sort, filter
   }, {})
 
   // 删除嵌套的 key
-  for(const k of Object.keys(embeddedNestKeys) ){
-   delete ret.data[k]
+  for (const k of Object.keys(embeddedNestKeys)) {
+    delete ret.data[k]
   }
   // rebuilding  ret.data for embedded .  ------------------------------------end
   return new Promise(

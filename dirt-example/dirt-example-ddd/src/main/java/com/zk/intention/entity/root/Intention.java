@@ -1,15 +1,18 @@
 package com.zk.intention.entity.root;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.zk.dirt.annotation.DirtEntity;
+import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.entity.DirtSimpleIdEntity;
 import com.zk.intention.entity.vo.Customer;
 import com.zk.intention.entity.vo.Driver;
 import com.zk.intention.entity.vo.Location;
 import com.zk.intention.types.eDriverStatus;
-import com.zk.dirt.annotation.DirtEntity;
-import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.entity.DirtSimpleIdEntity;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,10 +21,12 @@ import static javax.persistence.EnumType.STRING;
 
 @Getter
 @Setter
-@Accessors(fluent = false, chain = true)
+//@Accessors(fluent = false, chain = true)
 @Entity
 @Table(name = "t_intention")
 @DirtEntity(value = "意向")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+@JsonIdentityInfo(scope = Intention.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Intention  extends DirtSimpleIdEntity {
     @Embedded
     @DirtField(title = "起点")
@@ -51,9 +56,12 @@ public class Intention  extends DirtSimpleIdEntity {
     @DirtField(title = "司机")
     private Driver selectedDriver;
 
+    @DirtField(title = "候选")
     @OneToMany
     // 允许只生成两张表的情况下，双向更新
     @JoinColumn(name = "itention_id")
+    @JsonIdentityReference(alwaysAsId = true)
+
     private Set<Candidate> candidates  ;
 
     public boolean canMatchDriver() {
@@ -97,23 +105,26 @@ public class Intention  extends DirtSimpleIdEntity {
      * @param driverVo
      * @return 0 成功, -1 状态不对, -2 不是候选司机，-3 已被抢走
      */
-    public int confirmIntention(Driver driverVo) {
+    public void confirmIntention(Driver driverVo) {
         //判断状态
         if (!canConfirm()) {
             //状态不对
-            return -1;
+            //return -1;
+            throw new RuntimeException("状态不对");
         }
         //判断是否是候选司机，不能随便什么司机都来抢单
         if (candidates.stream().map(Candidate::getId).noneMatch(id -> id == driverVo.getDriverId())) {
-            return -2;
+            throw new RuntimeException("不是候选司机");
+
+            //return -2;
         }
         //将候选司机加入到列表中
-        if (this.selectedDriver == null) {
+        if (this.selectedDriver.getDriverId() == null) {
             this.selectedDriver = driverVo;
             this.status = eDriverStatus.Confirmed;
-            return 0;
+            //return 0;
         } else {
-            return -3;
+            throw new RuntimeException("selectedDriver is not null");
         }
 
     }

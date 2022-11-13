@@ -14,11 +14,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @Slf4j
 @EnableAsync
-@DirtScan({"com.zk.intention.entity.root","com.zk.intention.entity.vo"})
-@EntityScan({"com.zk.intention.entity.root","com.zk.intention.entity.vo"})
-public class DddApplication {
+@DirtScan({"com.zk.uc.root"})
+@EntityScan({"com.zk.uc.root"})
+public class UcApplication {
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(DddApplication.class);
+        SpringApplication app = new SpringApplication(UcApplication.class);
         ConfigurableApplicationContext run = app.run(args);
         SpringUtil.setApplicationContext(run);
 

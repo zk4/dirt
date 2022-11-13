@@ -36,7 +36,7 @@ public class UserRibbonHystrixApi {
 
 
     public Driver findDriverById(Long id) {
-        Map ret = restTemplate.getForObject("http://localhost:8081/users/" + id, Map.class);
+        Map ret = restTemplate.getForObject("http://localhost:8082/users/" + id, Map.class);
         Driver driverVo = new Driver();
         driverVo.setDriverId(id);
         driverVo.setMobile(String.valueOf(ret.get("mobile")));
