@@ -33,7 +33,7 @@ class CandidateTest {
     @Transactional
     void saveCandidate() {
         Candidate candidate = new Candidate();
-        candidate.setLocation(new Location(1.2,2.2));
+        //candidate.setLocation(new Location(1.2,2.2));
         Object save = persistProxy.save(Candidate.class, candidate);
         System.out.println(save);
     }

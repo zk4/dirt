@@ -1,5 +1,7 @@
 package com.zk.ddd.entity.root;
 
+import com.zk.dirt.annotation.DirtEntity;
+import com.zk.dirt.annotation.DirtField;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +14,10 @@ import javax.persistence.Embeddable;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@DirtEntity(visiable = false)
 public class Location {
+    @DirtField
     Double  longitude;
+    @DirtField
     Double  latitude;
 }

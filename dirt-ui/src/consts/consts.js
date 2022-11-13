@@ -4,4 +4,5 @@ export default {
   OneToOne: "OneToOne",
   OneToMany: "OneToMany",
   ManyToMany: "ManyToMany",
+  Embedded: "Embedded",
 }

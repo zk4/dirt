@@ -3,7 +3,9 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
-import com.zk.dirt.intef.*;
+import com.zk.dirt.intef.iDataSource;
+import com.zk.dirt.intef.iDirtDictionaryEntryType;
+import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.rule.DirtRules;
 import com.zk.dirt.util.ExceptionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -79,12 +81,12 @@ public class DirtEntityType {
         //if (dependDS.length > 0) {
         //    DirtDepends dependsAnnotation = dependDS[0];
         //    String onColumn = dependsAnnotation.onColumn();
-            //tableHeader.setDependColumn(onColumn);
-            //Class<? extends iDataSource> aClass = dependsAnnotation.dataSource();
-            //iDataSource ds = applicationContext.getBean(aClass);
-            //String name = entityClass.getName();
-            //String s = DirtContext.getOptionKey(name, field.getName());
-            //dirtContext.addOptionFunction(dsKey, ds);
+        //tableHeader.setDependColumn(onColumn);
+        //Class<? extends iDataSource> aClass = dependsAnnotation.dataSource();
+        //iDataSource ds = applicationContext.getBean(aClass);
+        //String name = entityClass.getName();
+        //String s = DirtContext.getOptionKey(name, field.getName());
+        //dirtContext.addOptionFunction(dsKey, ds);
         //}
         // 2. 无参 datasource
         //else if (dataSource.length > 0) {
@@ -105,8 +107,9 @@ public class DirtEntityType {
         // TODO:
         // 统一 field， method 基于 DirtField 的构造
         // 实现类似 vue 里 computed 的效果
-        this.heads = fields.stream()
+        List<Field> preFields = fields.stream()
                 .filter(field -> field.getDeclaredAnnotation(DirtField.class) != null)
+
                 // 不显示 metatype 禁用的数据
                 .filter(field -> {
                     DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
@@ -119,7 +122,10 @@ public class DirtEntityType {
                     }
                     // 为 null，则放过，使用默认 column 信息
                     return true;
-                })
+                }).collect(Collectors.toList());
+        this.heads = preFields.stream()
+                // 不处理 embedded ,后面再处理
+                .filter(field -> field.getDeclaredAnnotation(Embedded.class) == null)
                 .map(this::getFieldType)
                 .collect(Collectors.toList());
 
@@ -143,6 +149,20 @@ public class DirtEntityType {
 
             this.heads.add(action);
         }
+        // 处理 embedded
+        List<Field> embeddedList = preFields.stream().filter(field -> field.getDeclaredAnnotation(Embedded.class) != null)
+                .collect(Collectors.toList());
+        for (Field field : embeddedList) {
+            Type genericType = field.getGenericType();
+            DirtEntityType dirtEntity = dirtContext.getDirtEntity(genericType.getTypeName());
+            List<DirtFieldType> heads = dirtEntity.getHeads();
+            for (DirtFieldType head : heads) {
+                head.setPrefix(field.getName());
+            }
+            this.heads.addAll(heads);
+        }
+
+
         //  排序 header
         this.heads.sort(Comparator.comparingInt(DirtFieldType::getIndex));
     }
@@ -179,6 +199,19 @@ public class DirtEntityType {
         ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
         OneToOne oneToOne = field.getAnnotation(OneToOne.class);
         ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
+        Embedded embedded = field.getAnnotation(Embedded.class);
+
+        // 处理 embedded
+        //if(embedded!=null){
+        //    Type genericType = field.getGenericType();
+        //    DirtEntityType dirtEntity = dirtContext.getDirtEntity(genericType.getTypeName());
+        //    tableHeader.setValueType("group");
+        //    tableHeader.setHideInTable(true);
+        //    tableHeader.setHideInSearch(true);
+        //    tableHeader.setOnFilter(false);
+        //    tableHeader.setColumns(dirtEntity.getHeads());
+        //    return tableHeader;
+        //}
 
         tableHeader.setIndex(dirtField.index());
         tableHeader.setFixed(dirtField.fixed().getText());
@@ -198,7 +231,7 @@ public class DirtEntityType {
         }
 
         DirtDepends[] depends = dirtField.depends();
-        if(depends.length>0){
+        if (depends.length > 0) {
             DirtDepends depend = depends[0];
             String onColumn = depend.onColumn();
             tableHeader.setDependColumn(onColumn);
@@ -326,6 +359,7 @@ public class DirtEntityType {
         tableHeader.setKey(name);
         tableHeader.setDataIndex(name);
 
+
         String headerTooltip = dirtField.tooltip();
         tableHeader.setTooltip(headerTooltip);
 
@@ -356,6 +390,8 @@ public class DirtEntityType {
                 tableHeader.setRelation(eDirtEntityRelation.ManyToOne);
             else if (manyToMany != null)
                 tableHeader.setRelation(eDirtEntityRelation.ManyToMany);
+            else if (embedded != null)
+                tableHeader.setRelation(eDirtEntityRelation.Embedded);
 
         }
         return tableHeader;
@@ -403,11 +439,6 @@ public class DirtEntityType {
                     for (int i = 0; i < parameters.length; i++) {
                         Parameter parameter = parameters[i];
                         DirtEntityType dirtEntity = dirtContext.getDirtEntity(parameter.getType().getName());
-                        if (dirtEntity == null) {
-                            System.out.println("bug here");
-                        }
-
-
                         List<DirtFieldType> dirtFieldTypes = dirtEntity.getHeads();
                         // FIXED: java 8 会保留 parameter 名字， java 11 会变成 arg0， arg 1
                         dirtActionType.getArgColumnsMap().put("args", dirtFieldTypes);

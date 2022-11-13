@@ -16,16 +16,16 @@ public class Candidate extends DirtSimpleIdEntity {
     @JoinColumn(name = "itention_id")
     @DirtField
     private Intention intention;
-
-    @Embedded
-    private Driver driver;
+    //
+    //@Embedded
+    //private Driver driver;
     @DirtField
     private String driverName;
     @DirtField
     private String driverMobile;
+
     @Embedded
     @DirtField
-    //@Delegate
     Location location;
 
 }
