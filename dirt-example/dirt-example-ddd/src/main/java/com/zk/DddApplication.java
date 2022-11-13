@@ -14,8 +14,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @Slf4j
 @EnableAsync
-@DirtScan({"com.zk.ddd.entity.root"})
-@EntityScan("com.zk.ddd.entity.root")
+@DirtScan({"com.zk.intention.entity.root","com.zk.uc.root"})
+@EntityScan({"com.zk.intention.entity.root","com.zk.uc.root"})
 public class DddApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(DddApplication.class);

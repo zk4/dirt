@@ -2,6 +2,7 @@ package com.zk.ddd.entity.root;
 
 import com.zk.DddApplication;
 import com.zk.dirt.intef.iPersistProxy;
+import com.zk.intention.entity.root.Candidate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
