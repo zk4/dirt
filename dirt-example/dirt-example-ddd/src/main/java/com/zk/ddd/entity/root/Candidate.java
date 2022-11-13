@@ -26,6 +26,17 @@ public class Candidate extends DirtSimpleIdEntity {
 
     @Embedded
     @DirtField
-    Location location;
+    @AttributeOverrides({
+            @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
+            @AttributeOverride(name="latitude",column=@Column(name="startLatitude"))
+    })
+    Location startLocaiton;
 
+    @Embedded
+    @DirtField
+    @AttributeOverrides({
+            @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
+            @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
+    })
+    Location destLocation;
 }

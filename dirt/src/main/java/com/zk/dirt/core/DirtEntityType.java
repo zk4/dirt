@@ -157,7 +157,7 @@ public class DirtEntityType {
             DirtEntityType dirtEntity = dirtContext.getDirtEntity(genericType.getTypeName());
             List<DirtFieldType> heads = dirtEntity.getHeads();
             for (DirtFieldType head : heads) {
-                head.setPrefix(field.getName());
+                head.setPrefix(field.getName()+".");
             }
             this.heads.addAll(heads);
         }

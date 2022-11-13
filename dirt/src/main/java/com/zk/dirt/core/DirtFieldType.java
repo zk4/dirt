@@ -181,15 +181,15 @@ public class DirtFieldType {
 
     public String getTitle() {
         if (  metaType != null && metaType.getTitle()!=null && metaType.getTitle().length()!=0) return metaType.getTitle();
-        return this.prefix +"."+ title;
+        return this.prefix + title;
     }
 
     public String getDataIndex() {
-        return this.prefix +"."+ dataIndex;
+        return this.prefix + dataIndex;
     }
 
     public String getKey() {
-        return this.prefix +"."+  key;
+        return this.prefix +  key;
     }
 
     public MetaType getMetaType() {

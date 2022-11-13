@@ -44,14 +44,15 @@ ManyToMany 多对多，关系任意，可重复
 虽然使用 JPA，但不生成外键，也就是说，可以复用已有 entity 基于 mybatis 做传统开发。关系全在代码层维护。
 至于 JPA 里的关系映射。全部当 ManyToMany 处理即可。唯一性业务自行决定即可。
 
-如果想快速存储一对多的 ids，而不加载实体，则需要使用  CascadeType.MERGE，用 CascadeType.ALL 不起作用。 讲真，这是 hibernate 的 bug。
-> 具体见： https://stackoverflow.com/questions/13370221/persistentobjectexception-detached-entity-passed-to-persist-thrown-by-jpa-and-h
-> Why? By saying "cascade ALL" on the child entity Transaction you require that every DB operation gets propagated to the parent entity Account. If you then do persist(transaction), persist(account) will be invoked as well.
-> But only transient (new) entities may be passed to persist (Transaction in this case). The detached (or other non-transient state) ones may not (Account in this case, as it's already in DB).
-> Therefore you get the exception "detached entity passed to persist". The Account entity is meant! Not the Transaction you call persist on.
+嵌套关系的处理是比较麻烦的。 做个以下约定
+1. 不支持嵌套创建实体。只允许创建时关联实体 id。也就是说， 关联的实体，必须已在数据库存在。
+2. 支持嵌套查询。：）
+之所以这么设计原因：
+1. 嵌套创建在语义上就非常麻烦。创建的对象是已经在数据库做了修改？还是新创建的？要做对这些事，不容易，JPA 虽然有相关注解约定，如 maapedby cascade 相关。 但很容易用错。
+2. 相对于修改与创建， 查询才是最多的业务场景。
 
-嵌套关系的处理是比较麻烦的。 做了两个方面的约定
-1. 要么关联，要么创建。api 是分开的。在 UI 操作上会形成两步
+总而言之，单表，创建。
+
 
 
 ### 编程范式
