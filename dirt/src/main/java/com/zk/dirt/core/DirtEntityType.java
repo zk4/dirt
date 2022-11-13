@@ -3,7 +3,6 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
-import com.zk.dirt.intef.iDataSource;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
 import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.rule.DirtRules;
@@ -72,33 +71,6 @@ public class DirtEntityType {
         }
     }
 
-    private void initDataSource(String dsKey, Class<? extends iDataSource> aClass) {
-
-        //Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
-        //DirtDepends[] dependDS = dirtField.depends();
-        // 1. 有参 datasource
-        // TODO: OptionFunction 需要及时动态生成，不能依赖与当前调用条件。
-        //if (dependDS.length > 0) {
-        //    DirtDepends dependsAnnotation = dependDS[0];
-        //    String onColumn = dependsAnnotation.onColumn();
-        //tableHeader.setDependColumn(onColumn);
-        //Class<? extends iDataSource> aClass = dependsAnnotation.dataSource();
-        //iDataSource ds = applicationContext.getBean(aClass);
-        //String name = entityClass.getName();
-        //String s = DirtContext.getOptionKey(name, field.getName());
-        //dirtContext.addOptionFunction(dsKey, ds);
-        //}
-        // 2. 无参 datasource
-        //else if (dataSource.length > 0) {
-        //    Class<? extends iDataSource> ds = dataSource[0];
-        //
-        //    iDataSource enumProvider = applicationContext.getBean(ds);
-        //    //source = enumProvider.getSource();
-        //    //initialValue = enumProvider.initialValue();
-        //    dirtContext.addOptionFunction(dsKey, enumProvider);
-        //
-        //}
-    }
 
     private void initSchema() {
 
@@ -180,7 +152,6 @@ public class DirtEntityType {
 
     /**
      * @param field entity 的字段
-     *              //* @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
      * @return
      */
     public DirtFieldType getFieldType(Field field) {
@@ -200,18 +171,6 @@ public class DirtEntityType {
         OneToOne oneToOne = field.getAnnotation(OneToOne.class);
         ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
         Embedded embedded = field.getAnnotation(Embedded.class);
-
-        // 处理 embedded
-        //if(embedded!=null){
-        //    Type genericType = field.getGenericType();
-        //    DirtEntityType dirtEntity = dirtContext.getDirtEntity(genericType.getTypeName());
-        //    tableHeader.setValueType("group");
-        //    tableHeader.setHideInTable(true);
-        //    tableHeader.setHideInSearch(true);
-        //    tableHeader.setOnFilter(false);
-        //    tableHeader.setColumns(dirtEntity.getHeads());
-        //    return tableHeader;
-        //}
 
         tableHeader.setIndex(dirtField.index());
         tableHeader.setFixed(dirtField.fixed().getText());

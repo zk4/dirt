@@ -1,6 +1,7 @@
 package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
 import lombok.AllArgsConstructor;
@@ -44,13 +45,7 @@ public  class DirtSimpleIdEntity implements Serializable, iID {
 
     // 软删除
     @JsonIgnore
-    //@Column(nullable = false,columnDefinition="bit default false COMMENT '软删除状态, false: 未删除 true: 已删除'")
     protected Boolean  deleted;
-
-    // 乐观锁
-    //@Version
-    //@Column(nullable = false,columnDefinition="int default 0 COMMENT '乐观锁'")
-    //private Integer version;
 
 
     @PrePersist
@@ -80,4 +75,16 @@ public  class DirtSimpleIdEntity implements Serializable, iID {
     public int hashCode() {
         return getId() != null ? getId().hashCode() : 0;
     }
+
+
+
+    @DirtAction(text = "详情")
+    public void detail() {}
+
+    @DirtAction(text = "删除")
+    public void delete() {}
+
+    @DirtAction(text = "编辑")
+    public void edit() {}
+
 }
