@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {message} from 'antd';
 import {SpringFilterQueryBuilder as SFQB} from '../lib/query_builder';
-import {isObj} from './util'
+import {isObj,dot} from './util'
 
 // respone拦截器
 
@@ -166,6 +166,34 @@ const getDatasAsync = async (entityName, columnKeyMap, params = {}, sort, filter
 
   // 要符合 ProTalbe 的数据格式
   let ret = await axios.post(url, {...filterParams});
+  // rebuilding  ret.data for embedded .  ------------------------------------start
+  // Ex: location.lontitude  => location: {longitude}
+  let keys = Object.keys(columnKeyMap)
+  const embeddedKeys = keys.filter(c => c.includes("."))
+
+  ret.data = ret.data.map(d =>{
+    for(const k of embeddedKeys){
+      const v= dot(d,k)
+      d[k] = v;
+    }
+    return d;
+  })
+
+  let embeddedNestKeys = embeddedKeys.reduce((p, k) => {
+    let ks = k.split(".")
+    if (ks.length > 1)
+      p[ks[0]] = {[ks[1]]: null, ...p[ks[0]]}
+    else
+      p[k] = null
+
+    return p
+  }, {})
+
+  // 删除嵌套的 key
+  for(const k of Object.keys(embeddedNestKeys) ){
+   delete ret.data[k]
+  }
+  // rebuilding  ret.data for embedded .  ------------------------------------end
   return new Promise(
     (resolve, reject) => {
       resolve({
