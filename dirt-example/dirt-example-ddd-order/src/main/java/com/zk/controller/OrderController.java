@@ -1,10 +1,11 @@
 package com.zk.controller;
 
-import club.newtech.qbike.order.domain.core.vo.Events;
-import club.newtech.qbike.order.domain.core.vo.StateRequest;
-import club.newtech.qbike.order.domain.exception.OrderRuntimeException;
-import club.newtech.qbike.order.domain.repository.OrderRepository;
-import club.newtech.qbike.order.domain.service.FsmService;
+
+import com.zk.domain.core.vo.Events;
+import com.zk.domain.core.vo.StateRequest;
+import com.zk.domain.exception.OrderRuntimeException;
+import com.zk.domain.repository.OrderRepository;
+import com.zk.domain.service.FsmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class OrderController {
     OrderRepository orderRepository;
 
     @PostMapping("/order/cancel")
-    public List<String> cancelOrder(int driverId, String orderId) {
+    public List<String> cancelOrder(Long driverId, Long orderId) {
         StateRequest stateRequest = new StateRequest();
         stateRequest.setEvent(Events.CANCEL);
         stateRequest.setData(orderRepository.findById(orderId).get());
@@ -37,7 +38,7 @@ public class OrderController {
     }
 
     @PostMapping("/order/aboard")
-    public List<String> aboard(int driverId, String orderId) {
+    public List<String> aboard(Long driverId, Long orderId) {
         StateRequest stateRequest = new StateRequest();
         stateRequest.setEvent(Events.ABOARD);
         stateRequest.setData(orderRepository.findById(orderId).get());

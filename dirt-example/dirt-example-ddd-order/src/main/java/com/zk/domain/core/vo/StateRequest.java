@@ -29,7 +29,7 @@ public class StateRequest {
     /**
      * 用户信息
      */
-    private int userId;
+    private Long userId;
 
     /**
      * 追踪调用链

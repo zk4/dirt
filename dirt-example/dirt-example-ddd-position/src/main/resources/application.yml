@@ -37,7 +37,7 @@ zk:
 #  servlet:
 #    context-path: /member-script
 server:
-  port: 8081
+  port: 8084
 
 # token配置
 token:
