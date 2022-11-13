@@ -85,9 +85,7 @@ public class DirtEntityType {
                 // 不显示 metatype 禁用的数据
                 .filter(field -> {
                     DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
-
                     MetaType metaType = getMetaType(field, dirtField);
-
                     // 如果 enable 为 false ，则不显示
                     if (metaType != null) {
                         return metaType.getEnable() != null ? metaType.getEnable() : true;
@@ -108,19 +106,35 @@ public class DirtEntityType {
             action.setValueType(eUIType.option.toString());
             action.setFixed("right");
 
-            //  每个中文字符给个9px，差不多了
+            //  TODO： 应该由前端自己处理，不应该由服务端处理---------------------------start
+            //  暂时每个中文字符给个9px，差不多了
             int counts = 0;
             for (String name : names) {
                 counts += name.length();
             }
             action.setWidth(counts * 9 + names.size() * 2 + "px");
-            action.setIndex(9999);
+            //  TODO： 应该由前端自己处理，不应该由服务端处理---------------------------end
 
+            action.setIndex(9999);
             action.setTitle("操作");
             action.setActions(this.actionMap);
 
             this.heads.add(action);
         }
+
+        // -------------------------embedded 处理 开始----------------------------------start
+        // 本质上就是将embedded 成员变量拍扁了，不做任何嵌套处理。各有各的好处吧。
+        // 在名字上以 . 分隔
+        // 如:
+        // @Embedded
+        // @DirtField
+        // @AttributeOverrides({
+        //         @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
+        //         @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
+        // })
+        // Location destLocation;
+        // 会输出  destLocation.longitude  与  destLocation.latitude 的  dirtfield
+
         // 处理 embedded
         List<Field> embeddedList = preFields.stream().filter(field -> field.getDeclaredAnnotation(Embedded.class) != null)
                 .collect(Collectors.toList());
@@ -129,11 +143,12 @@ public class DirtEntityType {
             DirtEntityType dirtEntity = dirtContext.getDirtEntity(genericType.getTypeName());
             List<DirtFieldType> heads = dirtEntity.getHeads();
             for (DirtFieldType head : heads) {
+                // 增加 prefix
                 head.setPrefix(field.getName()+".");
             }
             this.heads.addAll(heads);
         }
-
+        // -------------------------embedded 处理 结束----------------------------------end
 
         //  排序 header
         this.heads.sort(Comparator.comparingInt(DirtFieldType::getIndex));
