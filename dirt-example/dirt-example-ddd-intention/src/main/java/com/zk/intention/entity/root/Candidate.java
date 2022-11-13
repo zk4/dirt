@@ -7,11 +7,13 @@ import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtSimpleIdEntity;
 import com.zk.intention.entity.vo.Location;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "t_candidate")
 @DirtEntity("候选司机")
