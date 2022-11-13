@@ -22,6 +22,6 @@ public class Candidate extends DirtSimpleIdEntity {
     private String driverMobile;
     @Embedded
     @DirtField(title = "地址")
-    private Location longitude;
+    private Location location;
 
 }

@@ -21,9 +21,14 @@ import java.util.Map;
 @ApiModel(value = "schema")
 public class DirtFieldType {
 
-    // 用来生成 embedded 前缀
+    // 用来生成 embedded title 前缀
     @JsonIgnore
-    String prefixName ="";
+    String prefixTitle ="";
+
+    // 用来生成 embedded dataIndex, key 前缀
+    @JsonIgnore
+    String prefixKey ="";
+
 
     @JsonIgnore
     MetaType metaType;
@@ -181,15 +186,15 @@ public class DirtFieldType {
 
     public String getTitle() {
         if (  metaType != null && metaType.getTitle()!=null && metaType.getTitle().length()!=0) return metaType.getTitle();
-        return this.prefixName + title;
+        return this.prefixTitle + title;
     }
 
     public String getDataIndex() {
-        return this.prefixName + dataIndex;
+        return this.prefixKey + dataIndex;
     }
 
     public String getKey() {
-        return this.prefixName +  key;
+        return this.prefixKey +  key;
     }
 
     public MetaType getMetaType() {

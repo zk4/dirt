@@ -142,15 +142,18 @@ public class DirtEntityType {
             Type genericType = field.getGenericType();
             DirtEntityType dirtEntity = dirtContext.getDirtEntity(genericType.getTypeName());
             List<DirtFieldType> heads = dirtEntity.getHeads();
+            DirtField df = field.getAnnotation(DirtField.class);
+            String name = field.getName();
             for (DirtFieldType head : heads) {
-                // 增加 prefixName
-                //DirtField annotation = field.getAnnotation(DirtField.class);
+                // 增加 prefixTitle
                 //String title = annotation.title();
-                String name = field.getName();
                 //if(title.length()>0){
                 //    name = title;
                 //}
-                head.setPrefixName(name +".");
+
+                head.setPrefixTitle(df.title() +".");
+                head.setPrefixKey(name +".");
+
             }
             this.heads.addAll(heads);
         }

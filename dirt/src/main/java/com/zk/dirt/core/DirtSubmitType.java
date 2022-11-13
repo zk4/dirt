@@ -176,7 +176,7 @@ public class DirtSubmitType {
 
     public String getKey() {
         if(fieldType!=null){
-            return fieldType.getPrefixName() + key;
+            return fieldType.getPrefixKey() + key;
         }
         return key;
     }
