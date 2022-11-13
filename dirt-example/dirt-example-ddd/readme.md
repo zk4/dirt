@@ -83,7 +83,7 @@ ManyToMany 多对多，关系任意，可重复
 1. [x] 树状结构组织
 1. [x] 业务事件驱动 
 1. [x] schema 标准化输出
-1. [x] embedded 支持
+1. [x] embedqded 支持
 1. [x] 内部接口调用接口结构化，而非DSL Filter,
 1. [x] 继承测试
 1. [x] 输出表单联动 schema
