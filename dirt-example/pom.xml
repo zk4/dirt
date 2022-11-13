@@ -12,7 +12,7 @@
     <modules>
 
         <!--<module>dirt-example-member</module>-->
-        <module>dirt-example-ddd</module>
+        <module>dirt-example-ddd-intention</module>
         <module>dirt-example-ddd-uc</module>
         <!--<module>dirt-example-eiam</module>-->
         <!--<module>dirt-example-mall</module>-->
