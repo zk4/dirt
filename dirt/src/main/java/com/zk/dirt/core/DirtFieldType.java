@@ -23,7 +23,7 @@ public class DirtFieldType {
 
     // 用来生成 embedded 前缀
     @JsonIgnore
-    String prefix="";
+    String prefixName ="";
 
     @JsonIgnore
     MetaType metaType;
@@ -181,15 +181,15 @@ public class DirtFieldType {
 
     public String getTitle() {
         if (  metaType != null && metaType.getTitle()!=null && metaType.getTitle().length()!=0) return metaType.getTitle();
-        return this.prefix + title;
+        return this.prefixName + title;
     }
 
     public String getDataIndex() {
-        return this.prefix + dataIndex;
+        return this.prefixName + dataIndex;
     }
 
     public String getKey() {
-        return this.prefix +  key;
+        return this.prefixName +  key;
     }
 
     public MetaType getMetaType() {

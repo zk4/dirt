@@ -6,8 +6,6 @@ import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtSimpleIdEntity;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -16,8 +14,6 @@ import static javax.persistence.EnumType.STRING;
 
 @Getter
 @Setter
-@ToString
-@Accessors(fluent = false, chain = true)
 @Entity
 @Table(name = "t_intention")
 @DirtEntity(value = "意向")
@@ -28,7 +24,7 @@ public class Intention  extends DirtSimpleIdEntity {
             @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
             @AttributeOverride(name="latitude",column=@Column(name="startLatitude"))
     })
-    Location startLocaiton;
+    Location startLocation;
 
     @Embedded
     @DirtField(title = "终点")
