@@ -15,8 +15,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD,PARAMETER})
 @Retention(RUNTIME)
 public @interface DirtField {
-    // 表头名
 
+    // 表头名
     String title() default  "";
     // 表头宽度, -1: auto
     eSubmitWidth width() default eSubmitWidth.MD;

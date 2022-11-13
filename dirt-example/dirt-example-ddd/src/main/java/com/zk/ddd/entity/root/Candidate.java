@@ -16,30 +16,12 @@ public class Candidate extends DirtSimpleIdEntity {
     @JoinColumn(name = "itention_id")
     @DirtField
     private Intention intention;
-    //
-    //@Embedded
-    //private Driver driver;
-    @DirtField
+
+    private int driverId;
     private String driverName;
-    @DirtField
     private String driverMobile;
-
     @Embedded
-    @DirtField
-    @AttributeOverrides({
-            @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
-            @AttributeOverride(name="latitude",column=@Column(name="startLatitude")),
-            @AttributeOverride(name="gender",column=@Column(name="startGender"))
-    })
-    Location startLocaiton;
+    @DirtField(title = "地址")
+    private Location longitude;
 
-    @Embedded
-    @DirtField
-    @AttributeOverrides({
-            @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
-            @AttributeOverride(name="latitude",column=@Column(name="destLatitude")),
-            @AttributeOverride(name="gender",column=@Column(name="destGender"))
-
-    })
-    Location destLocation;
 }

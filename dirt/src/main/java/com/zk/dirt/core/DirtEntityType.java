@@ -144,7 +144,13 @@ public class DirtEntityType {
             List<DirtFieldType> heads = dirtEntity.getHeads();
             for (DirtFieldType head : heads) {
                 // 增加 prefix
-                head.setPrefix(field.getName()+".");
+                DirtField annotation = field.getAnnotation(DirtField.class);
+                String title = annotation.title();
+                String name = field.getName();
+                if(title.length()>0){
+                    name = title;
+                }
+                head.setPrefix(name +".");
             }
             this.heads.addAll(heads);
         }

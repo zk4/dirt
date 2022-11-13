@@ -16,12 +16,9 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @DirtEntity(visiable = false)
 public class Location {
-    @DirtField
+    @DirtField(title = "经度")
     Double  longitude;
-    @DirtField
+    @DirtField(title = "纬度")
     Double  latitude;
 
-
-    @DirtField
-    eGender  gender;
 }

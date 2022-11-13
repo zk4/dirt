@@ -1,49 +1,59 @@
 package com.zk.ddd.entity.root;
 
 import com.zk.ddd.types.eStatus;
+import com.zk.dirt.annotation.DirtEntity;
+import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtSimpleIdEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.EnumType.STRING;
 
-@Data
+@Getter
+@Setter
 @ToString
 @Accessors(fluent = false, chain = true)
 @Entity
 @Table(name = "t_intention")
+@DirtEntity(value = "意向")
 public class Intention  extends DirtSimpleIdEntity {
-    //@Embedded
-    //@AttributeOverrides({
-    //        @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
-    //        @AttributeOverride(name="latitude",column=@Column(name="startLatitude"))
-    //})
-    //Location startLocaiton;
-    //
-    //@Embedded
-    //@AttributeOverrides({
-    //        @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
-    //        @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
-    //})
-    //Location destLocation;
+    @Embedded
+    @DirtField(title = "起点")
+    @AttributeOverrides({
+            @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
+            @AttributeOverride(name="latitude",column=@Column(name="startLatitude"))
+    })
+    Location startLocaiton;
 
     @Embedded
+    @DirtField(title = "终点")
+    @AttributeOverrides({
+            @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
+            @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
+    })
+    Location destLocation;
 
+    @Embedded
+    @DirtField(title = "乘客")
     private Customer customer;
 
     @Enumerated(value = STRING)
+    @DirtField
     private eStatus status;
 
     @Embedded
+    @DirtField(title = "司机")
     private Driver selectedDriver;
 
-    @OneToMany(mappedBy = "intention", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Candidate> candidates = new ArrayList<>();
+    @OneToMany
+    // 允许只生成两张表的情况下，双向更新
+    @JoinColumn(name = "itention_id")
+    private Set<Candidate> candidates  ;
 
     public boolean canMatchDriver() {
         if (status.equals(eStatus.Inited)) {
