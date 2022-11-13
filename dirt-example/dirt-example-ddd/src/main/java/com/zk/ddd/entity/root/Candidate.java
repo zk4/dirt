@@ -28,7 +28,8 @@ public class Candidate extends DirtSimpleIdEntity {
     @DirtField
     @AttributeOverrides({
             @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
-            @AttributeOverride(name="latitude",column=@Column(name="startLatitude"))
+            @AttributeOverride(name="latitude",column=@Column(name="startLatitude")),
+            @AttributeOverride(name="gender",column=@Column(name="startGender"))
     })
     Location startLocaiton;
 
@@ -36,7 +37,9 @@ public class Candidate extends DirtSimpleIdEntity {
     @DirtField
     @AttributeOverrides({
             @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
-            @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
+            @AttributeOverride(name="latitude",column=@Column(name="destLatitude")),
+            @AttributeOverride(name="gender",column=@Column(name="destGender"))
+
     })
     Location destLocation;
 }

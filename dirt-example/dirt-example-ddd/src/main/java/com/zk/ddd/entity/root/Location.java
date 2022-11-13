@@ -20,4 +20,8 @@ public class Location {
     Double  longitude;
     @DirtField
     Double  latitude;
+
+
+    @DirtField
+    eGender  gender;
 }

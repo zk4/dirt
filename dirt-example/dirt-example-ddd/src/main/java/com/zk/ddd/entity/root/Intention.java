@@ -18,19 +18,19 @@ import static javax.persistence.EnumType.STRING;
 @Entity
 @Table(name = "t_intention")
 public class Intention  extends DirtSimpleIdEntity {
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
-            @AttributeOverride(name="latitude",column=@Column(name="startLatitude"))
-    })
-    Location startLocaiton;
-
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
-            @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
-    })
-    Location destLocation;
+    //@Embedded
+    //@AttributeOverrides({
+    //        @AttributeOverride(name="longitude",column=@Column(name="startLongitude")),
+    //        @AttributeOverride(name="latitude",column=@Column(name="startLatitude"))
+    //})
+    //Location startLocaiton;
+    //
+    //@Embedded
+    //@AttributeOverrides({
+    //        @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
+    //        @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
+    //})
+    //Location destLocation;
 
     @Embedded
 
