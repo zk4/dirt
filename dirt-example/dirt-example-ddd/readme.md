@@ -82,24 +82,22 @@ ManyToMany 多对多，关系任意，可重复
 1. [x] 更新与创建关系时，只应该处理 id，不需要传递整个 entity，
 1. [x] 树状结构组织
 1. [x] 业务事件驱动 
-1. [ ] schema 标准化输出
-1. [ ] 内部接口调用接口结构化，而非DSL Filter,
+1. [x] schema 标准化输出
+1. [x] embedded 支持
+1. [x] 内部接口调用接口结构化，而非DSL Filter,
+1. [x] 继承测试
+1. [x] 输出表单联动 schema
+1. [x] action 动态返回显不显示的方案
 
 
 
 ### Version 0.1.1
-
 1. [ ] 完善的测试
-1. [ ] 继承？
 
-### Version 0.1.0
-
-1. [ ] 支持 JAVA 里其他映射类型，如 Map，Set，List
+### Version 0.2.0
+1. [ ] 支持  Map 的映射 
 1. [ ] 虚拟 entity 支持
-1. [ ] embeded 支持
-1. [ ] 输出表单联动 schema
 1. [ ] eFilterOperator 更全的实现
-1. [ ] action 动态返回显不显示的方案
 1. [ ] excel 导出
 
 ## 前端 T
@@ -115,7 +113,7 @@ ManyToMany 多对多，关系任意，可重复
 
 ### Version 0.1.0 - react
 
-1. [ ] 表单联动 schema
+1. [x] 表单联动 schema
 1. [ ] 多种页面展现形式
 1. [ ] UI 无关，支持 mobile 与 pc ，响应式
 1. [ ] 梳理自动布局的标准
