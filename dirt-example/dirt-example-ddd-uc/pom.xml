@@ -21,6 +21,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.zk</groupId>
+            <artifactId>dirt-common</artifactId>
+            <version>0.1.0.BETA</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
         </dependency>
