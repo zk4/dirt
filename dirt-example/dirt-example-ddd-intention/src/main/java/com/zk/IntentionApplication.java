@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
@@ -16,6 +18,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @DirtScan({"com.zk.intention.entity.root","com.zk.intention.entity.vo"})
 @EntityScan({"com.zk.intention.entity.root","com.zk.intention.entity.vo"})
+@EnableDiscoveryClient
+@EnableFeignClients
 public class IntentionApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(IntentionApplication.class);

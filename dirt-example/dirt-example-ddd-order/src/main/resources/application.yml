@@ -23,12 +23,17 @@ spring:
       # 60 secs
       time-to-live: 60000
   redis:
-    host: 127.0.0.1
+    host: smallmac.local
     port: 6379
     database: 0
   profiles:
     active: mysqlfk
 
+  rabbitmq:
+    host: smallmac.local
+    port: 5672
+    username: guest
+    password: guest
 
 zk:
   snowflake:

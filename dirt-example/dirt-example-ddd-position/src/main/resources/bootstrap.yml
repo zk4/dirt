@@ -1,17 +1,12 @@
 spring:
   application:
-    name: dirt
+    name: ddd-position
+
   cloud:
     nacos:
       config:
-        enabled: false
+        server-addr: smallmac.local:8848
       discovery:
-        enabled: false
-
-#  cloud:
-#    nacos:
-#      config:
-#        server-addr: localhost:8848
-#        file-extension: yml
-#        enabled: false
+        enabled: true
+        server-addr: smallmac.local:8848
 
