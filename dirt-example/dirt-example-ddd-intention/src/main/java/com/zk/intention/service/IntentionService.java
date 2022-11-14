@@ -101,6 +101,7 @@ public class IntentionService {
             lock = lockService.create(lockName);
             Intention intention = intentionRepository.findById(intentionId).orElse(null);
             Driver driverVo = userApi.findDriverById(driverId);
+            driverVo.setDriverId(driverId);
             intention.confirmIntention(driverVo);
             //LOGGER.info("{}司机抢单{}结果为{}", driverId, intentionId, ret);
 

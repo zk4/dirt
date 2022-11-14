@@ -24,7 +24,7 @@ import static javax.persistence.EnumType.STRING;
 //@Accessors(fluent = false, chain = true)
 @Entity
 @Table(name = "t_intention")
-@DirtEntity(value = "意向")
+@DirtEntity(value = "乘客意向")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(scope = Intention.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
 public class Intention  extends DirtSimpleIdEntity {
