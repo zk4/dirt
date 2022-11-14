@@ -57,6 +57,7 @@
     "postcss-safe-parser": "4.0.1",
     "qs": "^6.11.0",
     "react": "^18.2.0",
+    "react-amap": "^1.2.8",
     "react-app-polyfill": "^1.0.1",
     "react-dev-utils": "^9.0.1",
     "react-dom": "^18.2.0",

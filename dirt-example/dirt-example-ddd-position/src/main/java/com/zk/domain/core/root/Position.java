@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
+import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtSimpleIdEntity;
 import com.zk.domain.core.Status;
 import lombok.Getter;
@@ -38,5 +39,9 @@ public class Position  extends DirtSimpleIdEntity {
     private Status status;
     @DirtField
     private String driverId;
+
+    @DirtField(uiType = eUIType.map)
+    private  String map;
+
 
 }

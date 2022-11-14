@@ -43,6 +43,8 @@ export default {
   checkbox: "checkbox",
   //星级组件
   rate: "rate",
+  // 地图
+  map: "map",
   //单选框
   radio: "radio",
   //按钮单选框

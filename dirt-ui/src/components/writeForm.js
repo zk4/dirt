@@ -7,6 +7,7 @@ import UIConsts from '../consts/uiConsts'
 import customRender from './customRender'
 import RichText from './richEditor'
 import Cascader from './cascader'
+import Map from './amap'
 import ImageUploader from './imageUploader'
 import SelectInput from './selectInput'
 import SelectLiveInput from './selectLiveInput'
@@ -30,38 +31,16 @@ let WriteForm = (props) => {
   const handleCancel = (name) => {
     setIsModalOpen(s => {return {...s, [name]: false}});
   };
-  // columns.push(
-  //   {
-  //     title: '经度',
-  //     dataIndex: 'location.longitude',
-  //     valueType: 'text',
-  //     width: 'xs',
-  //     colProps: {
-  //       xs: 12,
-  //     },
-  //   })
-  // columns.push(
-  //   {
-  //     title: '纬度',
-  //     width: 'md',
-  //     dataIndex: 'location.latitude',
-  //     colProps: {
-  //       xs: 12,
-  //     },
-  //     formItemProps: {
-  //       rules: [
-  //         {
-  //           required: true,
-  //           message: '此项为必填项',
-  //         },
-  //       ],
-  //     },
-  //   },
-  // )
 
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation, dependColumn} = column
     // 自定义创建 formItem
+    if (column.valueType === UIConsts.map) {
+      column["colProps"] = {xs: 24, md: 24}
+      column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        return <Map.WriteView />
+      }
+    }
     if (column.valueType === UIConsts.selectLiveInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         return <SelectLiveInput.WriteView

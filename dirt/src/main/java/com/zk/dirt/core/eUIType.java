@@ -75,7 +75,8 @@ public enum eUIType {
     // 图片上传
     imageUploader,
 
-
+    // 地图
+    map,
 
     //代码框，但是带了 json 格式化
     jsonCode,
