@@ -83,7 +83,7 @@ public class Category extends DirtBaseIdEntity {
 
     @NotEmpty
     @Size(max = 30)
-    @DirtField(title = "类名", uiType = eUIType.text)
+    @DirtField(title = "类名")
     String name;
 
     @ManyToOne

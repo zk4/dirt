@@ -3,7 +3,8 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.*;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
-import com.zk.dirt.intef.*;
+import com.zk.dirt.intef.iDirtDictionaryEntryType;
+import com.zk.dirt.intef.iEnumText;
 import com.zk.dirt.rule.DirtRules;
 import com.zk.dirt.util.ExceptionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -70,33 +71,6 @@ public class DirtEntityType {
         }
     }
 
-    private void initDataSource(String dsKey, Class<? extends iDataSource> aClass) {
-
-        //Class<? extends iDataSource>[] dataSource = dirtField.dataSource();
-        //DirtDepends[] dependDS = dirtField.depends();
-        // 1. 有参 datasource
-        // TODO: OptionFunction 需要及时动态生成，不能依赖与当前调用条件。
-        //if (dependDS.length > 0) {
-        //    DirtDepends dependsAnnotation = dependDS[0];
-        //    String onColumn = dependsAnnotation.onColumn();
-            //tableHeader.setDependColumn(onColumn);
-            //Class<? extends iDataSource> aClass = dependsAnnotation.dataSource();
-            //iDataSource ds = applicationContext.getBean(aClass);
-            //String name = entityClass.getName();
-            //String s = DirtContext.getOptionKey(name, field.getName());
-            //dirtContext.addOptionFunction(dsKey, ds);
-        //}
-        // 2. 无参 datasource
-        //else if (dataSource.length > 0) {
-        //    Class<? extends iDataSource> ds = dataSource[0];
-        //
-        //    iDataSource enumProvider = applicationContext.getBean(ds);
-        //    //source = enumProvider.getSource();
-        //    //initialValue = enumProvider.initialValue();
-        //    dirtContext.addOptionFunction(dsKey, enumProvider);
-        //
-        //}
-    }
 
     private void initSchema() {
 
@@ -105,21 +79,23 @@ public class DirtEntityType {
         // TODO:
         // 统一 field， method 基于 DirtField 的构造
         // 实现类似 vue 里 computed 的效果
-        this.heads = fields.stream()
+        List<Field> preFields = fields.stream()
                 .filter(field -> field.getDeclaredAnnotation(DirtField.class) != null)
+
                 // 不显示 metatype 禁用的数据
                 .filter(field -> {
                     DirtField dirtField = field.getDeclaredAnnotation(DirtField.class);
-
                     MetaType metaType = getMetaType(field, dirtField);
-
                     // 如果 enable 为 false ，则不显示
                     if (metaType != null) {
                         return metaType.getEnable() != null ? metaType.getEnable() : true;
                     }
                     // 为 null，则放过，使用默认 column 信息
                     return true;
-                })
+                }).collect(Collectors.toList());
+        this.heads = preFields.stream()
+                // 不处理 embedded ,后面再处理
+                .filter(field -> field.getDeclaredAnnotation(Embedded.class) == null)
                 .map(this::getFieldType)
                 .collect(Collectors.toList());
 
@@ -130,19 +106,59 @@ public class DirtEntityType {
             action.setValueType(eUIType.option.toString());
             action.setFixed("right");
 
-            //  每个中文字符给个9px，差不多了
+            //  TODO： 应该由前端自己处理，不应该由服务端处理---------------------------start
+            //  暂时每个中文字符给个9px，差不多了
             int counts = 0;
             for (String name : names) {
                 counts += name.length();
             }
             action.setWidth(counts * 9 + names.size() * 2 + "px");
-            action.setIndex(9999);
+            //  TODO： 应该由前端自己处理，不应该由服务端处理---------------------------end
 
+            action.setIndex(9999);
             action.setTitle("操作");
             action.setActions(this.actionMap);
 
             this.heads.add(action);
         }
+
+        // -------------------------embedded 处理 开始----------------------------------start
+        // 本质上就是将embedded 成员变量拍扁了，不做任何嵌套处理。各有各的好处吧。
+        // 在名字上以 . 分隔
+        // 如:
+        // @Embedded
+        // @DirtField
+        // @AttributeOverrides({
+        //         @AttributeOverride(name="longitude",column=@Column(name="destLongitude")),
+        //         @AttributeOverride(name="latitude",column=@Column(name="destLatitude"))
+        // })
+        // Location destLocation;
+        // 会输出  destLocation.longitude  与  destLocation.latitude 的  dirtfield
+
+        // 处理 embedded
+        List<Field> embeddedList = preFields.stream().filter(field -> field.getDeclaredAnnotation(Embedded.class) != null)
+                .collect(Collectors.toList());
+        for (Field field : embeddedList) {
+            Type genericType = field.getGenericType();
+            DirtEntityType dirtEntity = dirtContext.getDirtEntity(genericType.getTypeName());
+            List<DirtFieldType> heads = dirtEntity.getHeads();
+            DirtField df = field.getAnnotation(DirtField.class);
+            String name = field.getName();
+            for (DirtFieldType head : heads) {
+                // 增加 prefixTitle
+                //String title = annotation.title();
+                //if(title.length()>0){
+                //    name = title;
+                //}
+
+                head.setPrefixTitle(df.title() +".");
+                head.setPrefixKey(name +".");
+
+            }
+            this.heads.addAll(heads);
+        }
+        // -------------------------embedded 处理 结束----------------------------------end
+
         //  排序 header
         this.heads.sort(Comparator.comparingInt(DirtFieldType::getIndex));
     }
@@ -160,7 +176,6 @@ public class DirtEntityType {
 
     /**
      * @param field entity 的字段
-     *              //* @param args  构成字段最终所需要的参数，通常用在联动上，比如当前字段，依赖另一个字段的选择值，才能确定当前字段的可选值是什么
      * @return
      */
     public DirtFieldType getFieldType(Field field) {
@@ -179,6 +194,7 @@ public class DirtEntityType {
         ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
         OneToOne oneToOne = field.getAnnotation(OneToOne.class);
         ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
+        Embedded embedded = field.getAnnotation(Embedded.class);
 
         tableHeader.setIndex(dirtField.index());
         tableHeader.setFixed(dirtField.fixed().getText());
@@ -198,7 +214,7 @@ public class DirtEntityType {
         }
 
         DirtDepends[] depends = dirtField.depends();
-        if(depends.length>0){
+        if (depends.length > 0) {
             DirtDepends depend = depends[0];
             String onColumn = depend.onColumn();
             tableHeader.setDependColumn(onColumn);
@@ -326,6 +342,7 @@ public class DirtEntityType {
         tableHeader.setKey(name);
         tableHeader.setDataIndex(name);
 
+
         String headerTooltip = dirtField.tooltip();
         tableHeader.setTooltip(headerTooltip);
 
@@ -356,6 +373,8 @@ public class DirtEntityType {
                 tableHeader.setRelation(eDirtEntityRelation.ManyToOne);
             else if (manyToMany != null)
                 tableHeader.setRelation(eDirtEntityRelation.ManyToMany);
+            else if (embedded != null)
+                tableHeader.setRelation(eDirtEntityRelation.Embedded);
 
         }
         return tableHeader;
@@ -403,11 +422,6 @@ public class DirtEntityType {
                     for (int i = 0; i < parameters.length; i++) {
                         Parameter parameter = parameters[i];
                         DirtEntityType dirtEntity = dirtContext.getDirtEntity(parameter.getType().getName());
-                        if (dirtEntity == null) {
-                            System.out.println("bug here");
-                        }
-
-
                         List<DirtFieldType> dirtFieldTypes = dirtEntity.getHeads();
                         // FIXED: java 8 会保留 parameter 名字， java 11 会变成 arg0， arg 1
                         dirtActionType.getArgColumnsMap().put("args", dirtFieldTypes);

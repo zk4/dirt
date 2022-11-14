@@ -50,7 +50,6 @@ public class DirtContext {
         String mainClassName = PackageUtil.getMainClassName();
         Class<?> aClass = Class.forName(mainClassName);
         DirtScan scanPackageAnno = aClass.getDeclaredAnnotation(DirtScan.class);
-
         String[] scanPackages = new String[]{"com.zk.dirt.entity"};
 
         // merge scan packages if found

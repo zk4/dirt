@@ -1,8 +1,10 @@
 package com.zk.relations;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
@@ -13,7 +15,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 @Getter
@@ -40,7 +45,16 @@ public class Teacher extends DirtBaseIdEntity {
     @OneToMany
     // 允许只生成两张表的情况下，双向更新
     @JoinColumn(name = "teacher")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<TeacherStudent> teacherStudents;
 
+    ////////////////////////// Action //////////////////////////
+    @DirtAction(text = "详情")
+    public void detail() {}
 
+    @DirtAction(text = "删除")
+    public void delete() {}
+
+    @DirtAction(text = "编辑")
+    public void edit() {}
 }

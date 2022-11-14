@@ -7,7 +7,10 @@ public enum eDirtEntityRelation implements iEnumText{
     OneToOne,
     OneToMany,
     ManyToOne,
-    ManyToMany;
+    ManyToMany,
+
+    // JPA embedded
+    Embedded;
 
 
     @Override
@@ -16,6 +19,6 @@ public enum eDirtEntityRelation implements iEnumText{
     }
 
     public static void main(String[] args) {
-        System.out.println(OneToMany);
+        System.out.println(Embedded);
     }
 }

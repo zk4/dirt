@@ -3,6 +3,7 @@ package com.zk.relations;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtBaseIdEntity;
@@ -22,7 +23,7 @@ import javax.persistence.*;
 @DirtEntity(value = "学生老师关系")
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "t_TeacherStudent",uniqueConstraints = @UniqueConstraint(columnNames = {"teacher", "student"}))
+@Table(name = "t_TeacherStudent",uniqueConstraints = @UniqueConstraint(columnNames = {"teacher", "student","deleted"}))
 @SQLDelete(sql = "UPDATE t_TeacherStudent SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
@@ -44,5 +45,13 @@ public class TeacherStudent extends DirtBaseIdEntity {
     @Column(nullable=true,name="impression_score")
     private int impressionScore;
 
+    ////////////////////////// Action //////////////////////////
+    @DirtAction(text = "详情")
+    public void detail() {}
 
+    @DirtAction(text = "删除")
+    public void delete() {}
+
+    @DirtAction(text = "编辑")
+    public void edit() {}
 }

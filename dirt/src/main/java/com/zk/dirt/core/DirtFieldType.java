@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Map;
 
 // https://procomponents.ant.design/components/table#columns-%E5%88%97%E5%AE%9A%E4%B9%89
@@ -19,13 +20,23 @@ import java.util.Map;
 @ToString
 @ApiModel(value = "schema")
 public class DirtFieldType {
+
+    // 用来生成 embedded title 前缀
+    @JsonIgnore
+    String prefixTitle ="";
+
+    // 用来生成 embedded dataIndex, key 前缀
+    @JsonIgnore
+    String prefixKey ="";
+
+
     @JsonIgnore
     MetaType metaType;
     @ApiModelProperty(value = "标题")
     String title;
 
     @ApiModelProperty(value = "排序")
-    Integer index;
+    Integer index = 0;
 
     @ApiModelProperty(value = "tooltip, 通常需要在 title 之后展示一个 icon，hover 之后提示一些信息")
     String tooltip;
@@ -127,6 +138,7 @@ public class DirtFieldType {
     @ApiModelProperty(value = "孩子节点名")
     String subTreeName;
 
+    List<DirtFieldType> columns;
 
     //  构造时，传入 column 元数据，可动态更改当前 schema 状态
     public DirtFieldType(MetaType metaType) {
@@ -174,7 +186,15 @@ public class DirtFieldType {
 
     public String getTitle() {
         if (  metaType != null && metaType.getTitle()!=null && metaType.getTitle().length()!=0) return metaType.getTitle();
-        return title;
+        return this.prefixTitle + title;
+    }
+
+    public String getDataIndex() {
+        return this.prefixKey + dataIndex;
+    }
+
+    public String getKey() {
+        return this.prefixKey +  key;
     }
 
     public MetaType getMetaType() {

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {BetaSchemaForm} from '@ant-design/pro-components';
 import DirtTable from './dirtTable'
 import {Modal, Input, Button} from 'antd';
@@ -13,7 +13,7 @@ import SelectLiveInput from './selectLiveInput'
 import network from '../logic/network'
 import {SearchOutlined} from '@ant-design/icons';
 
-export default (props) => {
+let WriteForm = (props) => {
   const {entityName, name, triggerCompoent, columns, onFinish, onInit} = props;
   // debugger
   // 有可能有多个 modal 需要保持状态，使用{}
@@ -30,20 +30,48 @@ export default (props) => {
   const handleCancel = (name) => {
     setIsModalOpen(s => {return {...s, [name]: false}});
   };
+  // columns.push(
+  //   {
+  //     title: '经度',
+  //     dataIndex: 'location.longitude',
+  //     valueType: 'text',
+  //     width: 'xs',
+  //     colProps: {
+  //       xs: 12,
+  //     },
+  //   })
+  // columns.push(
+  //   {
+  //     title: '纬度',
+  //     width: 'md',
+  //     dataIndex: 'location.latitude',
+  //     colProps: {
+  //       xs: 12,
+  //     },
+  //     formItemProps: {
+  //       rules: [
+  //         {
+  //           required: true,
+  //           message: '此项为必填项',
+  //         },
+  //       ],
+  //     },
+  //   },
+  // )
 
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation, dependColumn} = column
     // 自定义创建 formItem
     if (column.valueType === UIConsts.selectLiveInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        return <SelectLiveInput.WriteView 
-        size={1}
-        fetchOptions={
-          async (username) => {
-            const arg = form.getFieldValue(dependColumn)
-            return network.getOptionsAsync({entityName, subKey: columnKey, args: {[dependColumn]: arg}});
+        return <SelectLiveInput.WriteView
+          size={1}
+          fetchOptions={
+            async (username) => {
+              const arg = form.getFieldValue(dependColumn)
+              return network.getOptionsAsync({entityName, subKey: columnKey, args: {[dependColumn]: arg}});
+            }
           }
-        }
           onChange={
             (e) => {
               form.setFieldValue(columnKey, e?.[0]?.value)
@@ -52,6 +80,7 @@ export default (props) => {
         />
       }
     }
+
     if (column.valueType === UIConsts.selectInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
@@ -139,20 +168,11 @@ export default (props) => {
             <DirtTable entityName={idOfEntity}
               rowSelection={{
                 getCheckboxProps: (record) => {
-                  // let disabled = false
-                  // if (Array.isArray(vals)) {
-                  //   disabled = vals?.map(v => v.id).includes(record.id)
-                  // } else {
-                  //   disabled = record.id === vals?.id
-                  // }
-                  // return {
-                  //   disabled,
-                  // }
                 },
                 defaultSelectedRowKeys: vals ? Array.isArray(vals) ? vals.map(v => v.id) : [vals] : [],
                 type: (relation === Consts.OneToMany || relation === Consts.ManyToMany) ? "checkbox" : "radio",
                 onChange: (selectedRowKeys, selectedRows, info) => {
-                  // JPA compatiable
+                  // jpa compatiable
                   if (relation === Consts.OneToMany || relation === Consts.ManyToMany) {
                     const ids = selectedRows.map(v => {return {id: v.id}})
                     form.setFieldValue(columnKey, ids)
@@ -175,6 +195,10 @@ export default (props) => {
     return column
   })
 
+  let wrapperOnFinish = useCallback((v) => {
+    onFinish(v);
+  })
+
   const actionRef = useRef();
   return <BetaSchemaForm
     trigger={triggerCompoent}
@@ -188,7 +212,10 @@ export default (props) => {
     rowProps={{gutter: [16, 16]}}
     colProps={{span: 24, }}
     grid={true}
-    onFinish={v => {onFinish(v);}}
+    onFinish={v => {wrapperOnFinish(v);}}
   >
   </BetaSchemaForm>
 }
+
+
+export default WriteForm;

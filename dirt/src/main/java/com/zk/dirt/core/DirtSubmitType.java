@@ -97,6 +97,12 @@ public class DirtSubmitType {
             this.setInitialValue(initialValue);
     }
 
+
+
+
+
+
+
     public String getTitle() {
         if (fieldType != null && fieldType.getMetaType() != null && fieldType.getMetaType().getTitle()!=null && fieldType.getMetaType().getTitle().length()!=0) return fieldType.getMetaType().getTitle();
         if (fieldType != null) return fieldType.getTitle();
@@ -166,5 +172,12 @@ public class DirtSubmitType {
             return this.fieldType.dependColumn;
         }
         return null;
+    }
+
+    public String getKey() {
+        if(fieldType!=null){
+            return fieldType.getPrefixKey() + key;
+        }
+        return key;
     }
 }

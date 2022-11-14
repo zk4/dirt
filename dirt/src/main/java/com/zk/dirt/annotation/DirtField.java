@@ -5,7 +5,6 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.dirt.intef.iEnumText;
-import org.checkerframework.common.initializedfields.qual.InitializedFieldsBottom;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -16,8 +15,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD,PARAMETER})
 @Retention(RUNTIME)
 public @interface DirtField {
-    // 表头名
 
+    // 表头名
     String title() default  "";
     // 表头宽度, -1: auto
     eSubmitWidth width() default eSubmitWidth.MD;
@@ -28,7 +27,7 @@ public @interface DirtField {
 
     // 不是所有字段都需要改 meta。
     // 由开发者主动标识哪些完全不可改。
-    boolean metable() default  true;
+    boolean metable() default  false;
 
     // 表头排序
     int index() default 0;
