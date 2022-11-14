@@ -6,7 +6,6 @@ import com.zk.dirt.entity.DirtSimpleIdEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -17,26 +16,25 @@ import javax.persistence.Table;
 @DirtEntity(value = "poi")
 public class Poi extends DirtSimpleIdEntity {
 
-    @Column(length = 64)
+
     @DirtField
     private String linkMan;
-    @Column(length = 64)
+
     @DirtField
     private String shopName;
-    @Column(length = 64, nullable = false)
     @DirtField
     private String cellPhone;
     @DirtField
     private Double longitude;
     @DirtField
     private Double latitude;
-    @Column(length = 64)
+
     @DirtField
     private String province;
-    @Column(length = 64)
+
     @DirtField
     private String city;
-    @Column(length = 64)
+
     @DirtField
     private String district;
     @DirtField

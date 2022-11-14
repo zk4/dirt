@@ -234,15 +234,5 @@ public class DirtController {
         @ApiModelProperty("参数")
         Map args;
     }
-    //
-    //@Data
-    //@Builder
-    //@ApiModel("OptionRes")
-    //static class Option {
-    //    @ApiModelProperty("label")
-    //    String label;
-    //
-    //    @ApiModelProperty("value")
-    //    String value;
-    //}
+
 }

@@ -25,8 +25,5 @@ public class IntentionApplication {
         SpringApplication app = new SpringApplication(IntentionApplication.class);
         ConfigurableApplicationContext run = app.run(args);
         SpringUtil.setApplicationContext(run);
-
     }
-
-
 }

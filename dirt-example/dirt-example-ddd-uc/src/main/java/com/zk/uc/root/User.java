@@ -3,11 +3,10 @@ package com.zk.uc.root;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.entity.DirtSimpleIdEntity;
-import com.zk.uc.Type;
+import com.zk.uc.eUserType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
@@ -23,16 +22,16 @@ public class User extends DirtSimpleIdEntity {
 
     @DirtField
     private String userName;
-    @Column(length = 64)
+
     @DirtField
     private String mobile;
-    @Column(length = 64)
+
     @DirtField
     private String province;
-    @Column(length = 64)
+
     @DirtField
     private String city;
-    @Column(length = 64)
+
     @DirtField
     private String district;
     @DirtField
@@ -40,10 +39,8 @@ public class User extends DirtSimpleIdEntity {
     @DirtField
     private String originAddress;
 
-
     @Enumerated(value = STRING)
-    @Column(length = 32, nullable = false)
     @DirtField
-    private Type type;
+    private eUserType type;
 
 }

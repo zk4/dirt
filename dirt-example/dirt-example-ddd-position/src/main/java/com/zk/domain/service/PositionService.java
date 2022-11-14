@@ -2,8 +2,8 @@ package com.zk.domain.service;
 
 import com.zk.domain.core.Status;
 import com.zk.domain.core.root.DriverStatus;
-import com.zk.domain.core.vo.Driver;
 import com.zk.domain.core.root.Position;
+import com.zk.domain.core.vo.Driver;
 import com.zk.domain.repository.DriverStatusRepo;
 import com.zk.domain.repository.PositionRepository;
 import com.zk.infrastructure.UserRibbonHystrixApi;
@@ -58,7 +58,12 @@ public class PositionService {
 
             driverStatusRepo.save(driverStatus);
         } else {
-            Driver driver = userService.findById(driverId);
+            UserRibbonHystrixApi.DriverDTO driverDTO = userService.findById(driverId);
+            Driver driver = new Driver();
+            driver.setDriverId(driverId);
+            driver.setMobile(driverDTO.getMobile());
+            driver.setType(driverDTO.getType());
+            driver.setUserName(driverDTO.getUserName());
             driverStatus = new DriverStatus();
             driverStatus.setDriver(driver);
             driverStatus.setCurrentLongitude(longitude);
@@ -76,7 +81,7 @@ public class PositionService {
 
     public Collection<DriverStatus> matchDriver(double longitude, double latitude) {
         Circle circle = new Circle(new Point(longitude, latitude), //
-                new Distance(500, RedisGeoCommands.DistanceUnit.METERS));
+                new Distance(500000, RedisGeoCommands.DistanceUnit.METERS));
         GeoResults<RedisGeoCommands.GeoLocation<String>> result =
                 redisTemplate.opsForGeo().geoRadius("Drivers", circle);
         if (result.getContent().size() == 0) {
@@ -89,8 +94,9 @@ public class PositionService {
                     .map(x -> x.getContent().getName())
                     .collect(toList());
             LOGGER.info("获取附近司机为{}", drivers);
-            return drivers.stream().map(Long::parseLong)
+            List<DriverStatus> collect = drivers.stream().map(Long::parseLong)
                     .map(id -> driverStatusRepo.findByDriver_DriverId(id)).collect(toList());
+            return collect;
         }
     }
 }

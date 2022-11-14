@@ -12,7 +12,6 @@ import com.zk.dirt.intef.iDataSource;
 import com.zk.dirt.intef.iPersistProxy;
 import com.zk.dirt.intef.iResourceUploader;
 import com.zk.dirt.util.ArgsUtil;
-import com.zk.dirt.wrapper.Result;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -101,20 +100,17 @@ public class DirtService {
 
 
     @Transactional
-    public String deleteById(String entityName, Long id) throws ClassNotFoundException, JsonProcessingException {
+    public void deleteById(String entityName, Long id) throws ClassNotFoundException, JsonProcessingException {
         Class<?> entityClass = Class.forName(entityName);
         persistProxy.deleteById(entityClass, id);
-        return objectMapper.writeValueAsString(Result.ok());
-    }
+     }
 
 
     @Transactional
-    public String deleteByIds(String entityName, List<Long> ids) throws ClassNotFoundException, JsonProcessingException {
+    public void deleteByIds(String entityName, List<Long> ids) throws ClassNotFoundException, JsonProcessingException {
         Class<?> entityClass = Class.forName(entityName);
         persistProxy.deleteByIds(entityClass, ids);
-        return objectMapper.writeValueAsString(Result.ok());
-
-    }
+        }
 
 
     @Transactional(readOnly = true)
