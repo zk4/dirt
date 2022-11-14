@@ -1,6 +1,7 @@
 import React from 'react';
 import {Map} from 'react-amap';
 
+// https://github.com/ElemeFE/react-amap
 const SearchView = () => {
   const plugins = [
     'MapType',

@@ -15,6 +15,7 @@
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
+    "@uiw/react-amap": "^4.0.2",
     "antd": "^4.23.0",
     "antd-img-crop": "^4.2.4",
     "axios": "^0.27.2",
