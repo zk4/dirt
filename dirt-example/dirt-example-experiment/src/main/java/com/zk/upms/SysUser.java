@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.zk.dirt.annotation.DirtDepends;
+import com.zk.dirt.annotation.DirtDataSource;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSearch;
@@ -45,7 +45,7 @@ public class SysUser extends MyBaseIdEntity {
     @DirtField(
             title = "角色权限",
             uiType = eUIType.selectLiveInput,
-            depends = @DirtDepends(onEntity =SysRole.class , onColumn = "roleKey")
+            datasource = @DirtDataSource(onEntity =SysRole.class , dependsColumn = "roleKey")
     )
     private String roleKey;
 

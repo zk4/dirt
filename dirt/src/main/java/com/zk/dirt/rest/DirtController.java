@@ -6,6 +6,7 @@ import com.zk.dirt.conf.DirtQueryFilter;
 import com.zk.dirt.core.DirtFieldType;
 import com.zk.dirt.core.DirtViewType;
 import com.zk.dirt.core.Option;
+import com.zk.dirt.intef.iResourceUploader;
 import com.zk.dirt.service.DirtService;
 import com.zk.dirt.wrapper.Result;
 import io.swagger.annotations.ApiModel;
@@ -19,8 +20,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.beans.IntrospectionException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +40,25 @@ public class DirtController {
     @Autowired
     ObjectMapper objectMapper;
 
-    //@PostMapping("/dirt/upload")
-    //@ApiOperation(value = "上传文件")
-    //public String handleFileUpload(@RequestParam("file") MultipartFile file) {
-    //    if (resourceUploader == null) {
-    //        throw new RuntimeException("没实现 iResourceUploader, 无法上传");
-    //    }
-    //    return  resourceUploader.store(file);
-    //}
+
+
+    @Autowired
+    iResourceUploader resourceUploader;
+
+    @RequestMapping(value = "/dirt/upload", method = RequestMethod.POST)
+    public String uploadImages(HttpServletRequest request) throws IOException {
+
+        MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
+        String id = params.getParameter("id");
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        if (files == null || files.size() == 0) {
+            throw new RuntimeException("未获取到有效文件");
+        }
+
+        List<iResourceUploader.ImageRes> store = resourceUploader.store(files, id);
+        return objectMapper.writeValueAsString(Result.success(store));
+
+    }
 
 
     @PostMapping(value = "/dirt/action", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,19 +1,21 @@
 import React, {useState} from 'react';
-import {Upload, Carousel} from 'antd';
+import {Upload, Image} from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 function WriteView(props) {
-  const [fileList, setFileList] = useState([
-    // {
-    //   uid: '-1',
-    //   name: 'image.png',
-    //   status: 'done',
-    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    // },
-  ]);
+  const [fileList, setFileList] = useState(props.value.split(",").map(url =>{
+    return  {
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url,
+    }
+  }));
 
   const onChange = ({fileList: newFileList}) => {
-    console.log(newFileList)
+    const uploadedUrls = newFileList.filter(f => f?.response?.code === 0).map(f => f.response.data?.[0].url)
+    props.onChange(uploadedUrls.join(","))
+
     setFileList(newFileList);
   };
 
@@ -59,22 +61,18 @@ const contentStyle = {
   background: '#364d79',
 };
 
-const TableRowView = () => (
-  <Carousel autoplay>
-    <div>
-      <h3 style={contentStyle}>1</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>2</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>3</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>4</h3>
-    </div>
-  </Carousel>
-);
+const TableRowView = ({value}) => {
+  return value !== null ?
+    <Image.PreviewGroup>
+      {
+        value.split(",").map((url) => {
+          return <Image width={50} src={url} />
+        })
+      }
+    </Image.PreviewGroup>
+    : null
+
+};
 export default {
   WriteView,
   TableRowView,

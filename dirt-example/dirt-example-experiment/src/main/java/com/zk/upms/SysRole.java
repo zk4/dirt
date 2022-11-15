@@ -36,7 +36,7 @@ public class SysRole extends MyBaseIdEntity {
     @DirtField(
             title = "角色权限",
             uiType = eUIType.selectLiveInput,
-            depends = @DirtDepends(onEntity =SysRole.class , onColumn = "roleKey")
+            datasource = @DirtDataSource(onEntity =SysRole.class , dependsColumn = "roleKey")
     )
     private String roleKey;
 
