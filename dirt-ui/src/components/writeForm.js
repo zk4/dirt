@@ -98,7 +98,7 @@ let WriteForm = (props) => {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         // accept reference
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept
-        return <ImageUploader.WriteView  key={item?.id} vaule={form.getFieldValue(columnKey)} onChange={value => {
+        return <ImageUploader.WriteView accept="image/*" key={item?.id} vaule={form.getFieldValue(columnKey)} onChange={value => {
           form.setFieldValue(columnKey, value)
         }} />
       }
