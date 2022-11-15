@@ -22,8 +22,8 @@ public class DependsProvider implements iDataSource<String,Option> {
     DirtContext dirtContext;
     @Override
     public List<Option> getSource(String dependsEnityName,String dependsFiledName, Map<String,Object> args) {
-        //String  tableName = depends.onEntity()[0].getSimpleName();
-        //String column =depends.onColumn();
+        //String  tableName = datasource.onEntity()[0].getSimpleName();
+        //String column =datasource.dependsColumn();
         Query query = entityManager.createQuery("select DISTINCT "+ dependsFiledName +" from  "+dependsEnityName);
         List<String> resultList = query.getResultList();
         List<Option> collect = resultList.stream().map(s -> new Option(s, s)).collect(Collectors.toList());

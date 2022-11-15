@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.annotation.DirtAction;
-import com.zk.dirt.annotation.DirtDepends;
+import com.zk.dirt.annotation.DirtDataSource;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
@@ -31,7 +31,7 @@ public class MetaType extends DirtBaseIdEntity {
 
     @DirtField(title = "实体全名",tooltip = "影响的实体名",
             uiType = eUIType.selectLiveInput, fixed = DirtField.eFixedType.LEFT,
-            depends = @DirtDepends(dataSource = MetaTableProvider.class)
+            datasource = @DirtDataSource(value = MetaTableProvider.class)
     )
     String tableName;
 
@@ -40,7 +40,7 @@ public class MetaType extends DirtBaseIdEntity {
             uiType = eUIType.selectLiveInput,
             tooltip = "影响的列名",
             fixed = DirtField.eFixedType.LEFT,
-            depends = @DirtDepends(onColumn = "tableName", dataSource = TableColumnsProvider.class)
+            datasource = @DirtDataSource(dependsColumn = "tableName", value = TableColumnsProvider.class)
     )
     String columnName;
 
@@ -82,7 +82,7 @@ public class MetaType extends DirtBaseIdEntity {
     //@Column(nullable = false,columnDefinition="bit  COMMENT '是否必须存在, false: 不可 true: 可'")
     //Boolean mandate;
 
-    //@DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, dataSource = MetaGroupProvider.class )
+    //@DirtField(title = "分组名", uiType =  eUIType.selectInputMultipal, value = MetaGroupProvider.class )
     //String groupName;
     //
     //@DirtField(title = "分组排序")

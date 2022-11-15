@@ -5,7 +5,7 @@ import {isObj, dot} from './util'
 
 // respone拦截器
 
-axios.defaults.baseURL = 'http://127.0.0.1:8084/dirt/'
+axios.defaults.baseURL = 'http://127.0.0.1:8081/dirt/'
 
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
@@ -44,11 +44,20 @@ const getOptionsAsync = async (postData) => {
   return ret.data;
 }
 const getEntitySchemaAsync = async (entityName) => {
+  if(!entityName){
+    message.error("请选择实体");
+    return []
+  }
   const ret = await axios.get(`getEntitySchema?entityName=${entityName}`)
   return ret.data;
 }
 
 const getDataAsync = async (entityName, id) => {
+  if(!entityName){
+    message.error("请选择实体");
+    return []
+  }
+
   const ret = await axios.get(`getData?entityName=${entityName}&id=${id}`)
   return ret.data;
 }
@@ -110,6 +119,12 @@ const getFullDataslAsync = async (entityName, filter, success_cb) => {
   return ret.data;
 }
 const getDatasAsync = async (entityName, columnKeyMap, params = {}, sort, filter, success_cb) => {
+  if(!entityName){
+    message.error("请选择实体");
+    return []
+  }
+
+
   // 映射 current 到 pageNumber
   params.pageNumber = params.current;
   delete params["current"];
