@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -23,8 +24,9 @@ import javax.persistence.Table;
 @DynamicInsert
 @Table(name = "t_images")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = ImageHolder.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class ImageHolder extends DirtSimpleIdEntity {
+@JsonIdentityInfo(scope = Image.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Image extends DirtSimpleIdEntity {
 	@DirtField(title = "图片",uiType = eUIType.imageUploader)
-	String image;
+	@Column(nullable = false,columnDefinition="varchar(2560) COMMENT '图片地址'")
+	String url;
 }

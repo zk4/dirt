@@ -3,12 +3,19 @@ import {Upload, Image} from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 function WriteView(props) {
-  let urls = (props?.value?.split(",").map(url =>{ return  { uid: '-1', name: 'image.png', status: 'done', url, } }))
+  let accept = props.accept;
+  let urls = (props?.value?.split(",").map(url =>{ return  { status: 'done', url, } }))
   const [fileList, setFileList] = useState(urls?urls:[]);
 
   const onChange = ({fileList: newFileList}) => {
-    const uploadedUrls = newFileList.filter(f => f?.response?.code === 0).map(f => f.response.data?.[0].url)
-    props.onChange(uploadedUrls.join(","))
+    // const oldDoneUrls = newFileList.filter(f => f.status === 'done').map(f => f.url)
+    const uploadedUrls = newFileList.filter(f => f?.response?.code === 0 || f.status === 'done').map(f => f.url || f.response.data?.[0].url)
+    if(uploadedUrls.length == newFileList.length)
+    {
+      const urlsstr=  uploadedUrls.join(",")
+      console.log(urlsstr)
+      props.onChange(urlsstr)
+    }
 
     setFileList(newFileList);
   };
@@ -34,6 +41,7 @@ function WriteView(props) {
   return (
     <ImgCrop rotate readOnly>
       <Upload
+        accept = {accept}
         action="http://127.0.0.1:8081/dirt/upload"
         listType="picture-card"
         fileList={fileList}
@@ -60,7 +68,7 @@ const TableRowView = ({value}) => {
     <Image.PreviewGroup>
       {
         value.split(",").map((url) => {
-          return <Image width={50} src={url} />
+          return <Image width={50} src={url} key={url} />
         })
       }
     </Image.PreviewGroup>

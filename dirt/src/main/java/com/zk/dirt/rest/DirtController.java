@@ -40,8 +40,6 @@ public class DirtController {
     @Autowired
     ObjectMapper objectMapper;
 
-
-
     @Autowired
     iResourceUploader resourceUploader;
 
