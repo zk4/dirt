@@ -42,7 +42,7 @@ function WriteView(props) {
     <ImgCrop rotate readOnly>
       <Upload
         accept = {accept}
-        action="http://127.0.0.1:8081/dirt/upload"
+        action="/dirt/upload"
         listType="picture-card"
         fileList={fileList}
         onChange={onChange}
