@@ -22,8 +22,13 @@ function App() {
       try {
         let data = await axios.get(`getTableMaps`)
         setTables(data.data);
-        if (entityName != null)
-          setTitle(data?.data?.[entityName]?.text)
+        let e = data?.data?.[entityName]?.text
+        if (!e) {
+          e = Object.entries(data.data)?.[0]?.[1]?.text;
+          window.location.search = "entityName=" + Object.entries(data.data)?.[0]?.[0];
+        }
+
+        setTitle(e)
       } catch (e) {
         message.error("请求错误,请查看链接是否正确")
       }
@@ -34,7 +39,6 @@ function App() {
       {
         Object.keys(tables).length > 0 && Object.entries(tables).map(([t, v]) => {
           return <a key={t} href="#!" onClick={e => {
-            // window.location.entityName = v.className;
             window.location.search = "entityName=" + v.className;
 
           }}>{v.text} |</a>
