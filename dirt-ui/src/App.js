@@ -10,7 +10,6 @@ import {message} from "antd";
 function App() {
   let [tables, setTables] = useState({})
   let entityName = qs.parse(window.location.search, {ignoreQueryPrefix: true}).entityName
-  entityName = entityName
 
   const [title, setTitle] = useState(null);
   const [viewType, setViewType] = useState('Table');
@@ -24,7 +23,7 @@ function App() {
         let data = await axios.get(`getTableMaps`)
         setTables(data.data);
         if (entityName != null)
-          setTitle(data.data[entityName].text)
+          setTitle(data?.data?.[entityName]?.text)
       } catch (e) {
         message.error("请求错误,请查看链接是否正确")
       }
