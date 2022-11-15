@@ -3,14 +3,8 @@ import {Upload, Image} from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 function WriteView(props) {
-  const [fileList, setFileList] = useState(props.value.split(",").map(url =>{
-    return  {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url,
-    }
-  }));
+  let urls = (props?.value?.split(",").map(url =>{ return  { uid: '-1', name: 'image.png', status: 'done', url, } }))
+  const [fileList, setFileList] = useState(urls?urls:[]);
 
   const onChange = ({fileList: newFileList}) => {
     const uploadedUrls = newFileList.filter(f => f?.response?.code === 0).map(f => f.response.data?.[0].url)
