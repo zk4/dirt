@@ -68,7 +68,7 @@ const TableRowView = ({value}) => {
     <Image.PreviewGroup>
       {
         value.split(",").map((url) => {
-          return <Image width={50} src={url} key={url} />
+          return <Image style={{'paddingRight':'2px'}} width={50} src={url} key={url} />
         })
       }
     </Image.PreviewGroup>
