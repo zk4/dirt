@@ -32,7 +32,7 @@ public  class DirtBaseIdEntity implements Serializable, iID {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
     @DirtField(title = "id值",index = -999999, fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
     protected Long id;
- 
+
 
     @Data
     @AllArgsConstructor
