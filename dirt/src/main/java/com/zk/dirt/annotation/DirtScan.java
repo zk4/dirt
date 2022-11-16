@@ -1,7 +1,6 @@
 
 package com.zk.dirt.annotation;
 
-import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.post.DirtEntityRegisterPostProcessor;
 import org.springframework.context.annotation.Import;
 
@@ -18,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
-@Import({DirtContext.class, DirtEntityRegisterPostProcessor.class})
+@Import({DirtEntityRegisterPostProcessor.class})
 public @interface DirtScan {
 
 	// DirtEntity scan path
