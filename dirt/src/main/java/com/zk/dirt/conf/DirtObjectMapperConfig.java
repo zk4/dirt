@@ -143,7 +143,9 @@ public class DirtObjectMapperConfig {
         });
 
         objectMapper.registerModule(javaTimeModule);
-        objectMapper.registerModule(new Hibernate5Module());
+        Hibernate5Module module = new Hibernate5Module();
+        module.enable(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
+        objectMapper.registerModule(module);
 
         return objectMapper;
     }
