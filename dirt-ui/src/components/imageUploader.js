@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Upload, Image} from 'antd';
 import ImgCrop from 'antd-img-crop';
+import network from '../logic/network'
 
 function WriteView(props) {
   let accept = props.accept;
@@ -42,7 +43,7 @@ function WriteView(props) {
     <ImgCrop rotate readOnly>
       <Upload
         accept = {accept}
-        action="/dirt/upload"
+        action={network.API_HOST +"/dirt/upload"}
         listType="picture-card"
         fileList={fileList}
         onChange={onChange}

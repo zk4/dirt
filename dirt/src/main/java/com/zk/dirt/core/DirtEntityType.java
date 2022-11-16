@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * describe the meta data of types managed by Dirt
- * it's a mirroed structrue corssponding to  entity
+ * it's a mirroed structrue crosponding to entity
  * include：
  * 1. member field (states)
  * 2. acitons      (functions)
@@ -346,19 +346,12 @@ public class DirtEntityType {
             }
         }
 
-
-        //if (initialValue != null)
-        //    tableHeader.setInitialValue(initialValue);
-
-
         String name = field.getName();
         tableHeader.setKey(name);
         tableHeader.setDataIndex(name);
 
-
         String headerTooltip = dirtField.tooltip();
         tableHeader.setTooltip(headerTooltip);
-
 
         // dirt search -------------------------------------------
         DirtSearch[] dirtSearches = dirtField.dirtSearch();

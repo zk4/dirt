@@ -51,7 +51,6 @@ export default function DirtTable(props) {
       }
     }
 
-
     // 自定义 table row
     // 1.　relation 关系处理优先级更高
     if (relation === Consts.OneToOne || relation === Consts.ManyToOne) {
@@ -118,7 +117,6 @@ export default function DirtTable(props) {
       // 形成 key 为键的 headers，方便一些取值，比如：在 searchForm 里生成 filter 参数时
       let maps = headers.reduce((a, c) => {a[c.key] = c; return a;}, columnKeyMap);
 
-
       setColumnKeyMap(maps)
 
       setColumns(headers)
@@ -129,16 +127,6 @@ export default function DirtTable(props) {
 
   const searchAsyncWrapper = async (params = {}, sort, filter) => {
     return network.searchAsync(entityName, columnKeyMap, params, sort, filter)
-
-    // return new Promise(
-    //   (resolve, reject) => {
-    //     resolve({
-    //       data: result.data.filter(d => d.id != excludeId),
-    //       total: result.total,
-    //       success: result.success
-    //     });
-    //   }
-    // );
   }
 
   const generateCreateForm = () => {
@@ -257,14 +245,6 @@ export default function DirtTable(props) {
       message.success(`${text} 成功`);
       actionRef.current.reload();
     })
-    // if (res.data.code === 0) {
-    //   if (res.data) {
-    //     message.success(`${text} 成功`);
-    //     actionRef.current.reload();
-    //   }
-    // } else {
-    //   message.error(`${text}  失败`);
-    // }
   }
   // 用来操作 ProTable
   // https://procomponents.ant.design/components/table/#actionref-%E6%89%8B%E5%8A%A8%E8%A7%A6%E5%8F%91

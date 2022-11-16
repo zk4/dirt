@@ -5,7 +5,9 @@ import {isObj, dot} from './util'
 
 // respone拦截器
 
-axios.defaults.baseURL = '/dirt/'
+const API_HOST = "http://127.0.0.1:8081";
+
+axios.defaults.baseURL = API_HOST+'/dirt/';
 
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
@@ -235,6 +237,7 @@ const getDatasAsync = async (entityName, columnKeyMap, params = {}, sort, filter
   );
 }
 export default {
+  API_HOST,
   getTableHeadersAsync: getEntitySchemaAsync,
   getDataAsync,
   deleteByIdAsync,

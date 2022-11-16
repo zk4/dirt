@@ -2,7 +2,6 @@ package com.zk.dirt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.core.eUIType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
@@ -31,9 +30,9 @@ public  class DirtBaseIdEntity implements Serializable, iID {
     @Access(AccessType.PROPERTY)
 
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
-    @Column(name = "id")
-    @DirtField(title = "id",index = -999999, uiType = eUIType.text,fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
+    @DirtField(title = "id值",index = -999999, fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
     protected Long id;
+ 
 
     @Data
     @AllArgsConstructor
