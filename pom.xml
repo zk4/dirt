@@ -18,7 +18,7 @@
         <module>dirt</module>
         <module>dirt-common</module>
         <module>dirt-uniapi</module>
-        <module>dirt-example</module>
+        <!-- <module>dirt-example</module> -->
         <module>spring-boot-starter-dirt</module>
     </modules>
     <packaging>pom</packaging>
