@@ -7,12 +7,17 @@ import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtScan;
 import com.zk.dirt.intef.iDataSource;
 import com.zk.dirt.util.PackageUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
@@ -24,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class DirtContext {
+public class DirtContext implements ImportBeanDefinitionRegistrar {
 
     @Autowired
     ApplicationContext applicationContext;
@@ -32,7 +37,6 @@ public class DirtContext {
     @Autowired
     EntityManager entityManager;
 
-    //private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
     private final static LinkedHashMap<String, Supplier<DirtEntityType>> nameLambdaDirtEntityMap = new LinkedHashMap<>();
     private final static Map<String, Class> nameClassMap = new HashMap<String, Class>();
     private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String, SimpleJpaRepository>();
@@ -41,27 +45,43 @@ public class DirtContext {
     private final static Map<String, List<String>> nameColumns = new HashMap<String, List<String>>();
     private static Map<String, iDataSource> dependDataSources = new HashMap<>();
 
+    private static Class<?> primarySource;
 
-    public DirtContext() {
+    private static final Set<String> scanPackage = new HashSet<>();
+
+
+    @SneakyThrows
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        Class<?> clazz = ClassUtils.forName(importingClassMetadata.getClassName(), ClassUtils.getDefaultClassLoader());
+        Optional.ofNullable(clazz.getAnnotation(SpringBootApplication.class)).ifPresent(it -> primarySource = clazz);
+        DirtScan dirtScan = clazz.getAnnotation(DirtScan.class);
+        if (dirtScan.value().length == 0) {
+            scanPackage.add(clazz.getPackage().getName());
+        } else {
+            scanPackage.addAll(Arrays.asList(dirtScan.value()));
+        }
+        scanPackage.add("com.zk.dirt.entity");
+
     }
 
     @PostConstruct
-    public void init() throws ClassNotFoundException {
-        String mainClassName = PackageUtil.getMainClassName();
-        Class<?> aClass = Class.forName(mainClassName);
-        DirtScan scanPackageAnno = aClass.getDeclaredAnnotation(DirtScan.class);
-        String[] scanPackages = new String[]{"com.zk.dirt.entity"};
-
-        // merge scan packages if found
-        if (scanPackageAnno != null) {
-            scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackageAnno.value());
-        }
-        log.info("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
+    public void init()  {
+        //String mainClassName = PackageUtil.getMainClassName();
+        //Class<?> aClass = Class.forName(mainClassName);
+        //DirtScan scanPackageAnno = aClass.getDeclaredAnnotation(DirtScan.class);
+        //String[] scanPackages = new String[]{"com.zk.dirt.entity"};
+        //
+        //// merge scan packages if found
+        //if (scanPackageAnno != null) {
+        //    scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackageAnno.value());
+        //}
+        log.info("@DirtEntity 扫描路径:" + scanPackage.stream() .collect(Collectors.joining(", ")));
 
         dependDataSources = applicationContext.getBeansOfType(iDataSource.class);
         //System.out.println(beansOfType);
 
-        for (String packagePath : scanPackages) {
+        for (String packagePath : scanPackage) {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
             for (Class classAnnotationClass : classAnnotationClasses) {
                 String simpleName = classAnnotationClass.getName();
