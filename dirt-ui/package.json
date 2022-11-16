@@ -77,8 +77,8 @@
     "workbox-webpack-plugin": "4.2.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "cross-env DIRT_API='http://127.0.0.1:8081' node scripts/start.js",
+    "build": "cross-env DIRT_API='' node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
@@ -147,6 +147,7 @@
     ]
   },
   "devDependencies": {
-    "@alilc/lowcode-engine": "^1.0.13"
+    "@alilc/lowcode-engine": "^1.0.13",
+    "cross-env": "^7.0.3"
   }
 }

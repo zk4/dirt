@@ -3,9 +3,11 @@ import {message} from 'antd';
 import {SpringFilterQueryBuilder as SFQB} from '../lib/query_builder';
 import {isObj, dot} from './util'
 
-// respone拦截器
 
-const API_HOST = "http://127.0.0.1:8081";
+// respone拦截器
+console.log(process.env.DIRT_API)
+
+const API_HOST = process.env.DIRT_API || '';
 
 axios.defaults.baseURL = API_HOST+'/dirt/';
 
