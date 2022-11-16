@@ -1,7 +1,6 @@
 package com.zk.dirt.core;
 
 import com.zk.dirt.annotation.*;
-import com.zk.dirt.defaults.BaseDefaultValue;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
@@ -337,7 +336,7 @@ public class DirtEntityType {
         Class<?> defaultValue = dirtField.defaultValue();
         if (defaultValue != Void.class) {
             try {
-                Object init_value = BaseDefaultValue.class.getDeclaredField("DEFAULT_VALUE").get(null);
+                Object init_value = defaultValue.getDeclaredField("DEFAULT_VALUE").get(null);
                 tableHeader.setInitialValue(init_value);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
