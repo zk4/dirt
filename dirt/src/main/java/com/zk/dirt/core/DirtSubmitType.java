@@ -180,4 +180,11 @@ public class DirtSubmitType {
         }
         return key;
     }
+
+    public Object getInitialValue() {
+        if (this.initialValue == null && this.fieldType != null) {
+            return this.fieldType.initialValue;
+        }
+        return this.initialValue;
+    }
 }

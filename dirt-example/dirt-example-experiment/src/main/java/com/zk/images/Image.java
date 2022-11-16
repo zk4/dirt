@@ -29,4 +29,11 @@ public class Image extends DirtSimpleIdEntity {
 	@DirtField(title = "图片",uiType = eUIType.imageUploader)
 	@Column(nullable = false,columnDefinition="varchar(2560) COMMENT '图片地址'")
 	String url;
+
+
+	@DirtField(title = "默认创建值测试")
+	String mydefaultValue;
+
+	@DirtField(title = "默认数字")
+	Integer mydefaultInteger;
 }

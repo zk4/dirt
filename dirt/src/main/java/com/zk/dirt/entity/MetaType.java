@@ -8,6 +8,7 @@ import com.zk.dirt.annotation.DirtDataSource;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.core.eUIType;
+import com.zk.dirt.defaults.BaseDefaultValue;
 import com.zk.dirt.intef.iEnumText;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,9 +53,9 @@ public class MetaType extends DirtBaseIdEntity {
     @Column(nullable = false,columnDefinition="bit default false COMMENT '是否可搜索, false: 不可 true: 可'")
     Boolean search;
 
-    @DirtField(title = "是否启用",initialValue = 1,tooltip = "是否启用, 默认启用")
+    @DirtField(title = "是否启用",tooltip = "是否启用, 默认启用",defaultValue = BaseDefaultValue.TRUE.class)
     @Column(nullable = false,columnDefinition="bit default false COMMENT '是否启用, false: 不可 true: 可'")
-    Boolean enable;
+    Boolean enable ;
 
 
     public enum eConstrain implements iEnumText {
@@ -128,5 +129,6 @@ public class MetaType extends DirtBaseIdEntity {
         //            "的 metable 属性，请联系开发人员");
 
     }
+
 
 }

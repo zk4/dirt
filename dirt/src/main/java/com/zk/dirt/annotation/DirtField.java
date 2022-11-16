@@ -101,7 +101,9 @@ public @interface DirtField {
     // 为兼容 mybatis，如果只有 id ，说明 id 所关系的实体
     Class<? extends iID>[] idOfEntity() default {};
 
-    // @Dprecated，使用 provider 类，
+    // @Dprecated，使用 defaultValue 类，
     // 原因： 1 注解的返回值限制较多，2. 有可能返回数组，3 要与下拉匹配
-    int initialValue() default 0;
+    //int initialValue() default 0;
+
+    Class<?> defaultValue() default Void.class;
 }

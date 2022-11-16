@@ -1,6 +1,7 @@
 package com.zk.dirt.core;
 
 import com.zk.dirt.annotation.*;
+import com.zk.dirt.defaults.BaseDefaultValue;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.entity.iID;
 import com.zk.dirt.intef.iDirtDictionaryEntryType;
@@ -136,7 +137,8 @@ public class DirtEntityType {
         // 会输出  destLocation.longitude  与  destLocation.latitude 的  dirtfield
 
         // 处理 embedded
-        List<Field> embeddedList = preFields.stream().filter(field -> field.getDeclaredAnnotation(Embedded.class) != null)
+        List<Field> embeddedList = preFields.stream()
+                .filter(field -> field.getDeclaredAnnotation(Embedded.class) != null)
                 .collect(Collectors.toList());
         for (Field field : embeddedList) {
             Type genericType = field.getGenericType();
@@ -151,8 +153,8 @@ public class DirtEntityType {
                 //    name = title;
                 //}
 
-                head.setPrefixTitle(df.title() +".");
-                head.setPrefixKey(name +".");
+                head.setPrefixTitle(df.title() + ".");
+                head.setPrefixKey(name + ".");
 
             }
             this.heads.addAll(heads);
@@ -275,7 +277,6 @@ public class DirtEntityType {
         // 设置 valueEnum, initialValue
         // 只关心 enum 类型
         Map source = new HashMap();
-        Object initialValue = tableHeader.getInitialValue();
 
         // 枚举类型
         if (enumConstant) {
@@ -333,9 +334,21 @@ public class DirtEntityType {
         if (source != null)
             tableHeader.setValueEnum(source);
 
+        Class<?> defaultValue = dirtField.defaultValue();
+        if (defaultValue != Void.class) {
+            try {
+                Object init_value = BaseDefaultValue.class.getDeclaredField("DEFAULT_VALUE").get(null);
+                tableHeader.setInitialValue(init_value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
 
-        if (initialValue != null)
-            tableHeader.setInitialValue(initialValue);
+
+        //if (initialValue != null)
+        //    tableHeader.setInitialValue(initialValue);
 
 
         String name = field.getName();
