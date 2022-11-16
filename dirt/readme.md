@@ -203,3 +203,6 @@ https://linxfeng.github.io/flow-eda/#/introduce/overview
 
 hiberate 5.4 reference 
 https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#caching
+
+https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#access
+https://github.com/Blazebit/blaze-persistence#entity-view-usage

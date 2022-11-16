@@ -65,6 +65,7 @@ public class IntentionService {
         Location location = new Location(driverStatusVo.getCurrentLongitude(), driverStatusVo.getCurrentLatitude());
         candidate.setLocation(location);
         candidate.setIntention(intention);
+
         return candidate;
     }
 

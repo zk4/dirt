@@ -5,18 +5,18 @@
     <parent>
         <groupId>com.zk</groupId>
         <artifactId>dirt-parent</artifactId>
-        <version>0.1.1</version>
+        <version>0.1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <modules>
 
         <!--<module>dirt-example-member</module>-->
-        <!-- <module>dirt-example-ddd-intention</module> -->
+         <module>dirt-example-ddd-intention</module>
         <!-- <module>dirt-example-ddd-uc</module> -->
         <!-- <module>dirt-example-ddd-position</module> -->
         <!-- <module>dirt-example-ddd-order</module> -->
-        <module>dirt-example-experiment</module>
+        <!--<module>dirt-example-experiment</module>-->
         <!--<module>dirt-example-eiam</module>-->
         <!--<module>dirt-example-mall</module>-->
         <!--<module>dirt-example-templator</module>-->

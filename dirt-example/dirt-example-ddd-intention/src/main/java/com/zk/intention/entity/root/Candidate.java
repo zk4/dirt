@@ -1,6 +1,7 @@
 package com.zk.intention.entity.root;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.zk.dirt.annotation.DirtEntity;
@@ -18,11 +19,12 @@ import javax.persistence.*;
 @Table(name = "t_candidate")
 @DirtEntity("候选司机")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Candidate.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = Candidate.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Candidate extends DirtSimpleIdEntity {
-    @ManyToOne
-    @JoinColumn(name = "itention_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "intention_id")
     @DirtField
+    @JsonIdentityReference(alwaysAsId = true)
     private Intention intention;
 
     private int driverId;

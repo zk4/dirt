@@ -67,7 +67,7 @@ public class DirtEntityType {
             initActionMap();
             initSchema();
             // TODO: 先不缓存，不然 metatype 不生效，回头再改成 lazy 形式
-            //inited = true;
+            inited = true;
         }
     }
 

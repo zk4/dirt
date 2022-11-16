@@ -26,7 +26,7 @@ import static javax.persistence.EnumType.STRING;
 @Table(name = "t_intention")
 @DirtEntity(value = "乘客意向")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(scope = Intention.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "idObj")
+@JsonIdentityInfo(scope = Intention.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Intention  extends DirtSimpleIdEntity {
     @Embedded
     @DirtField(title = "起点")
@@ -57,9 +57,9 @@ public class Intention  extends DirtSimpleIdEntity {
     private Driver selectedDriver;
 
     @DirtField(title = "候选")
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     // 允许只生成两张表的情况下，双向更新
-    @JoinColumn(name = "itention_id")
+    @JoinColumn(name = "intention_id")
     @JsonIdentityReference(alwaysAsId = true)
 
     private Set<Candidate> candidates  ;

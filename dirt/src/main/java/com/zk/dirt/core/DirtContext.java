@@ -33,7 +33,8 @@ public class DirtContext {
     EntityManager entityManager;
 
     //private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
-    private final static LinkedHashMap<String, Supplier<DirtEntityType>> nameLambdaDirtEntityMap = new LinkedHashMap<>();
+    private final static LinkedHashMap<String, Supplier<DirtEntityType>> nameDirtEntityFactories = new LinkedHashMap<>();
+    private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
     private final static Map<String, Class> nameClassMap = new HashMap<String, Class>();
     private final static Map<String, SimpleJpaRepository> nameReposMap = new HashMap<String, SimpleJpaRepository>();
     private final static Map<Class, SimpleJpaRepository> classReposMap = new HashMap<Class, SimpleJpaRepository>();
@@ -65,12 +66,12 @@ public class DirtContext {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
             for (Class classAnnotationClass : classAnnotationClasses) {
                 String simpleName = classAnnotationClass.getName();
-                if (nameLambdaDirtEntityMap.get(simpleName) != null) {
+                if (nameDirtEntityFactories.get(simpleName) != null) {
                     throw new RuntimeException("重复的 DirtEntity " + simpleName);
                 }
 
                 //nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
-                nameLambdaDirtEntityMap.put(simpleName, () -> new DirtEntityType(this, applicationContext, classAnnotationClass));
+                nameDirtEntityFactories.put(simpleName, () -> new DirtEntityType(this, applicationContext, classAnnotationClass));
 
                 nameClassMap.put(simpleName, classAnnotationClass);
 
@@ -89,16 +90,36 @@ public class DirtContext {
                     nameEntityMap.put(simpleName, dirtViewType);
                 }
                 // 表对应 columns
-                ArrayList<String> columns = new ArrayList<>();
-                Field[] declaredFields = classAnnotationClass.getDeclaredFields();
-                for (Field declaredField : declaredFields) {
-                    columns.add(declaredField.getName());
-                }
-                nameColumns.put(simpleName, columns);
+                //ArrayList<String> columns = new ArrayList<>();
+                //Field[] declaredFields = classAnnotationClass.getDeclaredFields();
+                //for (Field declaredField : declaredFields) {
+                //    columns.add(declaredField.getName());
+                //}
+                List<String> fields = new ArrayList<>();
+                getFieldRecursively(fields, classAnnotationClass);
+                nameColumns.put(simpleName, fields);
             }
         }
        //log.info(nameDirtEntityMap.toString());
     }
+
+    // 递归父类拿 Field
+    public static List<String> getFieldRecursively(List<String>  out, Class<?> clazz) {
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            DirtField dirtField = declaredField.getAnnotation(DirtField.class);
+            if (dirtField != null && dirtField.metable()) {
+                out.add(declaredField.getName());
+            }
+        }
+        if (clazz.getSuperclass() != null)
+            getFieldRecursively(out, clazz.getSuperclass());
+
+        return out;
+
+    }
+
+
+
 
     public List<String>  getColumns(String className){
         return nameColumns.get(className);
@@ -114,12 +135,16 @@ public class DirtContext {
     }
 
     public DirtEntityType getDirtEntity(String name) {
-        Supplier<DirtEntityType> dirtEntityTypeSupplier = nameLambdaDirtEntityMap.get(name);
+        if(nameDirtEntityMap.containsKey(name)){
+            return nameDirtEntityMap.get(name);
+        }
+        Supplier<DirtEntityType> dirtEntityTypeSupplier = nameDirtEntityFactories.get(name);
         if(dirtEntityTypeSupplier!=null) {
             DirtEntityType dirtEntity = dirtEntityTypeSupplier.get();
             if (dirtEntity == null) {
                 throw new RuntimeException("不存在 " + name);
             }
+            nameDirtEntityMap.put(name, dirtEntity);
             return dirtEntity;
         }
         return null;

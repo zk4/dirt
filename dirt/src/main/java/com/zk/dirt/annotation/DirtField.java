@@ -27,7 +27,7 @@ public @interface DirtField {
 
     // 不是所有字段都需要改 meta。
     // 由开发者主动标识哪些完全不可改。
-    boolean metable() default  true;
+    boolean metable() default  false;
 
     // 表头排序
     int index() default 0;

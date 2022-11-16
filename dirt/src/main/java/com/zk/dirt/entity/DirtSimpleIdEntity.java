@@ -3,7 +3,6 @@ package com.zk.dirt.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtField;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -21,25 +20,26 @@ public  class DirtSimpleIdEntity implements Serializable, iID {
     private static final long serialVersionUID = 2359852974346431431L;
 
     @Id
+    //https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela
     @Access(AccessType.PROPERTY)
 
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增
     @Column(name = "id")
     @DirtField(title = "id",index = -999999, fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
     protected Long id;
-
-    @Data
-    @AllArgsConstructor
-    public static class IdObj {
-        Long id;
-    }
-
-    @Transient
-    IdObj idObj;
-
-    public IdObj getIdObj() {
-        return new IdObj(this.id);
-    }
+    //
+    //@Data
+    //@AllArgsConstructor
+    //public static class IdObj {
+    //    Long id;
+    //}
+    //
+    //@Transient
+    //IdObj idObj;
+    //
+    //public IdObj getIdObj() {
+    //    return new IdObj(this.id);
+    //}
 
 
     // 软删除
