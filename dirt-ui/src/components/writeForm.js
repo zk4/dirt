@@ -7,7 +7,7 @@ import UIConsts from '../consts/uiConsts'
 import customRender from './customRender'
 import RichText from './richEditor'
 import Cascader from './cascader'
-import Map from './amap'
+// import Map from './amap'
 import ImageUploader from './imageUploader'
 import SelectInput from './selectInput'
 import SelectLiveInput from './selectLiveInput'
@@ -35,12 +35,12 @@ let WriteForm = (props) => {
   let createColumns = columns.map(column => {
     const {key: columnKey, idOfEntity, relation, dependColumn} = column
     // 自定义创建 formItem
-    if (column.valueType === UIConsts.map) {
-      column["colProps"] = {xs: 24, md: 24}
-      column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        return <Map.WriteView />
-      }
-    }
+    // if (column.valueType === UIConsts.map) {
+    //   column["colProps"] = {xs: 24, md: 24}
+    //   column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+    //     return <Map.WriteView />
+    //   }
+    // }
     if (column.valueType === UIConsts.selectLiveInput) {
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
         return <SelectLiveInput.WriteView
@@ -96,7 +96,9 @@ let WriteForm = (props) => {
     else if (column.valueType === UIConsts.imageUploader) {
       column["colProps"] = {xs: 24, md: 24}
       column["renderFormItem"] = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
-        return <ImageUploader.WriteView key={item?.id} vaule={form.getFieldValue(columnKey)} onChange={value => {
+        // accept reference
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept
+        return <ImageUploader.WriteView accept="image/*" key={item?.id} vaule={form.getFieldValue(columnKey)} onChange={value => {
           form.setFieldValue(columnKey, value)
         }} />
       }

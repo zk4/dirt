@@ -66,12 +66,12 @@ public @interface DirtField {
     //Class<? extends iEnumText>[] enumListableType() default {};
 
     // 搜索表单相关
-    DirtDepends[] depends() default {};
+    DirtDataSource[] datasource() default {};
 
     // UI组件的源数据
     DirtHQLSource[] sourceProvider() default {};
 
-    //Class<? extends iDataSource>[] dataSource() default  {};
+    //Class<? extends iDataSource>[] value() default  {};
 
     boolean search() default  true;
     // 筛选表单，为 true 时使用 ProTable 自带的，为 false 时关闭本地筛选

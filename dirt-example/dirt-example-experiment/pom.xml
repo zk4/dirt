@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.zk</groupId>
         <artifactId>dirt-example</artifactId>
-        <version>0.1.0.BETA</version>
+        <version>0.1.1</version>
     </parent>
     <artifactId>dirt-example-experiment</artifactId>
 
@@ -146,6 +146,10 @@
             <groupId>com.turkraft</groupId>
             <artifactId>spring-filter</artifactId>
             <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
         </dependency>
 
     </dependencies>

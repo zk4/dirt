@@ -1,7 +1,7 @@
 package com.zk.dirt.core;
 
 
-import com.zk.dirt.annotation.DirtDepends;
+import com.zk.dirt.annotation.DirtDataSource;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtScan;
@@ -159,10 +159,10 @@ public class DirtContext {
             Field field = Class.forName(entityName).getDeclaredField(subKey);
             DirtField declaredAnnotation = field.getDeclaredAnnotation(DirtField.class);
             if(declaredAnnotation!=null) {
-                DirtDepends[] depends = declaredAnnotation.depends();
+                DirtDataSource[] depends = declaredAnnotation.datasource();
                 if(depends.length>0){
-                    DirtDepends depend = depends[0];
-                    Class<? extends iDataSource> aClass = depend.dataSource();
+                    DirtDataSource depend = depends[0];
+                    Class<? extends iDataSource> aClass = depend.value();
                     return applicationContext.getBean(aClass);
                 }
             }

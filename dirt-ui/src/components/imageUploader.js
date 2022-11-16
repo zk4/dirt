@@ -1,19 +1,22 @@
 import React, {useState} from 'react';
-import {Upload, Carousel} from 'antd';
+import {Upload, Image} from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 function WriteView(props) {
-  const [fileList, setFileList] = useState([
-    // {
-    //   uid: '-1',
-    //   name: 'image.png',
-    //   status: 'done',
-    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    // },
-  ]);
+  let accept = props.accept;
+  let urls = (props?.value?.split(",").map(url =>{ return  { status: 'done', url, } }))
+  const [fileList, setFileList] = useState(urls?urls:[]);
 
   const onChange = ({fileList: newFileList}) => {
-    console.log(newFileList)
+    // const oldDoneUrls = newFileList.filter(f => f.status === 'done').map(f => f.url)
+    const uploadedUrls = newFileList.filter(f => f?.response?.code === 0 || f.status === 'done').map(f => f.url || f.response.data?.[0].url)
+    if(uploadedUrls.length == newFileList.length)
+    {
+      const urlsstr=  uploadedUrls.join(",")
+      console.log(urlsstr)
+      props.onChange(urlsstr)
+    }
+
     setFileList(newFileList);
   };
 
@@ -38,7 +41,8 @@ function WriteView(props) {
   return (
     <ImgCrop rotate readOnly>
       <Upload
-        action="http://127.0.0.1:8081/dirt/upload"
+        accept = {accept}
+        action="/dirt/upload"
         listType="picture-card"
         fileList={fileList}
         onChange={onChange}
@@ -59,22 +63,18 @@ const contentStyle = {
   background: '#364d79',
 };
 
-const TableRowView = () => (
-  <Carousel autoplay>
-    <div>
-      <h3 style={contentStyle}>1</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>2</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>3</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>4</h3>
-    </div>
-  </Carousel>
-);
+const TableRowView = ({value}) => {
+  return value !== null ?
+    <Image.PreviewGroup>
+      {
+        value.split(",").map((url) => {
+          return <Image style={{'paddingRight':'2px'}} width={50} src={url} key={url} />
+        })
+      }
+    </Image.PreviewGroup>
+    : null
+
+};
 export default {
   WriteView,
   TableRowView,

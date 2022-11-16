@@ -75,6 +75,8 @@ public enum eUIType {
     // 图片上传
     imageUploader,
 
+    // 图片id 引用
+    imageReference,
     // 地图
     map,
 

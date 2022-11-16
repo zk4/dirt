@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.zk</groupId>
         <artifactId>dirt-parent</artifactId>
-        <version>0.1.0.BETA</version>
+        <version>0.1.1</version>
     </parent>
     <artifactId>dirt</artifactId>
 
@@ -47,6 +47,13 @@
     </distributionManagement>
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
         <!--knife4j swagger -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>

@@ -213,10 +213,10 @@ public class DirtEntityType {
             tableHeader.setSubTreeName(subTreeName);
         }
 
-        DirtDepends[] depends = dirtField.depends();
+        DirtDataSource[] depends = dirtField.datasource();
         if (depends.length > 0) {
-            DirtDepends depend = depends[0];
-            String onColumn = depend.onColumn();
+            DirtDataSource depend = depends[0];
+            String onColumn = depend.dependsColumn();
             tableHeader.setDependColumn(onColumn);
         }
 

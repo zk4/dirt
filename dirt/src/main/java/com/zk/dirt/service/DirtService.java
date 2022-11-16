@@ -2,7 +2,7 @@ package com.zk.dirt.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zk.dirt.annotation.DirtDepends;
+import com.zk.dirt.annotation.DirtDataSource;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.conf.DirtQueryFilter;
@@ -163,16 +163,16 @@ public class DirtService {
         Field field = aClass.getDeclaredField(fieldName);
         DirtField[] dirtFields = field.getDeclaredAnnotationsByType(DirtField.class);
         if (dirtFields.length == 1) {
-            DirtDepends[] depends = dirtFields[0].depends();
+            DirtDataSource[] depends = dirtFields[0].datasource();
             if (depends.length == 1) {
-                DirtDepends depend = depends[0];
+                DirtDataSource depend = depends[0];
                 iDataSource optionFunction = dirtContext.getOptionFunction(entityName, fieldName);
                 if (optionFunction != null) {
                     String tableName=null;
                     if(depend.onEntity().length>0){
                         tableName = depend.onEntity()[0].getSimpleName();
                     }
-                    String column = depend.onColumn();
+                    String column = depend.dependsColumn();
                     List<Option> source = optionFunction.getSource(tableName, column, args);
                     return source;
                 }

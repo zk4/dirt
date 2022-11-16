@@ -6,7 +6,7 @@
 
     <groupId>com.zk</groupId>
     <artifactId>dirt-parent</artifactId>
-    <version>0.1.0.BETA</version>
+    <version>0.1.1</version>
 
 
     <name>dirt-parent</name>
@@ -18,7 +18,7 @@
         <module>dirt</module>
         <module>dirt-common</module>
         <module>dirt-uniapi</module>
-        <module>dirt-example</module>
+        <!-- <module>dirt-example</module> -->
         <module>spring-boot-starter-dirt</module>
     </modules>
     <packaging>pom</packaging>
@@ -109,17 +109,17 @@
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>dirt</artifactId>
-                <version>0.1.0.BETA</version>
+                <version>0.1.1</version>
             </dependency>
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>spring-boot-starter-dirt</artifactId>
-                <version>0.1.0.BETA</version>
+                <version>0.1.1</version>
             </dependency>
             <dependency>
                 <groupId>com.zk</groupId>
                 <artifactId>dirt-common-core</artifactId>
-                <version>0.1.0.BETA</version>
+                <version>0.1.1</version>
             </dependency>
 
             <dependency>
