@@ -12,8 +12,9 @@ import {isObj} from '../logic/util';
 import Cascader from './cascader'
 import RichText from './richEditor'
 import ImageUploader from './imageUploader'
+import SelectInput from './selectInput'
+import SelectLiveInput from './selectLiveInput'
 const {RangePicker} = DatePicker;
-
 
 export default function DirtTable(props) {
   // excludeIds: default self id
@@ -25,16 +26,67 @@ export default function DirtTable(props) {
 
   // 给 header 加点料，如加上新的 render，以支持在不同的场景下，渲染不同的组件，典型如：日期在创建时，是选择具体的值，但在搜索时，经常性是个范围。
   const redefineHeader = (headers, c) => {
-    const {title, idOfEntity: cls, dataIndex, relation} = c
+    const {title, idOfEntity: cls, dataIndex, relation, dependColumn, key: columnKey} = c
 
+    // const {key: columnKey, idOfEntity, relation, dependColumn} = column
     // json object 与 json 有区别。服务器过来的是 json，json 不支持key为数字，只能放在值里，如果前端需要，先放值里，再转到 key
     if (c.valueEnum) {
       c.valueEnum = Object.entries(c.valueEnum).reduce((a, [k, c]) => {a[c.status] = c; return a;}, {})
     }
 
-    // 自定义搜索栏
+    // 默认搜索组件
+    if (c.valueType === UIConsts.selectLiveInput) {
+      c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        return <SelectLiveInput.WriteView
+          size={1}
+          fetchOptions={
+            async (username) => {
+              const arg = form.getFieldValue(dependColumn)
+              return network.getOptionsAsync({entityName, subKey: columnKey, args: {[dependColumn]: arg}});
+            }
+          }
+          onChange={
+            (e) => {
+              form.setFieldValue(columnKey, e?.[0]?.value)
+            }
+          }
+        />
+      }
+    }
+    // 根据 searchType 自定义搜索组件
     if (c.searchType != null) {
       c.renderFormItem = (item, {type, defaultRender, formItemProps, fieldProps, ...rest}, form) => {
+        if (c.searchType.valueType === UIConsts.selectLiveInput) {
+          return <SelectLiveInput.WriteView
+            size={1}
+            fetchOptions={
+              async (username) => {
+                const arg = form.getFieldValue(dependColumn)
+                return network.getOptionsAsync({entityName, subKey: columnKey, args: {[dependColumn]: arg}});
+              }
+            }
+            onChange={
+              (e) => {
+                form.setFieldValue(columnKey, e?.[0]?.value)
+              }
+            }
+          />
+        }
+
+        if (c.searchType.valueType === UIConsts.selectInput) {
+          let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
+          return <SelectInput.WriteView options={options} size={1} handleChange={e => {
+            form.setFieldValue(columnKey, e[0])
+          }} />
+
+        }
+        if (c.searchType.valueType === UIConsts.selectInputMultipal) {
+          let options = Object.entries(item.valueEnum).map(([k, v]) => {return {label: v.text, value: v.text}})
+          return <SelectInput.WriteView options={options} handleChange={e => {
+            form.setFieldValue(columnKey, e)
+          }} />
+
+        }
         if (c.searchType.valueType === UIConsts.cascader) {
           return <Cascader.SearchView idOfEntity={c.idOfEntity} subTreeName={c.subTreeName} onValueSet={(valueArrays, optionArrays) => {
             const v = valueArrays?.slice(-1)?.[0]
