@@ -14,7 +14,7 @@ Just for fun.
 ```
 127.0.0.1  smallmac.local
 ```
-4. create db name in your mysql 
+4. create db scheme in your mysql 
 5. start com.zk.IntentionApplication 
 6. open http://127.0.0.1:8081,  you are good to go 
 
