@@ -9,7 +9,7 @@ Dirt (Data In Reactive Table)，自动解析基于 entity  schema 生成企业�
 Just for fun.
 
 1. open the root pom 
-2. open module examples/dirt-example-ddd-intention 
+2. open module dirt-examples/dirt-example-ddd-intention 
 3. config your host file 
 ```
 127.0.0.1  smallmac.local
