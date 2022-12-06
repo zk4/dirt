@@ -46,7 +46,6 @@ public class ReserveTimeTemplate extends DirtBaseIdEntity {
     @DirtField(
             title = "可用星期",
             uiType = eUIType.checkbox,
-            enumListableType= eWeekDay.class,
             dirtSubmit = @DirtSubmit())
     @ElementCollection
     List<eWeekDay>  days;

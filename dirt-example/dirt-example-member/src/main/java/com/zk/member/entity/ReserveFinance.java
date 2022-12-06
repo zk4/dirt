@@ -8,7 +8,6 @@ import com.zk.dirt.core.eUIType;
 import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.experiment.eSubmitWidth;
 import com.zk.member.entity.types.eReseveProductType;
-import com.zk.member.provider.StatusProvider;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -96,10 +95,7 @@ public class ReserveFinance extends DirtBaseIdEntity {
     @DirtField(
             title = "状态",
 
-            filters = true,
-            onFilter = true,
             uiType = eUIType.select,
-            enumProvider = {StatusProvider.class},
             dirtSubmit = @DirtSubmit())
     String status;
 

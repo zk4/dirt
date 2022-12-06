@@ -16,7 +16,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @DirtScan({"com.zk.mall.entity"})
 public class MallApplication {
 
-
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(MallApplication.class);
         ConfigurableApplicationContext run = app.run(args);
@@ -24,8 +23,6 @@ public class MallApplication {
 
         DruidDataSource bean = run.getBean(DruidDataSource.class);
         String dburl = (bean.getUrl());
-
-
     }
 
 }

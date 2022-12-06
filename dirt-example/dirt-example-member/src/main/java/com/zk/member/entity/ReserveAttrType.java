@@ -32,7 +32,7 @@ public class ReserveAttrType extends DirtBaseIdEntity {
     @NotNull
     String name;
 
-    @DirtField(title = "单位", uiType = eUIType.select,enumListableType = eUnit.class)
+    @DirtField(title = "单位", uiType = eUIType.select)
     @Enumerated(EnumType.STRING)
     @NotNull
     eUnit unit;
