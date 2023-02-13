@@ -1,14 +1,13 @@
 package com.zk.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.dirt.annotation.DirtAction;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
 import com.zk.dirt.annotation.DirtSubmit;
 import com.zk.dirt.core.eUIType;
+import com.zk.dirt.entity.DirtBaseIdEntity;
 import com.zk.member.entity.types.eReseveProductType;
-import com.zk.member.provider.StatusProvider;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -94,8 +93,8 @@ public class ReserveProduct extends DirtBaseIdEntity {
 
     @DirtField(
             title = "状态",
-            uiType = eUIType.select,
-            enumProvider = {StatusProvider.class}
+            uiType = eUIType.select
+
     )
     String status;
 
