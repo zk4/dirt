@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -143,13 +142,12 @@ public class DirtObjectMapperConfig {
         });
 
         objectMapper.registerModule(javaTimeModule);
-        Hibernate5Module module = new Hibernate5Module();
-
-        module.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
-        module.enable(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
+        //Hibernate5Module module = new Hibernate5Module();
+        //module.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
+        //module.enable(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
         //module.enable(Hibernate5Module.Feature.REQUIRE_EXPLICIT_LAZY_LOADING_MARKER);
         //module.enable(Hibernate5Module.Feature.REPLACE_PERSISTENT_COLLECTIONS);
-        objectMapper.registerModule(module);
+        //objectMapper.registerModule(module);
 
         return objectMapper;
     }
