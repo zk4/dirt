@@ -141,16 +141,11 @@ public class DirtContext implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args)  {
-        String[] scanPackages = new String[]{COM_ZK_DIRT_ENTITY};
-        String[] scanPackage = DirtApplication.getScanPackage();
         // merge scan packages if found
-        if (scanPackage != null) {
-            scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackage);
-        }
+        String[] scanPackages = (String[]) ArrayUtils.addAll(DirtApplication.getScanPackage(), new String[]{COM_ZK_DIRT_ENTITY});
         log.info("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
 
         dependDataSources = applicationContext.getBeansOfType(iDataSource.class);
-        //System.out.println(beansOfType);
 
         for (String packagePath : scanPackages) {
             Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
@@ -159,10 +154,7 @@ public class DirtContext implements ApplicationRunner {
                 if (nameDirtEntityFactories.get(simpleName) != null) {
                     throw new RuntimeException("重复的 DirtEntity " + simpleName);
                 }
-
-                //nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
                 nameDirtEntityFactories.put(simpleName, () -> new DirtEntityType(this, applicationContext, classAnnotationClass));
-
                 nameClassMap.put(simpleName, classAnnotationClass);
 
                 if (classAnnotationClass.getAnnotation(Entity.class) != null) {
