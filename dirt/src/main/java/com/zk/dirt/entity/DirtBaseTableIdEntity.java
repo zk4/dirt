@@ -14,10 +14,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-// 插入时只插入非 null, 子类如果需要也要加上
-@DynamicInsert
-// The dynamic update allows you to set just the columns that were modified in the associated entity. （包含设了 null) , 子类如果需要也要加
-@DynamicUpdate
+@DynamicInsert // 插入时只插入非 null, 子类如果需要也要加上
+@DynamicUpdate // The dynamic update allows you to set just the columns that were modified in the associated entity. （包含设了 null) , 子类如果需要也要加
 @MappedSuperclass
 public  class DirtBaseTableIdEntity implements Serializable, iID {
 
@@ -29,7 +27,6 @@ public  class DirtBaseTableIdEntity implements Serializable, iID {
     @Id
     // https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela/32223785#32223785
     @Access(AccessType.PROPERTY)
-
     @GeneratedValue(strategy = GenerationType.TABLE) // 自增
     @Column(name = "id")
     @DirtField(title = "id",index = -999999, uiType = eUIType.text,fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})

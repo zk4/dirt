@@ -1,6 +1,5 @@
 package com.zk.dirt.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.dirt.annotation.DirtDataSource;
 import com.zk.dirt.annotation.DirtField;
@@ -49,7 +48,7 @@ public class DirtService {
 
 
     @Transactional
-    public void action(String entityName, String actionName, Long id, Map args) throws IllegalAccessException, InvocationTargetException, JsonProcessingException {
+    public void action(String entityName, String actionName, Long id, Map args) throws IllegalAccessException, InvocationTargetException {
         Class classByName = dirtContext.getClassByName(entityName);
         Object o2 = persistProxy.getOne(classByName, id);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
@@ -62,7 +61,7 @@ public class DirtService {
 
 
     @Transactional
-    public void create(String entityName, Map body) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IntrospectionException, InvocationTargetException, JsonProcessingException {
+    public void create(String entityName, Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
         Class<? extends iID> entityClass = (Class<? extends iID>) Class.forName(entityName);
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
         body.forEach((k, v) -> {
@@ -80,7 +79,7 @@ public class DirtService {
 
 
     @Transactional
-    public void update(String entityName, Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException, JsonProcessingException {
+    public void update(String entityName, Map body) throws ClassNotFoundException, IllegalAccessException, IntrospectionException, InvocationTargetException {
         Class<? extends iID> entityClass = (Class<? extends iID>) Class.forName(entityName);
 
         DirtEntityType dirtEntity = dirtContext.getDirtEntity(entityName);
@@ -100,28 +99,28 @@ public class DirtService {
 
 
     @Transactional
-    public void deleteById(String entityName, Long id) throws ClassNotFoundException, JsonProcessingException {
+    public void deleteById(String entityName, Long id) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         persistProxy.deleteById(entityClass, id);
      }
 
 
     @Transactional
-    public void deleteByIds(String entityName, List<Long> ids) throws ClassNotFoundException, JsonProcessingException {
+    public void deleteByIds(String entityName, List<Long> ids) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         persistProxy.deleteByIds(entityClass, ids);
         }
 
 
     @Transactional(readOnly = true)
-    public Page<Object> page(DirtQueryFilter reqFilter, String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
+    public Page<Object> page(DirtQueryFilter reqFilter, String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         return persistProxy.findAll(entityClass, reqFilter.getSpec(), pageable);
     }
 
 
     @Transactional(readOnly = true)
-    public List<Object> fullData(DirtQueryFilter reqFilter, String entityName, Pageable pageable) throws ClassNotFoundException, JsonProcessingException {
+    public List<Object> fullData(DirtQueryFilter reqFilter, String entityName, Pageable pageable) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         return persistProxy.findAll(entityClass, reqFilter.getSpec());
     }
@@ -137,23 +136,23 @@ public class DirtService {
     }
 
 
-    public List<DirtFieldType> getTableHeaders(String entityName) throws JsonProcessingException {
+    public List<DirtFieldType> getTableHeaders(String entityName) {
         DirtEntityType bySimpleName = dirtContext.getDirtEntity(entityName);
         return bySimpleName.getHeads();
     }
 
 
-    public Set<String> getTablesNames() throws JsonProcessingException {
+    public Set<String> getTablesNames()  {
         return dirtContext.getAllEntityNames();
     }
 
 
-    public Map<String, DirtViewType> getTableMaps() throws JsonProcessingException {
+    public Map<String, DirtViewType> getTableMaps()  {
         return dirtContext.getNameEntityMap();
     }
 
 
-    public DirtFieldType getDirtField(String entityName, String fieldName) throws JsonProcessingException {
+    public DirtFieldType getDirtField(String entityName, String fieldName) {
         return dirtContext.getDirtEntity(entityName).getFieldType(fieldName);
     }
 

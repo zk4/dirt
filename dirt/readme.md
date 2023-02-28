@@ -206,3 +206,9 @@ https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Gu
 
 https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#access
 https://github.com/Blazebit/blaze-persistence#entity-view-usage
+
+
+
+json-schemaeditor-antd 
+是一个界面的好方案
+https://gitee.com/furtherbank/json-schemaeditor-antd#https://furtherbank.gitee.io/json-schemaeditor-antd

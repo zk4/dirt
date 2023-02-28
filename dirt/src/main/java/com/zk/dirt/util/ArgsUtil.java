@@ -125,7 +125,7 @@ public class ArgsUtil {
 
             if (declaredField.isAnnotationPresent(OneToMany.class) || declaredField.isAnnotationPresent(ManyToMany.class)) {
                 Class[] classes = ArgsUtil.getCollectionItemType(declaredField);
-
+                assert  classes.length>=2;
                 Class containerType = classes[0];
                 Boolean isSet = containerType.isAssignableFrom(Set.class);
                 // 容器内部类型

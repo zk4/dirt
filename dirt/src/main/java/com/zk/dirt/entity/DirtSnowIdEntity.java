@@ -15,10 +15,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-// 插入时只插入非 null, 子类如果需要也要加上
-@DynamicInsert
-// The dynamic update allows you to set just the columns that were modified in the associated entity. （包含设了 null) , 子类如果需要也要加
-@DynamicUpdate
+@DynamicInsert // 插入时只插入非 null, 子类如果需要也要加上
+@DynamicUpdate // The dynamic update allows you to set just the columns that were modified in the associated entity. （包含设了 null) , 子类如果需要也要加
 @MappedSuperclass
 public  class DirtSnowIdEntity implements Serializable, iID {
 
@@ -28,8 +26,7 @@ public  class DirtSnowIdEntity implements Serializable, iID {
     // @JsonValue
 
     @Id
-    // https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela/32223785#32223785
-    @Access(AccessType.PROPERTY)
+    @Access(AccessType.PROPERTY)     // https://stackoverflow.com/questions/32220951/just-getting-id-column-value-not-using-join-in-hibernate-object-one-to-many-rela/32223785#32223785
     @Column(name = "id", nullable = false)
     @DirtField(title = "id",index = -999999, uiType = eUIType.text,fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
     protected Long id;
@@ -41,7 +38,6 @@ public  class DirtSnowIdEntity implements Serializable, iID {
     }
 
     @Transient
-
     IdObj idObj;
 
     public IdObj getIdObj() {

@@ -27,19 +27,7 @@ public  class DirtSimpleIdEntity implements Serializable, iID {
     @Column(name = "id")
     @DirtField(title = "id",index = -999999, fixed = DirtField.eFixedType.LEFT,dirtSubmit = {})
     protected Long id;
-    //
-    //@Data
-    //@AllArgsConstructor
-    //public static class IdObj {
-    //    Long id;
-    //}
-    //
-    //@Transient
-    //IdObj idObj;
-    //
-    //public IdObj getIdObj() {
-    //    return new IdObj(this.id);
-    //}
+
 
 
     // 软删除
