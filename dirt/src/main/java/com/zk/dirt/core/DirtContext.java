@@ -4,17 +4,18 @@ package com.zk.dirt.core;
 import com.zk.dirt.annotation.DirtDataSource;
 import com.zk.dirt.annotation.DirtEntity;
 import com.zk.dirt.annotation.DirtField;
-import com.zk.dirt.annotation.DirtScan;
 import com.zk.dirt.intef.iDataSource;
 import com.zk.dirt.util.PackageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
@@ -22,9 +23,13 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
+@Order(100)
+@Service
 @Slf4j
-public class DirtContext {
+public class DirtContext implements ApplicationRunner {
+
+    public static final String COM_ZK_DIRT_ENTITY = "com.zk.dirt.entity";
 
     @Autowired
     ApplicationContext applicationContext;
@@ -32,7 +37,6 @@ public class DirtContext {
     @Autowired
     EntityManager entityManager;
 
-    //private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
     private final static LinkedHashMap<String, Supplier<DirtEntityType>> nameDirtEntityFactories = new LinkedHashMap<>();
     private final static LinkedHashMap<String, DirtEntityType> nameDirtEntityMap = new LinkedHashMap<>();
     private final static Map<String, Class> nameClassMap = new HashMap<String, Class>();
@@ -43,65 +47,6 @@ public class DirtContext {
     private static Map<String, iDataSource> dependDataSources = new HashMap<>();
 
 
-    public DirtContext() {
-    }
-
-    @PostConstruct
-    public void init() throws ClassNotFoundException {
-        String mainClassName = PackageUtil.getMainClassName();
-        Class<?> aClass = Class.forName(mainClassName);
-        DirtScan scanPackageAnno = aClass.getDeclaredAnnotation(DirtScan.class);
-        String[] scanPackages = new String[]{"com.zk.dirt.entity"};
-
-        // merge scan packages if found
-        if (scanPackageAnno != null) {
-            scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackageAnno.value());
-        }
-        log.info("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
-
-        dependDataSources = applicationContext.getBeansOfType(iDataSource.class);
-        //System.out.println(beansOfType);
-
-        for (String packagePath : scanPackages) {
-            Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
-            for (Class classAnnotationClass : classAnnotationClasses) {
-                String simpleName = classAnnotationClass.getName();
-                if (nameDirtEntityFactories.get(simpleName) != null) {
-                    throw new RuntimeException("重复的 DirtEntity " + simpleName);
-                }
-
-                //nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
-                nameDirtEntityFactories.put(simpleName, () -> new DirtEntityType(this, applicationContext, classAnnotationClass));
-
-                nameClassMap.put(simpleName, classAnnotationClass);
-
-                if (classAnnotationClass.getAnnotation(Entity.class) != null) {
-                    SimpleJpaRepository jpaRepository = new SimpleJpaRepository(classAnnotationClass, entityManager);
-                    nameReposMap.put(simpleName, jpaRepository);
-                    classReposMap.put(classAnnotationClass, jpaRepository);
-                }
-
-                DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
-                if (declaredAnnotation.visiable()) {
-                    DirtViewType dirtViewType = new DirtViewType();
-                    dirtViewType.setText(declaredAnnotation.value());
-                    dirtViewType.setClassName(simpleName);
-                    dirtViewType.setViewType(declaredAnnotation.viewType());
-                    nameEntityMap.put(simpleName, dirtViewType);
-                }
-                // 表对应 columns
-                //ArrayList<String> columns = new ArrayList<>();
-                //Field[] declaredFields = classAnnotationClass.getDeclaredFields();
-                //for (Field declaredField : declaredFields) {
-                //    columns.add(declaredField.getName());
-                //}
-                List<String> fields = new ArrayList<>();
-                getFieldRecursively(fields, classAnnotationClass);
-                nameColumns.put(simpleName, fields);
-            }
-        }
-       //log.info(nameDirtEntityMap.toString());
-    }
 
     // 递归父类拿 Field
     public static List<String> getFieldRecursively(List<String>  out, Class<?> clazz) {
@@ -115,11 +60,7 @@ public class DirtContext {
             getFieldRecursively(out, clazz.getSuperclass());
 
         return out;
-
     }
-
-
-
 
     public List<String>  getColumns(String className){
         return nameColumns.get(className);
@@ -127,7 +68,6 @@ public class DirtContext {
 
     public Class getClassByName(String name) {
         Class aClass = nameClassMap.get(name);
-        ;
         if (aClass == null) {
             throw new RuntimeException("不存在 " + aClass);
         }
@@ -199,11 +139,52 @@ public class DirtContext {
         return null;
     }
 
-    //public void removeOptionFunctionKey(String entityName,String subKey) {
-    //    String optionKey = getOptionKey(entityName, subKey);
-    //    dependDataSources.remove(optionKey);
-    //}
-    //public void addOptionFunction(String key, iDataSource denpendsWithArgsDataSource){
-    //    dependDataSources.put(key, denpendsWithArgsDataSource);
-    //}
+    @Override
+    public void run(ApplicationArguments args)  {
+        String[] scanPackages = new String[]{COM_ZK_DIRT_ENTITY};
+        String[] scanPackage = DirtApplication.getScanPackage();
+        // merge scan packages if found
+        if (scanPackage != null) {
+            scanPackages = (String[]) ArrayUtils.addAll(scanPackages, scanPackage);
+        }
+        log.info("@DirtEntity 扫描路径:" + Arrays.stream(scanPackages).collect(Collectors.joining(", ")));
+
+        dependDataSources = applicationContext.getBeansOfType(iDataSource.class);
+        //System.out.println(beansOfType);
+
+        for (String packagePath : scanPackages) {
+            Set<Class> classAnnotationClasses = PackageUtil.findClassAnnotationClasses(packagePath, DirtEntity.class);
+            for (Class classAnnotationClass : classAnnotationClasses) {
+                String simpleName = classAnnotationClass.getName();
+                if (nameDirtEntityFactories.get(simpleName) != null) {
+                    throw new RuntimeException("重复的 DirtEntity " + simpleName);
+                }
+
+                //nameDirtEntityMap.put(simpleName, new DirtEntityType(this, applicationContext, classAnnotationClass));
+                nameDirtEntityFactories.put(simpleName, () -> new DirtEntityType(this, applicationContext, classAnnotationClass));
+
+                nameClassMap.put(simpleName, classAnnotationClass);
+
+                if (classAnnotationClass.getAnnotation(Entity.class) != null) {
+                    SimpleJpaRepository jpaRepository = new SimpleJpaRepository(classAnnotationClass, entityManager);
+                    nameReposMap.put(simpleName, jpaRepository);
+                    classReposMap.put(classAnnotationClass, jpaRepository);
+                }
+
+                DirtEntity declaredAnnotation = (DirtEntity) classAnnotationClass.getDeclaredAnnotation(DirtEntity.class);
+                if (declaredAnnotation.visiable()) {
+                    DirtViewType dirtViewType = new DirtViewType();
+                    dirtViewType.setText(declaredAnnotation.value());
+                    dirtViewType.setClassName(simpleName);
+                    dirtViewType.setViewType(declaredAnnotation.viewType());
+                    nameEntityMap.put(simpleName, dirtViewType);
+                }
+
+                List<String> fields = new ArrayList<>();
+                getFieldRecursively(fields, classAnnotationClass);
+                nameColumns.put(simpleName, fields);
+            }
+        }
+    }
+
 }

@@ -144,8 +144,7 @@ public class ArgsUtil {
                 Class<?> type = declaredField.getType();
                 arg = entityManager.getReference(type, ((iID) arg).getId());
             } else {
-                // primitive field
-
+                // primitive field, do nothing
             }
 
             // set entity reference back to annotated field
