@@ -4,7 +4,6 @@ import com.zk.dirt.JPAPersistProxyImp;
 import com.zk.dirt.MetaTableProvider;
 import com.zk.dirt.TableColumnsProvider;
 import com.zk.dirt.aop.DirtActionAspect;
-import com.zk.dirt.core.DirtContext;
 import com.zk.dirt.entity.MetaType;
 import com.zk.dirt.rest.DirtController;
 import com.zk.dirt.service.DirtService;
@@ -25,14 +24,13 @@ import org.springframework.web.filter.CorsFilter;
 /***
  * Dirt AutoConfiguration
  * @author <a href="mailto:xiaoymin@foxmail.com">liuzq7@gmail.com</a>
- * 2019/10/22 21:08
+ * 2023/2/28
  */
 @Configuration
 @EnableConfigurationProperties({DirtProperties.class})
 @ConditionalOnProperty(name = "dirt.enable",havingValue = "true")
 @Import({
         DirtService.class,
-        DirtContext.class,
         DirtActionAspect.class,
         JPAPersistProxyImp.class,
         MetaTableProvider.class,
@@ -50,17 +48,6 @@ public class DirtAutoConfiguration {
     public DirtAutoConfiguration(Environment environment) {
         this.environment = environment;
     }
-
-    //
-    //@ComponentScan(
-    //        basePackages = {
-    //                "com.zk.dirt",
-    //
-    //        }
-    //)
-    //public class DirtEnhanceAutoConfiguration{
-    //
-    //}
 
     /**
      * Configuration CorsFilter
