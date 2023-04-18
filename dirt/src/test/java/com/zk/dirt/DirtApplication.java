@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @Slf4j
 @EnableAsync
-@DirtScan({"com.zk.dirt"})
+@DirtScan
 public class DirtApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(DirtApplication.class);

@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -34,16 +33,14 @@ public class DirtService {
 
     @Autowired
     ObjectMapper objectMapper;
+
     @Autowired
     DirtContext dirtContext;
 
     @Autowired
     iPersistProxy persistProxy;
 
-    @Autowired
-    EntityManager entityManager;
-
-    @Autowired(required = false)
+    @Autowired(required = false) // 由包引用者自行实现
     iResourceUploader resourceUploader;
 
 
@@ -181,6 +178,16 @@ public class DirtService {
         return null;
     }
 
+    /**
+     * 业务 code 获取
+     * Code 定义：
+     * 1. code 一般对外。不随数据迁移而改变。
+     * 2. code 一般带有业务编码规则。不是纯数字。
+     * @param entityName
+     * @param code
+     * @return
+     * @throws ClassNotFoundException
+     */
     public Object getByCode(String entityName, String code) throws ClassNotFoundException {
         Class<?> entityClass = Class.forName(entityName);
         Optional byId = persistProxy.findByCode(entityClass, code);

@@ -59,19 +59,11 @@ public @interface DirtField {
     // 排序函数，本地排序使用一个函数(参考 Array.sort 的 compareFunction)，需要服务端排序可设为 true
     boolean sorter() default  true;
 
-    // 以下两者任选一，不要同时选，
-    // 基于类做下拉数据源
-    //Class<? extends iEnumProvider>[] enumProvider() default {};
-    // 基于 enum 做数据源
-    //Class<? extends iEnumText>[] enumListableType() default {};
-
     // 搜索表单相关
     DirtDataSource[] datasource() default {};
 
     // UI组件的源数据
     DirtHQLSource[] sourceProvider() default {};
-
-    //Class<? extends iDataSource>[] value() default  {};
 
     boolean search() default  true;
     // 筛选表单，为 true 时使用 ProTable 自带的，为 false 时关闭本地筛选
@@ -101,9 +93,6 @@ public @interface DirtField {
     // 为兼容 mybatis，如果只有 id ，说明 id 所关系的实体
     Class<? extends iID>[] idOfEntity() default {};
 
-    // @Dprecated，使用 defaultValue 类，
-    // 原因： 1 注解的返回值限制较多，2. 有可能返回数组，3 要与下拉匹配
-    //int initialValue() default 0;
 
     Class<?> defaultValue() default Void.class;
 }

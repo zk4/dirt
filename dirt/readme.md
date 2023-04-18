@@ -1,12 +1,67 @@
-Dirt 的目标是不丢失服务端数据关系。实现数据可视化。
-与 JPA 搭配，不用关心存储。 JPA 抽象了存储， Dirt 就用来抽象 UI。这可以极大提高工程质量。
+其实我的想法很简单，能不能用一套数据模型驱动存储与展示。对于那种复杂的表格类界面。减少后台 UI 的开发调试成本。
 
-UI schema 模型大部分用 antd 相关名词做定义。其他 UI 按照输出 schema 映射即可。理论上不限制前端库。
+第一想法就是与 JPA 搭配， JPA 抽象了存储， 那我要做的就是基于 JPA 抽象一套 UI。
 
-## 设计
-1. 业务 (Business) = 数据(Entity) +逻辑(Action)
-2. Entity 面向对象，Action 面向事件驱动
-3. 元数据管理
+用 JPA 的好处是 entity 的关系能够显示定义。 这样也可以做为驱动界面的要素。
+
+
+
+普通的 CRUD 界面我直接生成前端代码不香么？
+
+市面其实有很多 code generator。但问题在于：
+
+1. 模板代码就是模板代码，通常很难达到生成就能用的程度。你还是得有前端熟悉的人去改，或者部署。
+2. 针对行的自定义操作，前后端还是得写代码保证可用，后端得写 api，前端得写入口完成 api 调用。
+
+
+
+
+
+业务 (Business) = 数据(Entity) +逻辑(Action)
+
+Entity 面向对象，Action 面向事件驱动
+
+
+
+然而使用 JPA 做为起点。也会有一系列问题。
+
+1. 关系需要用来构建界面逻辑，那数据库的外键还需要吗？
+
+**OneToMany  一对多，不可重复
+ManyToOne  多对一，不可重复
+OneToOne   一对一，不可重复
+ManyToMany 多对多，关系任意，可重复
+
+我的选择是不生成外键。 因为这为日后集成 mybatis 提供较好的兼容性。
+
+
+
+2. 关系是用实体映射还是 id 映射？
+
+   如果按传统 JPA 走。那肯定是实体映射合理。但 mybatis 怎么办？就是方便了一边。另一边必须麻烦。所以我还是选择实体映射。因为毕竟我现在是用 JPA 弄。 到做 mybatis 兼容时再说。
+
+
+
+如果想快速存储一对多的 ids，而不加载实体，则需要使用  CascadeType.MERGE，用 CascadeType.ALL 不起作用。 讲真，这是 hibernate 的 bug。
+
+> 具体见： https://stackoverflow.com/questions/13370221/persistentobjectexception-detached-entity-passed-to-persist-thrown-by-jpa-and-h
+> Why? By saying "cascade ALL" on the child entity Transaction you require that every DB operation gets propagated to the parent entity Account. If you then do persist(transaction), persist(account) will be invoked as well.
+> But only transient (new) entities may be passed to persist (Transaction in this case). The detached (or other non-transient state) ones may not (Account in this case, as it's already in DB).
+> Therefore you get the exception "detached entity passed to persist". The Account entity is meant! Not the Transaction you call persist on.
+
+
+
+3. 嵌套关系怎么处理
+
+做个约定。要么关联，要么创建。api 要分开。体现在 UI 上会形成两次操作。
+
+
+### 编程范式
+
+1. 服务端 entity 对象测试
+2. 基于事件驱动，可以非常快的与异步模型整合，且非常方便微服务拆分。 
+
+
 
 ### 面向对象
 
@@ -31,33 +86,6 @@ UI schema 模型大部分用 antd 相关名词做定义。其他 UI 按照输出
 
 Action 应该仅针对 entity 的成员变量做处理。这就带来一个非常明显的好处。面向对象化。
 Action 的类型：
-
-
-### JPA 里关系概念
-OneToMany  一对多，不可重复
-ManyToOne  多对一，不可重复
-OneToOne   一对一，不可重复
-ManyToMany 多对多，关系任意，可重复
-
-### 数据库
-
-虽然使用 JPA，但不生成外键，也就是说，可以复用已有 entity 基于 mybatis 做传统开发。关系全在代码层维护。
-至于 JPA 里的关系映射。全部当 ManyToMany 处理即可。唯一性业务自行决定即可。
-
-如果想快速存储一对多的 ids，而不加载实体，则需要使用  CascadeType.MERGE，用 CascadeType.ALL 不起作用。 讲真，这是 hibernate 的 bug。
-> 具体见： https://stackoverflow.com/questions/13370221/persistentobjectexception-detached-entity-passed-to-persist-thrown-by-jpa-and-h
-> Why? By saying "cascade ALL" on the child entity Transaction you require that every DB operation gets propagated to the parent entity Account. If you then do persist(transaction), persist(account) will be invoked as well.
-> But only transient (new) entities may be passed to persist (Transaction in this case). The detached (or other non-transient state) ones may not (Account in this case, as it's already in DB).
-> Therefore you get the exception "detached entity passed to persist". The Account entity is meant! Not the Transaction you call persist on.
-
-嵌套关系的处理是比较麻烦的。 做了两个方面的约定
-1. 要么关联，要么创建。api 是分开的。在 UI 操作上会形成两步
-
-
-### 编程范式
-
-1. 服务端 entity 对象测试
-2. 基于事件驱动，可以非常快的与异步模型整合，且非常方便微服务拆分。 
 
 
 
@@ -142,9 +170,28 @@ ManyToMany 多对多，关系任意，可重复
    比如: 从 java 返回 Map<Long,String>，序列化完就变成了 Map<String,String>，。
        json 的 key 只能是字符串.且要有双引号
 
+### 元数据
+
+所谓元数据，也就是描述数据的数据。
+
+比如以下就是 mysql 元数据的描述，但通常这种元数据都是写死的。
+
+```
+name varchar(32) NOT NULL;
+```
+
+但如果我希望这些是动态的呢？
+
+也就是说， 我能不能随时可以将 name 改成 title呢？ 能不能将 varchar(32) 改成  vharchar(64) 呢？能不能将NOT NULL 改成 NULL。
+
+仔细想想，有很大坑在里面。 如果数据库已经定义好了数据类型。随时改元数据会导致严重的数据损坏的问题。比如将varchar(32) 改成 varchar(16)，丢失精度。
+
+所以，在 Dirt 里提供的元数据管理不包含这类改变。 只包含前端元数据管理。 通常包含前端显示的别名，提交时的验证等。
+
 
 
 ## 参考
+
 spring plugin 机制
 https://www.cnblogs.com/m78-seven/p/15399971.html
 

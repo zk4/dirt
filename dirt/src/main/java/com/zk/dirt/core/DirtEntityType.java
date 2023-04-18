@@ -320,7 +320,7 @@ public class DirtEntityType {
                                 ));
                     } else {
                         Map option1 = (Map) option;
-                        // TODO: 不可这样写，需要与实现无关
+                        // TODO: 耦合严重，不可这样写，需要与实现无关
                         source.put(option1.get("dictKey"),
                                 new DirtEnumValue(option1.get("dictValue"),
                                         option1.get("dictKey")
@@ -330,8 +330,7 @@ public class DirtEntityType {
             }
         }
 
-        if (source != null)
-            tableHeader.setValueEnum(source);
+        tableHeader.setValueEnum(source);
 
         Class<?> defaultValue = dirtField.defaultValue();
         if (defaultValue != Void.class) {

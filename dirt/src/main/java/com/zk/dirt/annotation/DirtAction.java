@@ -12,7 +12,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface DirtAction {
     String text();
     String desc() default  "";
-    String confirmMsg() default  "";
     // 是否需要确认操作
     boolean confirm() default  false;
 }

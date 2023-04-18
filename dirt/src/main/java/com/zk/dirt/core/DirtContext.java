@@ -152,7 +152,8 @@ public class DirtContext implements ApplicationRunner {
             for (Class classAnnotationClass : classAnnotationClasses) {
                 String simpleName = classAnnotationClass.getName();
                 if (nameDirtEntityFactories.get(simpleName) != null) {
-                    throw new RuntimeException("重复的 DirtEntity " + simpleName);
+                    Supplier<DirtEntityType> dirtEntityTypeSupplier = nameDirtEntityFactories.get(simpleName);
+                    throw new RuntimeException("重复的 DirtEntity " + simpleName +"，duplicated value:"+ dirtEntityTypeSupplier.get());
                 }
                 nameDirtEntityFactories.put(simpleName, () -> new DirtEntityType(this, applicationContext, classAnnotationClass));
                 nameClassMap.put(simpleName, classAnnotationClass);

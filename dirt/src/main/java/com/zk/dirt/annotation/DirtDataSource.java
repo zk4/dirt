@@ -7,6 +7,4 @@ public @interface DirtDataSource {
     Class[] onEntity() default {};
     String dependsColumn() default  "";
     Class<? extends iDataSource> value() default DependsProvider.class;
-    //spring el 表达式
-    String spel() default  "";
 }

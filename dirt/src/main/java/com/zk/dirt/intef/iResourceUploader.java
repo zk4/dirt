@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface iResourceUploader {
     @Data
-    static public  class ImageRes {
+    class ImageRes {
         String name;
         String url;
         String ext;
